@@ -43,4 +43,4 @@ Before you begin, make sure you have the following installed:
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/firatkaanbitmez/ShopAppProject.git
+   git clone https://github.com/firatkaanbitmez/ShopfiyAspNetWebsite.git
