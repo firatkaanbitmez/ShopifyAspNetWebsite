@@ -1,0 +1,94 @@
+<!--/Views/Sold/Details.cshtml-->
+@model ShopAppProject.Data.Sold
+ 
+<div class="container mt-5">
+    <div class="mb-4">
+        <a class="btn btn-secondary" asp-action="Index">Satılan Ürünlerinize Geri Dönün</a>
+    </div>
+    <h2>Satış Bilgileri</h2>
+    <hr>
+ 
+    <div>
+        <h4>Alıcının Bilgileri</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">Alıcı Adı Soyadı</dt>
+            <dd class="col-sm-10">@Model.BuyerFirstName @Model.BuyerLastName</dd>
+
+            <dt class="col-sm-2">Alıcı Adres</dt>
+            <dd class="col-sm-10">@Model.BuyerAddress</dd>
+
+            <dt class="col-sm-2">Alıcı Telefon</dt>
+            <dd class="col-sm-10">@Model.BuyerPhoneNumber</dd>
+        </dl>
+    </div>
+    <div>
+        <h4>Satış Detayı</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">Satış Tarihi</dt>
+            <dd class="col-sm-10">@Model.SoldDate.ToString("yyyy-MM-dd HH:mm:ss")</dd>
+
+            <dt class="col-sm-2">Sipariş ID</dt>
+            <dd class="col-sm-10">@Model.Order.OrderId</dd>
+
+            <dt class="col-sm-2">Toplam Ödeme</dt>
+            <dd class="col-sm-10">@Model.Order.TotalAmount.ToString("C")</dd>
+        </dl>
+    </div>
+
+   
+
+    <div>
+        <h4>Sipariş Detayları</h4>
+        <hr />
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Ürün</th>
+                    <th>Adet</th>
+                    <th>Adet Fiyatı</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var orderDetail in Model.Order.OrderDetails)
+                {
+                    <tr>
+                        <td>@orderDetail.Product.ProductTitle</td>
+                        <td>@orderDetail.Quantity</td>
+                        <td>@orderDetail.UnitPrice.ToString("C")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+  
+    
+      <div class="mt-4">
+        <form asp-controller="Sold" asp-action="UpdateShipmentInfo" method="post">
+            <div class="form-group">
+                <label for="shipmentTrackingInfo">Kargo Takip Bilgisi:</label>
+                <input type="text" id="shipmentTrackingInfo" name="shipmentTrackingInfo" class="form-control" required>
+            </div>
+            <input type="hidden" name="soldId" value="@Model.SoldId">
+            <button type="submit" class="btn btn-secondary">Kargo Takip Bilgisini Gir</button>
+        </form>
+    </div>
+  <!-- Debugging information -->
+<div class="mt-4">
+    <p>ShipmentTrackingInfo: @Model.ShipmentTrackingInfo</p>
+    @if (!string.IsNullOrEmpty(Model.ShipmentTrackingInfo))
+    {
+        <div class="mt-4">
+            <label>Kargo Takip Kodu:</label>
+            <p>@Model.ShipmentTrackingInfo</p>
+        </div>
+    }
+    else
+    {
+        <p>ShipmentTrackingInfo is null or empty</p>
+    }
+</div>
+
+   
+</div>

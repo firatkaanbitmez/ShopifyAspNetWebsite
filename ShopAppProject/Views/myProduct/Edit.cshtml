@@ -1,0 +1,49 @@
+<!--Views/Product/Edit.cshtml-->
+
+@model Product
+
+<h2>Ürün Güncelle</h2>
+
+<form asp-controller="myProduct" asp-action="Edit" method="post">
+    <input type="hidden" asp-for="ProductId">
+
+    <div class="mb-3">
+        <label asp-for="ProductCategory" class="form-label">Ürün Kategorisi</label>
+        <select asp-for="ProductCategory" asp-items="@(new SelectList(ViewBag.CategoryList, "Value", "Text"))" class="form-control">
+            <option value="">Kategori Seç</option>
+        </select>
+        <span asp-validation-for="ProductCategory" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ProductTitle" class="form-label">Ürün İsmi</label>
+        <input asp-for="ProductTitle" class="form-control">
+        <span asp-validation-for="ProductTitle" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ProductDesc" class="form-label">Ürün Açıklaması</label>
+        <textarea asp-for="ProductDesc" class="form-control"></textarea>
+        <span asp-validation-for="ProductDesc" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ProductStock" class="form-label">Ürün Stok Miktarı</label>
+        <input asp-for="ProductStock" class="form-control">
+        <span asp-validation-for="ProductStock" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ProductPrice" class="form-label">Ürün Fiyatı</label>
+        <input asp-for="ProductPrice" class="form-control">
+        <span asp-validation-for="ProductPrice" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ProductImage" class="form-label">Ürün Resim Yolu veya URL</label>
+        <input asp-for="ProductImage" class="form-control">
+        <span asp-validation-for="ProductImage" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Kaydet</button>
+</form>

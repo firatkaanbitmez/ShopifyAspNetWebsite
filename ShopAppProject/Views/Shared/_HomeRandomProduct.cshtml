@@ -1,0 +1,92 @@
+@model List<Product>
+<style>
+    .title-container {
+        max-width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+                text-decoration: none; /* Remove underline from the link */
+
+    }
+
+       .title {
+        font-size: 20px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-decoration: none; /* Remove underline from the link */
+        color: inherit;
+        display: contents; /* This makes the link behave like a block-level element */
+    }
+    .card {
+        margin-bottom: 0px; /* Add some spacing between cards */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
+        transition: box-shadow 0.3s ease-in-out; /* Smooth box shadow transition */
+    }
+
+    .card:hover {
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Increase box shadow on hover */
+    }
+
+    .card-img-top {
+        max-height: 300px; /* Set image height */
+    }
+   
+    .card-body {
+        padding: 10px; /* Add padding to the card body */
+       
+    }
+
+    .price {
+        font-weight: bold; /* Make the price bold */
+        color: #e44d26; /* Set price color */
+    }
+
+ 
+   
+</style>
+
+<h1 class="text-center mt-4">Süper Fiyat & Süper Teklif</h1>
+<hr style="color: #e44d26; margin-top: -1px;">
+
+<div class="row discounted-products mb-5 mt-5 mr-5">
+    <div class="col-md-2">
+        <a href="Product">
+            <img src="~/img/süperteklif.jpg" style="margin-top: 0px; border-radius:10px;" alt="Super Fiyat Teklifleri" class="img-fluid">
+        </a>
+    </div>
+    @foreach (var product in Model)
+    {
+       
+            <div class="col-md-2">
+                <div class="card" style=" margin-top:0px; max-height: 320px;
+            max-width: 100%;
+            width: auto;
+            object-fit: contain;" href="@Url.Action("Details", "Product", new { id = product.ProductId })">
+                    <a href="@Url.Action("Details", "Product", new { id = product.ProductId })">
+                        @if (!string.IsNullOrEmpty(product.ProductImage))
+                        {
+                            <img src="@product.ProductImage" alt="@product.ProductTitle" class="card-img-top" style="  border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
+    object-fit: contain !important;
+    width: 182px !important; /* Set the width to 128px */
+    height: 182px !important; ">
+                        }
+                        else
+                        {
+                            <img src="~/img/defaultproduct.png" alt="Default Product Image" class="card-img-top" style="margin-top: 30px;  border-top-left-radius: 10px !important; 
+    border-top-right-radius: 10px !important;
+     object-fit: contain !important; ">
+                        }
+                    </a>
+                    <div class="card-body" >
+                        <a href="@Url.Action("Details", "Product", new { id = product.ProductId })" class="title-container">
+                            <h5 class="card-title title">@product.ProductTitle</h5>
+                        </a>
+                        <p class="card-text price" style="margin-top: 30px;">@String.Format("{0:N2}", product.ProductPrice) ₺</p>
+                    </div>
+                </div>
+            </div>
+        
+    }
+</div>

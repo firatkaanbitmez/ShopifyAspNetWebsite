@@ -1,0 +1,33 @@
+<!-- Views/Shared/_UserProductListItem.cshtml -->
+
+@model ShopAppProject.Data.UserProductList
+
+<tr>
+    <td class="align-middle">
+        <div class="d-flex align-items-center">
+            <a href="@Url.Action("Details", "Product", new { id = Model.Product.ProductId })">
+                <img src="@Model.Product.ProductImage" class="img-fluid rounded-3" style="width: 50px;" alt="@Model.Product.ProductTitle">
+            </a>
+            <div class="flex-column ms-4">
+                <p class="mb-2 text-center">
+                    <a href="@Url.Action("Details", "Product", new { id = Model.Product.ProductId })" class="text-decoration-none text-dark fw">@Model.Product.ProductTitle</a>
+                </p>
+            </div>
+        </div>
+    </td>
+    <td class="align-middle">
+        <p>@Model.Product.ProductDesc</p>
+    </td>
+    <td class="align-middle">
+        <p>@Model.Product.ProductStock</p>
+    </td>
+    <td class="align-middle">
+        <p>@Model.Product.ProductPrice.ToString("C")</p>
+    </td>
+    <td class="align-middle">
+        <form method="post" action="/MyList/RemoveFromList">
+            <input type="hidden" name="productId" value="@Model.Product.ProductId" />
+            <button type="submit" class="btn btn-danger">Sil</button>
+        </form>
+    </td>
+</tr>

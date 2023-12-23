@@ -1,0 +1,32 @@
+<!--/Views/Shared/_RandomProductsPartial.cshtml-->
+
+@model List<Product>
+<style>
+    .title-container {
+        max-width: 250px; /* Set a fixed width for the container */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .title {
+        /* Add your additional styles here */
+        font-weight: bold; /* Example: Make the title bold */
+        color: #007bff;   /* Example: Set the title color to a specific color */
+    }
+</style>
+
+@foreach (var product in Model)
+{
+    <div class="d-flex mb-3">
+        <a href="@Url.Action("Details", "Product", new { id = product.ProductId })" class="me-3">
+            <img src="@product.ProductImage" style="min-width: 96px; height: 96px;" class="img-md img-thumbnail" />
+        </a>
+        <div class="info">
+            <a href="@Url.Action("Details", "Product", new { id = product.ProductId })" class="nav-link mb-1 title-container">
+                <span class="title">@product.ProductTitle</span> <br />
+                @String.Format("{0:N2}", product.ProductPrice) ₺
+            </a>
+        </div>
+    </div>
+}
