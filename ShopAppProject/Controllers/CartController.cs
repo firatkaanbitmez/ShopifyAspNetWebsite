@@ -154,15 +154,16 @@ namespace ShopAppProject.Controllers
             var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var wallet = await _context.Wallets.FirstOrDefaultAsync(w => w.UserId == userId);
             ViewBag.WalletBalance = wallet?.Balance;
-
+            var cartItems = await _context.CartItems
+                                    .Where(c => c.UserId == userId)
+                                    .Include(c => c.Product)
+                                        .ThenInclude(p => p.Images) // Eğer ürün resimleri de gerekliyse bu satırı ekleyin
+                                    .ToListAsync();
             var totalAmounts = CalculateTotalAmount(userId);
 
             var cartModel = new CartViewModel
             {
-                CartItems = await _context.CartItems
-                    .Include(c => c.Product)
-                    .Where(c => c.UserId == userId)
-                    .ToListAsync(),
+                CartItems = cartItems,
                 TotalAmounts = totalAmounts
             };
 

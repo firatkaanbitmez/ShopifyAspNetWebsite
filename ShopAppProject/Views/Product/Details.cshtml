@@ -21,6 +21,27 @@
         
     }
 
+.product-image-container .main-image {
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+.product-image-container .image-gallery .thumbnail {
+    cursor: pointer;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.product-image-container .image-gallery .thumbnail img {
+    transition: all 0.3s ease;
+}
+
+.product-image-container .image-gallery .thumbnail:hover img {
+    transform: scale(1.1);
+}
 
 </style>
 
@@ -85,27 +106,33 @@
 <section class="py-5">
   <div class="container">
     <div class="row gx-5">
-      <aside class="col-lg-6">
-        <div class="border rounded-4 mb-3 d-flex justify-content-center" style=" border-radius: 10px;">
-        <a data-fancybox="gallery" href="@Model.ProductImage">
-    @{
-        if (!string.IsNullOrEmpty(Model.ProductImage))
+<aside class="col-lg-6">
+    <div class="product-image-container text-center">
+        @if (Model.Images != null && Model.Images.Any())
         {
-            <img src="@Model.ProductImage" style="max-width: 100%; max-height: 50vh; margin: auto;" class="rounded-4 fit" alt="Product Image">
+            var firstImage = Model.Images.First();
+            <div class="main-image">
+                <a data-fancybox="gallery" href="@Url.Content(firstImage.FullImagePath)">
+                    <img src="@Url.Content(firstImage.FullImagePath)" class="rounded-4" alt="Product Image" style="max-width: 70%; height: auto; margin: auto;">
+                </a>
+            </div>
+            <div class="image-gallery d-flex justify-content-center flex-wrap mt-3">
+                @foreach (var image in Model.Images.Skip(1))
+                {
+                    <a data-fancybox="gallery" href="@Url.Content(image.FullImagePath)" class="thumbnail m-1">
+                        <img src="@Url.Content(image.FullImagePath)" alt="Product Image" style="width: 100px; height: 100px;">
+                    </a>
+                }
+            </div>
         }
         else
         {
-            <img src="/img/defaultproduct.png" style="max-width: 100%; max-height: 50vh; margin: auto;" class="rounded-4 fit" alt="Default Product Image">
+            <img src="/img/defaultproduct.png" class="rounded-4" alt="Default Product Image" style="max-width: 100%; height: auto; margin: auto;">
         }
-    }
-</a>
+    </div>
+</aside>
 
-        </div>
-        <div class="d-flex justify-content-center mb-3">
-          
-        </div>
- 
-      </aside>
+
       <main class="col-lg-6">
         <div class="ps-lg-3">
           <h4 class="title text-dark">
@@ -220,16 +247,16 @@ else
           <!-- Pills navs -->
           <ul class="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
             <li class="nav-item d-flex" role="presentation">
-<a class="nav-link d-flex align-items-center justify-content-center w-100 active" id="Desc" role="tab" data-bs-toggle="pill" data-bs-target="#ex1-pills-1" aria-selected="true">Ürün Açıklaması</a>
+<a class="nav-link d-flex align-items-center justify-content-center w-100 active" id="Desc" style="cursor:default;" role="tab" data-bs-toggle="pill" data-bs-target="#ex1-pills-1" aria-selected="true">Ürün Açıklaması</a>
             </li>
             <li class="nav-item d-flex" role="presentation">
-<a class="nav-link d-flex align-items-center justify-content-center w-100" id="Kampanya" role="tab" data-bs-toggle="pill" data-bs-target="#ex1-pills-2" aria-selected="false">Kampanyalar</a>
+<a class="nav-link d-flex align-items-center justify-content-center w-100" id="Kampanya" style="cursor:default;"role="tab" data-bs-toggle="pill" data-bs-target="#ex1-pills-2" aria-selected="false">Kampanyalar</a>
             </li>
             <li class="nav-item d-flex" role="presentation">
-<a class="nav-link d-flex align-items-center justify-content-center w-100" id="sellerinfo"  role="tab" data-bs-toggle="pill" data-bs-target="#ex1-pills-3" aria-selected="false">Satıcı Bilgileri</a>
+<a class="nav-link d-flex align-items-center justify-content-center w-100" id="sellerinfo" style="cursor:default;" role="tab" data-bs-toggle="pill" data-bs-target="#ex1-pills-3" aria-selected="false">Satıcı Bilgileri</a>
             </li>
             <li class="nav-item d-flex" role="presentation">
-<a class="nav-link d-flex align-items-center justify-content-center w-100" id="comments" role="tab" data-bs-toggle="pill" data-bs-target="#ex1-pills-4" aria-selected="false">Yorumlar</a>
+<a class="nav-link d-flex align-items-center justify-content-center w-100" id="comments"style="cursor:default;" role="tab" data-bs-toggle="pill" data-bs-target="#ex1-pills-4" aria-selected="false">Yorumlar</a>
 </li>
           </ul>
           <!-- Pills navs -->
@@ -300,19 +327,20 @@ else
       </div>
 
       
-         <div class="col-lg-4">
-                <div class="px-0 border rounded-2 shadow-0">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">İlginizi Çekebilecek Ürünler</h5>
-                            <div id="randomProductsContainer">
-                                @await Html.PartialAsync("_RandomProductsPartial", ViewData["randomProducts"])
-                            </div>
-
-                        </div>
-                    </div>
+       <div class="col-lg-4" style="max-width: 400px;">
+    <div class="px-0 border rounded-2 shadow-0">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">İlginizi Çekebilecek Ürünler</h5>
+                <!-- Random ürünlerin gösterileceği kısım -->
+                <div id="randomProductsContainer">
+                    @await Html.PartialAsync("_RandomProductsPartial", ViewData["randomProducts"])
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
     </div>
   </div>
 </section>

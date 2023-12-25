@@ -33,6 +33,8 @@ namespace ShopAppProject.Controllers
                 {
                     user.UserProductLists = _context.UserProductLists
                                                        .Include(upl => upl.Product)
+                                                                                      .ThenInclude(p => p.Images) // Make sure to include images
+
                                                        .Where(upl => upl.UserId == user.Id)
                                                        .ToList();
 

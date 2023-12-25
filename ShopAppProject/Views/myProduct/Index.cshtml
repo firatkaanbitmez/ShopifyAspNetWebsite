@@ -61,14 +61,15 @@
             {
         <div class="col-md-3 mb-3">
                     <div class="card h-100">
-                        @if (!string.IsNullOrEmpty(item.ProductImage))
-                        {
-                            <img src="@item.ProductImage" class="card-img-top" alt="Product Image">
-                        }
-                        else
-                        {
-                            <img src="/img/defaultproduct.png" class="card-img-top" alt="Default Product Image">
-                        }
+                             @if (item.Images.Any())
+            {
+                var firstImage = item.Images.First();
+                <img src="@Url.Content(firstImage.FullImagePath)" class="card-img-top" alt="Ürün Resmi">
+            }
+            else
+            {
+                <img src="/img/defaultproduct.png" class="card-img-top" alt="Varsayılan Ürün Resmi">
+            }
 
                         <div class="card-body">
                             <h5 class="card-title">Ürün Adı: @item.ProductTitle</h5>
@@ -94,14 +95,15 @@
             {
                 <div class="col-md-3 mb-3">
                     <div class="card h-100">
-                        @if (!string.IsNullOrEmpty(item.ProductImage))
-                        {
-                            <img src="@item.ProductImage" class="card-img-top" alt="Product Image">
-                        }
-                        else
-                        {
-                            <img src="/img/defaultproduct.png" class="card-img-top" alt="Default Product Image">
-                        }
+                          @if (item.Images.Any())
+            {
+                var firstImage = item.Images.First();
+                <img src="@Url.Content(firstImage.FullImagePath)" class="card-img-top" alt="Ürün Resmi">
+            }
+            else
+            {
+                <img src="/img/defaultproduct.png" class="card-img-top" alt="Varsayılan Ürün Resmi">
+            }
 
                         <div class="card-body">
                             <h5 class="card-title">Ürün Adı: @item.ProductTitle</h5>

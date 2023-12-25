@@ -402,6 +402,26 @@ namespace ShopAppProject.Migrations
                     b.ToTable("Product");
                 });
 
+            modelBuilder.Entity("ShopAppProject.Data.ProductImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ImagePath")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductImages");
+                });
+
             modelBuilder.Entity("ShopAppProject.Data.Shipping", b =>
                 {
                     b.Property<int>("ShippingId")
@@ -658,6 +678,17 @@ namespace ShopAppProject.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("ShopAppProject.Data.ProductImage", b =>
+                {
+                    b.HasOne("ShopAppProject.Data.Product", "Product")
+                        .WithMany("Images")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("ShopAppProject.Data.Sold", b =>
                 {
                     b.HasOne("ShopAppProject.Data.ApplicationUser", "Buyer")
@@ -739,6 +770,8 @@ namespace ShopAppProject.Migrations
             modelBuilder.Entity("ShopAppProject.Data.Product", b =>
                 {
                     b.Navigation("Comments");
+
+                    b.Navigation("Images");
 
                     b.Navigation("UserProductLists");
                 });

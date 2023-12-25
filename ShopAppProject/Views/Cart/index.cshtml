@@ -1,7 +1,11 @@
 @model ShopAppProject.Data.CartViewModel
 @{
     var context = ViewData["Context"] as DataContext;
+        ViewData["Title"] = "Sepetim";
+
 }
+
+
 <section class="h-100 h-custom">
     <div class="container h-100 py-5">
         <div class="row d-flex justify-content-center align-items-center h-100">
@@ -40,8 +44,9 @@
                                                 <td class="align-middle">
                                                     <div class="d-flex align-items-center">
                                                         <a href="@Url.Action("Details", "Product", new { id = item.ProductId })">
-                                                            <img src="@item.Product.ProductImage" class="img-fluid rounded-3" style="width: 50px;" alt="@item.Product.ProductTitle">
-                                                        </a>
+<img src="@Url.Content(item.Product.Images.FirstOrDefault()?.FullImagePath ?? "/img/defaultproduct.png")"   class="img-fluid rounded-3" style="width: 50px;" alt="Product Image">
+
+                </a>
                                                         <div class="flex-column ms-4">
                                                             <p class="mb-2 text-center">
                                                                 <a href="@Url.Action("Details", "Product", new { id = item.ProductId })" class="text-decoration-none text-dark fw">@item.Product.ProductTitle</a>
@@ -85,7 +90,7 @@
                                 <div class="card-body p-4">
                                  
                                  
-<h4>Toplam Ödenecek Tutarlar </h4>
+<h4>Sipariş Detayları </h4>
 <table class="table">
     <thead>
         <tr>

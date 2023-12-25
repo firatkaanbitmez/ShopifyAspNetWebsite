@@ -4,8 +4,9 @@ using Microsoft.AspNetCore.Identity;
 using ShopAppProject.Data;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-
 using ShopAppProject.Models;
+using Microsoft.EntityFrameworkCore; // Bu satırı ekleyin
+
 
 
 namespace ShopAppProject.Controllers;
@@ -29,19 +30,23 @@ public class HomeController : Controller
     public async Task<IActionResult> Index()
     {
         var user = await _userManager.GetUserAsync(User);
-
-        // Eğer kullanıcı giriş yapmışsa, kullanıcının adını ViewBag üzerinden gönder
         if (user != null)
         {
             ViewBag.UserName = user.Email;
         }
-        var allProducts = _context.Products.ToList();
+
+        // Ürünleri ve ilişkili resimleri çek
+        var allProducts = await _context.Products
+                                        .Include(p => p.Images) // Bu satır önemli
+                                        .ToListAsync();
+
         var random = new Random();
         var shuffledProducts = allProducts.OrderBy(p => random.Next()).Take(5).ToList();
 
         ViewData["randomProducts"] = shuffledProducts;
         return View();
     }
+
     public IActionResult GetRandomProducts()
     {
         // Fetch all products from the database

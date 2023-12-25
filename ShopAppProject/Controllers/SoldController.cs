@@ -39,18 +39,28 @@ namespace ShopAppProject.Controllers
             var sellerId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var sold = _context.Solds
-                .Include(s => s.Order)
-                .ThenInclude(o => o.OrderDetails)
-                .FirstOrDefault(s => s.SoldId == soldId && s.SellerId == sellerId);
+                        .Include(s => s.Order)
+                        .FirstOrDefault(s => s.SoldId == soldId && s.SellerId == sellerId);
 
             if (sold != null)
             {
-                sold.Order.ShipmentTrackingInfo = shipmentTrackingInfo;
+                // Update ShipmentTrackingInfo in Sold entity
+                sold.ShipmentTrackingInfo = shipmentTrackingInfo;
+
+                // Check if Order is not null and update ShipmentTrackingInfo in Order entity
+                if (sold.Order != null)
+                {
+                    sold.Order.ShipmentTrackingInfo = shipmentTrackingInfo;
+                }
+
                 _context.SaveChanges();
+                return RedirectToAction("Details", new { id = soldId });
             }
 
-            return RedirectToAction("Details", new { id = soldId });
+            return NotFound(); // Or handle the error appropriately
         }
+
+
 
         public async Task<IActionResult> Details(int id)
         {

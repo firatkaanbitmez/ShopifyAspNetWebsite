@@ -6,6 +6,11 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Http;
+using System;
+using System.Collections.Generic;
+using System.IO;
+
 
 
 namespace ShopAppProject.Controllers
@@ -26,7 +31,9 @@ namespace ShopAppProject.Controllers
             // Check if the user has the "Admin" or "Company" role
             if (User.IsInRole("Admin") || User.IsInRole("Company"))
             {
-                var products = await _context.Products.ToListAsync();
+                var products = await _context.Products
+                                .Include(p => p.Images) // Resimleri de yükle
+                                .ToListAsync();
                 return View(products);
             }
             else
@@ -43,38 +50,47 @@ namespace ShopAppProject.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Product model)
+        public async Task<IActionResult> Create(Product model, List<IFormFile> ImageFiles)
         {
             if (!ModelState.IsValid)
             {
-                // If the model state is not valid, return to the create view with errors
-                ViewBag.CategoryList = GetCategorySelectList(); // Ensure ViewBag.CategoryList is set
+                ViewBag.CategoryList = GetCategorySelectList(); // Re-populate the category list
                 return View(model);
             }
 
-            // Get the current user ID
-            var userId = HttpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Get current user ID
+            model.UserId = userId; // Assign the user ID to the product
 
-            // Set the user ID for the product
-            model.UserId = userId;
-
-            // Add category handling here
-            if (string.IsNullOrEmpty(model.ProductCategory))
+            if (ImageFiles == null || ImageFiles.Count == 0)
             {
-                ModelState.AddModelError("ProductCategory", "Please select a category");
-                ViewBag.CategoryList = GetCategorySelectList(); // Ensure ViewBag.CategoryList is set
+                ModelState.AddModelError("ProductImages", "En az bir resim yüklenmelidir.");
+                ViewBag.CategoryList = GetCategorySelectList();
                 return View(model);
             }
 
-            // Add the product to the context
-            _context.Products.Add(model);
+            model.Images = new List<ProductImage>(); // Initialize the Images collection
 
-            // Save changes to the database
-            await _context.SaveChangesAsync();
+            foreach (var image in ImageFiles)
+            {
+                if (image != null && image.Length > 0)
+                {
+                    var uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(image.FileName);
+                    var imagePath = Path.Combine("wwwroot/images", uniqueFileName);
+                    using (var stream = new FileStream(imagePath, FileMode.Create))
+                    {
+                        await image.CopyToAsync(stream);
+                    }
 
-            // Redirect to the Index action
-            return RedirectToAction("Index");
+                    model.Images.Add(new ProductImage { ImagePath = imagePath });
+                }
+            }
+
+            _context.Products.Add(model); // Add the product to the context
+            await _context.SaveChangesAsync(); // Save changes
+
+            return RedirectToAction("Index"); // Redirect after successful creation
         }
+
         public IActionResult Details(int id)
         {
             var product = _context.Products.Include(p => p.Comments).FirstOrDefault(p => p.ProductId == id);
@@ -134,7 +150,9 @@ namespace ShopAppProject.Controllers
 
             var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var product = await _context.Products.FirstOrDefaultAsync(p => p.ProductId == id);
+            var product = await _context.Products
+                                        .Include(p => p.Images)
+                                        .FirstOrDefaultAsync(p => p.ProductId == id);
 
             if (product == null)
             {
@@ -154,21 +172,19 @@ namespace ShopAppProject.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Product model)
+        public async Task<IActionResult> Edit(int id, Product model, int[] deleteImages, IFormFile[] newImages)
         {
-            if (id != model.ProductId)
-            {
-                return NotFound();
-            }
-
-            var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            var product = await _context.Products.FirstOrDefaultAsync(p => p.ProductId == id);
-
+            var product = await _context.Products.Include(p => p.Images).FirstOrDefaultAsync(p => p.ProductId == id);
             if (product == null)
             {
                 return NotFound();
             }
+
+
+            var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+
+
 
             // Check if the user is an Admin
             if (!User.IsInRole("Admin") && product.UserId != userId)
@@ -181,7 +197,33 @@ namespace ShopAppProject.Controllers
                 ViewBag.CategoryList = GetCategorySelectList(); // Set the ViewBag for categories
                 return View(model);
             }
+            // Silme işlemleri
+            foreach (var imageId in deleteImages)
+            {
+                var image = product.Images.FirstOrDefault(i => i.Id == imageId);
+                if (image != null)
+                {
+                    var imagePath = image.ImagePath;
+                    if (System.IO.File.Exists(imagePath))
+                    {
+                        System.IO.File.Delete(imagePath);
+                    }
+                    _context.ProductImages.Remove(image);
+                }
+            }
 
+            // Yeni resimleri ekleme
+            foreach (var newImage in newImages)
+            {
+                var uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(newImage.FileName);
+                var imagePath = Path.Combine("wwwroot/images", uniqueFileName);
+                using (var stream = new FileStream(imagePath, FileMode.Create))
+                {
+                    await newImage.CopyToAsync(stream);
+                }
+
+                product.Images.Add(new ProductImage { ImagePath = imagePath });
+            }
             // Update all properties including the category
             product.ProductTitle = model.ProductTitle;
             product.ProductDesc = model.ProductDesc;
@@ -194,6 +236,35 @@ namespace ShopAppProject.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteImage(int id, int productId)
+        {
+            var image = await _context.ProductImages.FirstOrDefaultAsync(i => i.Id == id);
+            if (image != null)
+            {
+                var imagePath = image.ImagePath;
+                if (System.IO.File.Exists(imagePath))
+                {
+                    System.IO.File.Delete(imagePath);
+                }
+                _context.ProductImages.Remove(image);
+                await _context.SaveChangesAsync();
+            }
+
+            // Kullanıcıyı aynı ürünün düzenleme sayfasına geri yönlendir
+            return RedirectToAction("Edit", new { id = productId });
+        }
+
+
+        public IActionResult DeleteSuccess()
+        {
+            return View();
+        }
+
+
+
+
 
         [HttpGet]
         public async Task<IActionResult> Delete(int? id)
@@ -212,7 +283,7 @@ namespace ShopAppProject.Controllers
                 return NotFound();
             }
 
-            // Check if the user is an Admin
+            // Check if the user is an Admin or the owner of the product
             if (!User.IsInRole("Admin") && product.UserId != userId)
             {
                 return Forbid(); // If not an Admin and not the owner, deny access
@@ -221,31 +292,52 @@ namespace ShopAppProject.Controllers
             return View(product);
         }
 
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var product = await _context.Products.FirstOrDefaultAsync(p => p.ProductId == id);
-
+            var product = await _context.Products
+                                           .Include(p => p.Images)
+                                           .FirstOrDefaultAsync(p => p.ProductId == id);
             if (product == null)
             {
                 return NotFound();
             }
 
-            // Check if the user is an Admin
+            // Check if the user is an Admin or the owner of the product
             if (!User.IsInRole("Admin") && product.UserId != userId)
             {
                 return Forbid(); // If not an Admin and not the owner, deny access
             }
 
+            // Delete related images and other data
+
+            foreach (var image in product.Images)
+            {
+                var imagePath = image.ImagePath;
+                if (System.IO.File.Exists(imagePath))
+                {
+                    System.IO.File.Delete(imagePath);
+                }
+                _context.ProductImages.Remove(image);
+            }
+
             // Remove the product from the context and save changes
             _context.Products.Remove(product);
             await _context.SaveChangesAsync();
+            if (!User.IsInRole("Admin") && product.UserId != userId)
+            {
+                return RedirectToAction("AccessDenied"); // Add this line
+            }
 
-            // Redirect to the Index action after the product has been deleted
-            return RedirectToAction("Index");
+            // Redirect to a success page or another appropriate location
+            return RedirectToAction("DeleteSuccess");
+        }
+        public IActionResult AccessDenied()
+        {
+            return View();
         }
 
 

@@ -22,7 +22,7 @@ namespace ShopAppProject.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Index(string category, string query)
         {
-            IQueryable<Product> products = _context.Products;
+            IQueryable<Product> products = _context.Products.Include(p => p.Images);
 
             if (!string.IsNullOrEmpty(category))
             {
@@ -109,7 +109,7 @@ namespace ShopAppProject.Controllers
         public IActionResult GetRandomProducts()
         {
             // Fetch all products from the database
-            var allProducts = _context.Products.ToList();
+            var allProducts = _context.Products.Include(p => p.Images).ToList();
 
             // Shuffle the products using a random seed
             var random = new Random();
@@ -137,9 +137,10 @@ namespace ShopAppProject.Controllers
             try
             {
                 var product = _context.Products
-                         .Include(p => p.Comments)
-                         .Include(p => p.UserProductLists) // Include UserProductLists here
-                         .FirstOrDefault(p => p.ProductId == id);
+                    .Include(p => p.Comments)
+                    .Include(p => p.UserProductLists)
+                    .Include(p => p.Images) // Ürün resimlerini de yükle
+                    .FirstOrDefault(p => p.ProductId == id);
 
                 var randomProducts = _context.Products.AsEnumerable().OrderBy(p => Guid.NewGuid()).Take(5).ToList();
 
@@ -182,6 +183,8 @@ namespace ShopAppProject.Controllers
         public IActionResult Search(string query)
         {
             var products = _context.Products
+            .Include(p => p.Images)
+
                 .AsEnumerable()  // Explicitly switch to client-side evaluation
                 .Where(p => string.IsNullOrEmpty(query) ||
                             p.ProductTitle.Contains(query, StringComparison.OrdinalIgnoreCase) ||

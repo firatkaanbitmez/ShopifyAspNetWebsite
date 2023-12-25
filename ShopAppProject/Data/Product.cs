@@ -27,6 +27,7 @@ namespace ShopAppProject.Data
         [Display(Name = "Product Image")]
         public string? ProductImage { get; set; }
 
+        public virtual ICollection<ProductImage>? Images { get; set; }
 
         public ICollection<UserProductList>? UserProductLists { get; set; }
 
