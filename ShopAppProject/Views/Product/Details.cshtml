@@ -113,14 +113,14 @@
             var firstImage = Model.Images.First();
             <div class="main-image">
                 <a data-fancybox="gallery" href="@Url.Content(firstImage.FullImagePath)">
-                    <img src="@Url.Content(firstImage.FullImagePath)" class="rounded-4" alt="Product Image" style="max-width: 70%; height: auto; margin: auto;">
+                    <img src="@Url.Content(firstImage.FullImagePath)" class="rounded-4" alt="Product Image" style="max-width: 512px; height: auto; margin: auto; object-fit:contain; max-height:512px; min-height:512px;">
                 </a>
             </div>
             <div class="image-gallery d-flex justify-content-center flex-wrap mt-3">
                 @foreach (var image in Model.Images.Skip(1))
                 {
                     <a data-fancybox="gallery" href="@Url.Content(image.FullImagePath)" class="thumbnail m-1">
-                        <img src="@Url.Content(image.FullImagePath)" alt="Product Image" style="width: 100px; height: 100px;">
+                        <img src="@Url.Content(image.FullImagePath)" alt="Product Image" style="width: 100px; height: 100px; object-fit:contain;">
                     </a>
                 }
             </div>

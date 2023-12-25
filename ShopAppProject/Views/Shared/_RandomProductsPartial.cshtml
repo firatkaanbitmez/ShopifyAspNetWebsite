@@ -62,7 +62,7 @@
         @if (product.Images != null && product.Images.Any())
         {
             var firstImage = product.Images.First();
-            <img src="@Url.Content(firstImage.FullImagePath)" class="product-image" />
+            <img src="@Url.Content(firstImage.FullImagePath)" class="product-image" style="object-fit: contain;" />
         }
         else
         {
