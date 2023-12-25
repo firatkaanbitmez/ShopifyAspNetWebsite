@@ -44,3 +44,10 @@ Before you begin, make sure you have the following installed:
 
    ```bash
    git clone https://github.com/firatkaanbitmez/ShopfiyAspNetWebsite.git
+
+![Opera Snapshot_2023-12-25_195727_localhost](https://github.com/firatkaanbitmez/ShopfiyAspNetWebsite/assets/74864221/9c7f4f6d-239a-4cda-be37-010397b80671)
+
+
+
+
+   
