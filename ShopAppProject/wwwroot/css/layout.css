@@ -154,3 +154,13 @@ span {
     border-radius: 50%;
 
 }
+
+.navbar-nav .btn {
+    color: #f8694c;
+    border-color: #f8694c;
+}
+
+.navbar-nav .btn:hover {
+    background-color: #f8694c;
+    color: white;
+}
