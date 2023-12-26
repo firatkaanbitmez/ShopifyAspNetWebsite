@@ -1,34 +1,130 @@
-@model Deals
+@model ShopAppProject.Data.Deals
 
-<h2>Create Deals</h2>
+@{
+    ViewData["Title"] = "Kampanya Oluştur";
+}
 
-<form asp-action="Create" method="post">
-    <div class="form-group">
-    <label asp-for="DealsType" class="control-label"></label>
-    <select asp-for="DealsType" class="form-control" asp-items="Html.GetEnumSelectList<DealsType>()">
-        <option value="">Select Deals Type</option>
-    </select>
-    <span asp-validation-for="DealsType" class="text-danger"></span>
-</div>
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Create" method="post" id="dealsForm">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
     <div class="form-group">
-        <label asp-for="DealsName"></label>
+        <label asp-for="DealsType" class="control-label">Kampanya Türü</label>
+        <select asp-for="DealsType" class="form-control" asp-items="ViewBag.DealsType" onchange="showRelevantFields()">
+            <option value="">Kampanya Türü Seçin</option>
+        </select>
+        <span asp-validation-for="DealsType" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="DealsName" class="control-label">Kampanya Adı</label>
         <input asp-for="DealsName" class="form-control" />
+        <span asp-validation-for="DealsName" class="text-danger"></span>
     </div>
+
     <div class="form-group">
-        <label asp-for="DiscountPercentage"></label>
-        <input asp-for="DiscountPercentage" class="form-control" />
+        <label asp-for="DealsDescription" class="control-label">Kampanya Açıklaması</label>
+        <textarea asp-for="DealsDescription" class="form-control"></textarea>
+        <span asp-validation-for="DealsDescription" class="text-danger"></span>
     </div>
+
     <div class="form-group">
-        <label asp-for="StartDate" class="control-label"></label>
+        <label asp-for="StartDate" class="control-label">Başlangıç Tarihi</label>
         <input asp-for="StartDate" class="form-control" />
         <span asp-validation-for="StartDate" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="EndDate" class="control-label"></label>
+        <label asp-for="EndDate" class="control-label">Bitiş Tarihi</label>
         <input asp-for="EndDate" class="form-control" />
         <span asp-validation-for="EndDate" class="text-danger"></span>
     </div>
-    <button type="submit" class="btn btn-primary">Create</button>
+    <div id="dealsFields">
+        <!-- Dinamik form alanları burada yer alacak -->
+    </div>
+
+
+    <button type="submit" class="btn btn-primary">Oluştur</button>
 </form>
+@section Scripts {
+    <script>
+        function showRelevantFields() {
+            var selectedType = document.getElementById("DealsType").value;
+            var fieldsContainer = document.getElementById("dealsFields");
+
+            fieldsContainer.innerHTML = ''; // Clear existing fields
+
+            switch (selectedType) {
+                case 'DiscountPercentage':
+                    addDiscountPercentageFields(fieldsContainer);
+                    break;
+                case 'DiscountPrice':
+                    addDiscountPriceFields(fieldsContainer);
+                    break;
+                case 'DiscountCoupon':
+                    addDiscountCouponFields(fieldsContainer);
+                    break;
+                case 'FreeShipping':
+                    addFreeShippingFields(fieldsContainer);
+                    break;
+                case 'GiftProduct':
+                    addGiftProductFields(fieldsContainer);
+                    break;
+                case 'CategoryDiscount':
+                    addCategoryDiscountFields(fieldsContainer);
+                    break;
+                case 'PointEarning':
+                    addPointEarningFields(fieldsContainer);
+                    break;
+                default:
+                    fieldsContainer.innerHTML = '';
+            }
+        }
+
+        function addDiscountPercentageFields(container) {
+            container.innerHTML += '<div class="form-group"><label for="DPercentage">Discount Percentage</label><input type="number" class="form-control" name="DPercentage" /></div>';
+            container.innerHTML += '<div class="form-group"><label for="DPercentageMinimumPrice">Minimum Price for Discount Percentage</label><input type="number" class="form-control" name="DPercentageMinimumPrice" /></div>';
+        }
+
+        function addDiscountPriceFields(container) {
+            container.innerHTML += '<div class="form-group"><label for="DPrice">Discount Price</label><input type="number" class="form-control" name="DPrice" /></div>';
+            container.innerHTML += '<div class="form-group"><label for="DPriceMinimumPrice">Minimum Price for Discount Price</label><input type="number" class="form-control" name="DPriceMinimumPrice" /></div>';
+        }
+
+        function addDiscountCouponFields(container) {
+            container.innerHTML += '<div class="form-group"><label for="DCouponCode">Coupon Code</label><input type="text" class="form-control" name="DCouponCode" /></div>';
+            container.innerHTML += '<div class="form-group"><label for="DCodeMinimumPrice">Minimum Price for Coupon Code</label><input type="number" class="form-control" name="DCodeMinimumPrice" /></div>';
+        }
+
+        function addFreeShippingFields(container) {
+            container.innerHTML += '<div class="form-group"><label for="FSMinimumPrice">Minimum Price for Free Shipping</label><input type="number" class="form-control" name="FSMinimumPrice" /></div>';
+        }
+
+        function addGiftProductFields(container) {
+            container.innerHTML += '<div class="form-group"><label for="GProductId">Gift Product ID</label><input type="number" class="form-control" name="GProductId" /></div>';
+        }
+
+        function addCategoryDiscountFields(container) {
+            var categorySelectHtml = '<select class="form-control" name="ProductCategory">';
+            categorySelectHtml += '<option value="">Select a Category</option>';
+
+        @foreach (var category in ViewBag.ProductCategories)
+        {
+            <text>
+                        categorySelectHtml += '<option value="@category.Value">@category.Text</option>';
+            </text>
+        }
+
+                categorySelectHtml += '</select>';
+
+            container.innerHTML += '<div class="form-group"><label for="CDiscountPercentage">Category Discount Percentage</label><input type="number" class="form-control" name="CDiscountPercentage" /></div>';
+            container.innerHTML += '<div class="form-group"><label for="CDMinimumPrice">Minimum Price for Category Discount</label><input type="number" class="form-control" name="CDMinimumPrice" /></div>';
+            container.innerHTML += '<div class="form-group"><label for="ProductCategory">Product Category</label>' + categorySelectHtml + '</div>';
+        }
+
+
+        function addPointEarningFields(container) {
+            container.innerHTML += '<div class="form-group"><label for="Point">Points</label><input type="number" class="form-control" name="Point" /></div>';
+        }
+    </script>
+}

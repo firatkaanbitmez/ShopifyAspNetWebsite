@@ -10,8 +10,8 @@
         <dd class="col-sm-10">@Model.DealsType</dd>
         <dt class="col-sm-2">Name</dt>
         <dd class="col-sm-10">@Model.DealsName</dd>
-        <dt class="col-sm-2">Discount Percentage</dt>
-        <dd class="col-sm-10">@Model.DiscountPercentage</dd>
+        <dt class="col-sm-2">Açıklaması</dt>
+        <dd class="col-sm-10">@Model.DealsDescription</dd>
         <dt class="col-sm-2">Start Date</dt>
         <dd class="col-sm-10">@Model.StartDate.ToString("MM/dd/yyyy")</dd>
         <dt class="col-sm-2">End Date</dt>
@@ -41,7 +41,7 @@
                 var minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
 
                 document.getElementById("countdown").innerHTML = days + "d " + hours + "h " + minutes + "m ";
-                
+
                 // Update the countdown every second
                 setTimeout(function () {
                     updateCountdown(endDate);

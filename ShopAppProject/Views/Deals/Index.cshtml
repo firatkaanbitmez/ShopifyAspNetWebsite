@@ -1,49 +1,40 @@
 @model IEnumerable<ShopAppProject.Data.Deals>
 
 @{
-    var isAdmin = User.IsInRole("Admin");
+    ViewData["Title"] = "Deals Index";
 }
+<a asp-action="Create">Create New Deal</a>
+<h2>Deals Index</h2>
 
-<div class="container">
-    <h2>Kampanyalar</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.DealsType)</th>
+            <th>@Html.DisplayNameFor(model => model.DealsName)</th>
+            <th>@Html.DisplayNameFor(model => model.StartDate)</th>
+            <th>@Html.DisplayNameFor(model => model.EndDate)</th>
+            <th>Status</th>
+            <th>İşlemler</th>
 
-    @if (isAdmin)
-    {
-        <a class="btn btn-primary" asp-action="Create" asp-route-id="">Yeni Oluştur</a>
-    }
-
-    <table class="table">
-        <thead>
+            <!-- Add additional headers for different deal types as needed -->
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
             <tr>
-                <th>ID</th>
-                <th>Kampanya Türü</th>
-                <th>Kampanya Adı</th>
-                <th>Başlangıç Tarihi</th>
-                <th>Bitiş Tarihi</th>
-                <th>Durum</th>
-                <th>İşlemler</th>
+                <td>@Html.DisplayFor(modelItem => item.DealsType)</td>
+                <td>@Html.DisplayFor(modelItem => item.DealsName)</td>
+                <td>@Html.DisplayFor(modelItem => item.StartDate)</td>
+                <td>@Html.DisplayFor(modelItem => item.EndDate)</td>
+                <td>@Html.DisplayFor(modelItem => item.Status)</td>
+                <!-- Display additional fields based on the type of deal -->
+                <td>
+                    <a href="@Url.Action("Edit", new { id = item.DealsId })">Edit</a> |
+                    <a href="@Url.Action("Details", new { id = item.DealsId })">Details</a> |
+                    <a href="@Url.Action("Delete", new { id = item.DealsId })">Delete</a>
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach (var deal in Model)
-            {
-                <tr>
-                    <td>@deal.DealsId</td>
-                    <td>@deal.DealsType</td>
-                    <td>@deal.DealsName</td>
-                    <td>@deal.StartDate.ToString("dd/MM/yyyy")</td>
-                    <td>@deal.EndDate.ToString("dd/MM/yyyy")</td>
-                    <td>@deal.Status</td>
-                    <td>
-                        @if (isAdmin)
-                        {
-                            <a class="btn btn-info" asp-action="Edit" asp-route-id="@deal.DealsId">Düzenle</a>
-                            <a class="btn btn-danger" asp-action="Delete" asp-route-id="@deal.DealsId">Sil</a>
-                        }
-                        <a class="btn btn-secondary" asp-action="Details" asp-route-id="@deal.DealsId">Detaylar</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
+        }
+    </tbody>
+</table>

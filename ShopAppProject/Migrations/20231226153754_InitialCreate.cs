@@ -59,20 +59,32 @@ namespace ShopAppProject.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Dealss",
+                name: "Deals",
                 columns: table => new
                 {
                     DealsId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     DealsType = table.Column<int>(type: "INTEGER", nullable: false),
-                    DealsName = table.Column<string>(type: "TEXT", nullable: false),
-                    DiscountPercentage = table.Column<decimal>(type: "TEXT", nullable: true),
+                    DealsName = table.Column<string>(type: "TEXT", nullable: true),
+                    DealsDescription = table.Column<string>(type: "TEXT", nullable: true),
                     StartDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    EndDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    DPercentage = table.Column<double>(type: "REAL", nullable: true),
+                    DPercentageMinimumPrice = table.Column<double>(type: "REAL", nullable: true),
+                    DPrice = table.Column<double>(type: "REAL", nullable: true),
+                    DPriceMinimumPrice = table.Column<double>(type: "REAL", nullable: true),
+                    DCouponCode = table.Column<string>(type: "TEXT", nullable: true),
+                    DCodeMinimumPrice = table.Column<double>(type: "REAL", nullable: true),
+                    FSMinimumPrice = table.Column<double>(type: "REAL", nullable: true),
+                    GProductId = table.Column<int>(type: "INTEGER", nullable: true),
+                    ProductCategory = table.Column<string>(type: "TEXT", nullable: true),
+                    CDiscountPercentage = table.Column<double>(type: "REAL", nullable: true),
+                    CDMinimumPrice = table.Column<double>(type: "REAL", nullable: true),
+                    Point = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Dealss", x => x.DealsId);
+                    table.PrimaryKey("PK_Deals", x => x.DealsId);
                 });
 
             migrationBuilder.CreateTable(
@@ -587,7 +599,7 @@ namespace ShopAppProject.Migrations
                 name: "Comments");
 
             migrationBuilder.DropTable(
-                name: "Dealss");
+                name: "Deals");
 
             migrationBuilder.DropTable(
                 name: "OrderDetails");

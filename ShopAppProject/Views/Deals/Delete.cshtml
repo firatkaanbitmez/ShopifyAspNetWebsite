@@ -1,24 +1,32 @@
 @model ShopAppProject.Data.Deals
 
-<h2>Delete Deals</h2>
+@{
+    ViewData["Title"] = "Delete Deal";
+}
 
+<h2>@ViewData["Title"]</h2>
+
+<h3>Are you sure you want to delete this deal?</h3>
 <div>
-    <h3>Are you sure you want to delete this Deals?</h3>
+    <h4>Deal Details</h4>
+    <hr />
     <dl class="row">
-        <dt class="col-sm-2">ID</dt>
-        <dd class="col-sm-10">@Model.DealsId</dd>
-        <dt class="col-sm-2">Name</dt>
-        <dd class="col-sm-10">@Model.DealsName</dd>
-        <dt class="col-sm-2">Discount Percentage</dt>
-        <dd class="col-sm-10">@Model.DiscountPercentage</dd>
-        <dt class="col-sm-2">Start Date</dt>
-        <dd class="col-sm-10">@Model.StartDate</dd>
-        <dt class="col-sm-2">End Date</dt>
-        <dd class="col-sm-10">@Model.EndDate</dd>
-        <!-- Add other properties as needed -->
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DealsType)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DealsType)
+        </dd>
+
+        <!-- Include other deal properties here as needed -->
+
     </dl>
-    <form asp-action="Delete" asp-route-id="@Model.DealsId" method="post">
-        <button type="submit" class="btn btn-danger">Delete</button>
-        <a asp-action="Index">Back to List</a>
+
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="DealsId" />
+        <div class="form-group">
+            <input type="submit" value="Delete" class="btn btn-danger" />
+            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        </div>
     </form>
 </div>

@@ -11,7 +11,7 @@ using ShopAppProject.Data;
 namespace ShopAppProject.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231225133835_InitialCreate")]
+    [Migration("20231226153754_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -297,17 +297,52 @@ namespace ShopAppProject.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<double?>("CDMinimumPrice")
+                        .HasColumnType("REAL");
+
+                    b.Property<double?>("CDiscountPercentage")
+                        .HasColumnType("REAL");
+
+                    b.Property<double?>("DCodeMinimumPrice")
+                        .HasColumnType("REAL");
+
+                    b.Property<string>("DCouponCode")
+                        .HasColumnType("TEXT");
+
+                    b.Property<double?>("DPercentage")
+                        .HasColumnType("REAL");
+
+                    b.Property<double?>("DPercentageMinimumPrice")
+                        .HasColumnType("REAL");
+
+                    b.Property<double?>("DPrice")
+                        .HasColumnType("REAL");
+
+                    b.Property<double?>("DPriceMinimumPrice")
+                        .HasColumnType("REAL");
+
+                    b.Property<string>("DealsDescription")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("DealsName")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("DealsType")
                         .HasColumnType("INTEGER");
 
-                    b.Property<decimal?>("DiscountPercentage")
+                    b.Property<DateTime>("EndDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("EndDate")
+                    b.Property<double?>("FSMinimumPrice")
+                        .HasColumnType("REAL");
+
+                    b.Property<int?>("GProductId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("Point")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ProductCategory")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("StartDate")
@@ -315,7 +350,7 @@ namespace ShopAppProject.Migrations
 
                     b.HasKey("DealsId");
 
-                    b.ToTable("Dealss");
+                    b.ToTable("Deals");
                 });
 
             modelBuilder.Entity("ShopAppProject.Data.Order", b =>

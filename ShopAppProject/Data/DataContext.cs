@@ -42,7 +42,7 @@ namespace ShopAppProject.Data
         public DbSet<ProductImage> ProductImages { get; set; }
 
         public DbSet<UserProductList> UserProductLists { get; set; }
-        public DbSet<Deals> Dealss { get; set; }
+        public DbSet<Deals> Deals { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
