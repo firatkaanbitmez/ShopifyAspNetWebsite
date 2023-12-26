@@ -1,38 +1,100 @@
 @model ShopAppProject.Data.Deals
 
-<h2>Deals Details</h2>
+@{
+    ViewData["Title"] = "Kampanya Detayları";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Varsa genel layout'unuzu buraya ekleyin
+}
 
-<div>
-    <dl class="row">
-        <dt class="col-sm-2">ID</dt>
-        <dd class="col-sm-10">@Model.DealsId</dd>
-        <dt class="col-sm-2">Deals Type</dt>
-        <dd class="col-sm-10">@Model.DealsType</dd>
-        <dt class="col-sm-2">Name</dt>
-        <dd class="col-sm-10">@Model.DealsName</dd>
-        <dt class="col-sm-2">Açıklaması</dt>
-        <dd class="col-sm-10">@Model.DealsDescription</dd>
-        <dt class="col-sm-2">Start Date</dt>
-        <dd class="col-sm-10">@Model.StartDate.ToString("MM/dd/yyyy")</dd>
-        <dt class="col-sm-2">End Date</dt>
-        <dd class="col-sm-10">@Model.EndDate.ToString("MM/dd/yyyy")</dd>
-        <dt class="col-sm-2">Time Left</dt>
-        <dd class="col-sm-10" id="countdown"></dd>
-        <!-- Add other properties as needed -->
-    </dl>
-    <div class="mt-3">
-        <a asp-action="Edit" asp-route-id="@Model.DealsId" class="btn btn-primary">Edit</a>
-        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+<h2 class="my-4 text-center">@ViewData["Title"]</h2>
+
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-4">ID</dt>
+                <dd class="col-sm-5">@Model.DealsId</dd>
+
+                <dt class="col-sm-4">Kampanya Türü</dt>
+                <dd class="col-sm-5">@Model.DealsType</dd>
+                <!-- Enum değerinin görünen adını almak için GetDisplayName() kullanılır -->
+
+                <dt class="col-sm-4">İsim</dt>
+                <dd class="col-sm-5">@Model.DealsName</dd>
+
+                <dt class="col-sm-4">Açıklama</dt>
+                <dd class="col-sm-5">@Model.DealsDescription</dd>
+
+                <dt class="col-sm-4">Başlangıç Tarihi</dt>
+                <dd class="col-sm-5">@Model.StartDate.ToString("dd.MM.yyyy")</dd>
+
+                <dt class="col-sm-4">Bitiş Tarihi</dt>
+                <dd class="col-sm-5">@Model.EndDate.ToString("dd.MM.yyyy")</dd>
+
+                @switch (Model.DealsType)
+                {
+                    case ShopAppProject.Data.DealsType.DiscountPercentage:
+                        <dt class="col-sm-4">İndirim Yüzdesi</dt>
+                        <dd class="col-sm-5">@Model.DPercentage%</dd>
+
+                        <dt class="col-sm-4">Minimum Fiyat</dt>
+                        <dd class="col-sm-5">@Model.DPercentageMinimumPrice</dd>
+                        break;
+
+                    case ShopAppProject.Data.DealsType.DiscountPrice:
+                        <dt class="col-sm-4">İndirim Miktarı</dt>
+                        <dd class="col-sm-5">@Model.DPrice</dd>
+                        <dt class="col-sm-4">Minimum Fiyat (Miktar İndirimi)</dt>
+                        <dd class="col-sm-5">@Model.DPriceMinimumPrice</dd>
+                        break;
+
+                    case ShopAppProject.Data.DealsType.DiscountCoupon:
+                        <dt class="col-sm-4">Kupon Kodu</dt>
+                        <dd class="col-sm-5">@Model.DCouponCode</dd>
+                        <dt class="col-sm-4">Minimum Fiyat (Kupon)</dt>
+                        <dd class="col-sm-5">@Model.DCodeMinimumPrice</dd>
+                        break;
+
+                    case ShopAppProject.Data.DealsType.FreeShipping:
+                        <dt class="col-sm-4">Minimum Fiyat (Ücretsiz Kargo)</dt>
+                        <dd class="col-sm-5">@Model.FSMinimumPrice</dd>
+                        break;
+
+                    case ShopAppProject.Data.DealsType.GiftProduct:
+                        <dt class="col-sm-4">Hediye Ürün ID'si</dt>
+                        <dd class="col-sm-5">@Model.GProductId</dd>
+                        break;
+
+                    case ShopAppProject.Data.DealsType.CategoryDiscount:
+                        <dt class="col-sm-4">Kategori İndirimi Yüzdesi</dt>
+                        <dd class="col-sm-5">@Model.CDiscountPercentage%</dd>
+                        <dt class="col-sm-4">Minimum Fiyat (Kategori İndirimi)</dt>
+                        <dd class="col-sm-5">@Model.CDMinimumPrice</dd>
+                        <dt class="col-sm-4">İndirim Uygulanan Kategori</dt>
+                        <dd class="col-sm-5">@Model.ProductCategory</dd>
+                        break;
+
+                    case ShopAppProject.Data.DealsType.PointEarning:
+                        <dt class="col-sm-4">Kazanılan Puan</dt>
+                        <dd class="col-sm-5">@Model.Point</dd>
+                        break;
+                }
+
+                <dt class="col-sm-4">Kalan Zaman</dt>
+                <dd class="col-sm-5" id="countdown"></dd>
+            </dl>
+        </div>
+        <div class="card-footer text-center">
+            <a asp-action="Edit" asp-route-id="@Model.DealsId" class="btn btn-primary">Düzenle</a>
+            <a asp-action="Index" class="btn btn-secondary">Listeye Geri Dön</a>
+        </div>
     </div>
 </div>
 
 @section Scripts {
     <script>
-        // Calculate and display the countdown
         function updateCountdown(endDate) {
             var now = new Date();
             var end = new Date(endDate);
-
             var timeLeft = end - now;
 
             if (timeLeft > 0) {
@@ -40,18 +102,16 @@
                 var hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 var minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
 
-                document.getElementById("countdown").innerHTML = days + "d " + hours + "h " + minutes + "m ";
+                document.getElementById("countdown").innerHTML = days + " gün " + hours + " saat " + minutes + " dakika ";
 
-                // Update the countdown every second
                 setTimeout(function () {
                     updateCountdown(endDate);
                 }, 1000);
             } else {
-                document.getElementById("countdown").innerHTML = "Deals has ended";
+                document.getElementById("countdown").innerHTML = "Kampanya sona erdi";
             }
         }
 
-        // Call the function with the Deals's end date
         updateCountdown("@Model.EndDate.ToString("yyyy-MM-ddTHH:mm:ss")");
     </script>
 }
