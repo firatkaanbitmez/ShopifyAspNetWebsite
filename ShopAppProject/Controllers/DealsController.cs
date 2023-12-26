@@ -33,6 +33,7 @@ namespace ShopAppProject.Controllers
             return View();
         }
 
+
         // POST: Deals/Create
         [HttpPost]
         [ValidateAntiForgeryToken]

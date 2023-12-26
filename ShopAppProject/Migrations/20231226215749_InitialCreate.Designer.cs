@@ -11,7 +11,7 @@ using ShopAppProject.Data;
 namespace ShopAppProject.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231226153754_InitialCreate")]
+    [Migration("20231226215749_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
