@@ -1,15 +1,13 @@
-/* _layout.css */
-
-@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
-
+/* Global Styles */
 body {
-    background-color: #fff;
-    font-family: 'Poppins', sans-serif;
+    background-color: #ffffff;
+    font-family: Arial, Helvetica, sans-serif;
     overflow-y: scroll;
     scrollbar-width: thin;
     scrollbar-color: #131921 #131921;
 }
 
+/* Form Styling */
 .form-inline {
     display: inline-flex;
     position: relative;
@@ -41,6 +39,7 @@ body {
     background-color: #c45335;
 }
 
+/* Scrollbar Styling */
 body::-webkit-scrollbar {
     width: 15px;
 }
@@ -56,18 +55,21 @@ body::-webkit-scrollbar-thumb {
     border: 2px solid #232E33;
 }
 
+/* Header and Footer */
 header {
-    background-color: whitesmoke;
+    background-color: rgba(255, 255, 255, 0.8);
 }
 
 footer {
     background-color: #fff;
 }
 
+/* Span Styles */
 span {
     color: #f8694c;
 }
 
+/* Navbar and Nav Items */
 .navbar-nav .nav-item {
     margin-right: 10px;
 }
@@ -86,6 +88,7 @@ span {
     border-bottom-color: #ff8840;
 }
 
+/* Dropdown Styling */
 .dropdown-toggle {
     min-width: 200px;
     max-width: 250px;
@@ -94,7 +97,7 @@ span {
     text-overflow: ellipsis;
 }
 
-/* Dropdown menu style */
+/* Dropdown Menu Styles */
 .dropdown {
     margin-right: 40px;
 }
@@ -110,7 +113,7 @@ span {
     line-height: 40px;
 }
 
-/* Logout Button */
+/* Logout Button Styling */
 .btn-logout,
 .btn-logout-custom {
     background-color: #dc3545;
@@ -130,7 +133,7 @@ span {
     color: #fff;
 }
 
-/* Cart CSS */
+/* Cart Styles */
 .cart-link {
     padding: 8px;
     border-radius: 100%;
@@ -144,6 +147,7 @@ span {
     max-width: 38px;
 }
 
+/* Badge Styling */
 .badge {
     color: #f8694c;
     font-size: 18px;
@@ -152,9 +156,9 @@ span {
     right: 9px;
     padding: 5px 10px;
     border-radius: 50%;
-
 }
 
+/* Navbar Button Styles */
 .navbar-nav .btn {
     color: #f8694c;
     border-color: #f8694c;
@@ -165,15 +169,8 @@ span {
     color: white;
 }
 
-/* Genel sayfa tasarımı */
-body {
-    background-color: #f8f9fa;
+/* General Page Design */
 
-}
-
-
-h1,
-h2,
 h3,
 h4,
 h5,
@@ -181,55 +178,33 @@ h6 {
     margin-bottom: 20px;
 }
 
-/* Başlık stilleri */
 h1 {
     font-size: 36px;
+    font-weight: bold;
     color: #333;
 }
 
 h2 {
     font-size: 24px;
+    font-weight: bold;
     color: #555;
 }
 
-/* Form stilleri */
+p {
+    font-size: 16px;
+    line-height: 1.5;
+    color: #666;
+}
+
+
+/* Form Group Styles */
 .form-group {
     margin-bottom: 20px;
 }
 
-.form-label {
-    font-weight: bold;
-    color: #333;
-}
-
-.form-control {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
-}
-
-/* Tablo stilleri */
+/* Table Styles */
 table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
-}
-
-table,
-th,
-td {
-    border: 1px solid #ccc;
-}
-
-th,
-td {
-    padding: 10px;
-    text-align: left;
-}
-
-th {
-    background-color: #f2f2f2;
-    font-weight: bold;
 }
