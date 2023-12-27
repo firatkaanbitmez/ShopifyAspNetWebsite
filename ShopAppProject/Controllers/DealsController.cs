@@ -1,9 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using ShopAppProject.Data;
+using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
+
 
 
 namespace ShopAppProject.Controllers
@@ -17,39 +18,57 @@ namespace ShopAppProject.Controllers
             _context = context;
         }
 
-        [AllowAnonymous]
+        // GET: Deals
         public async Task<IActionResult> Index()
         {
-            var deals = await _context.Deals.ToListAsync();
-            return View(deals);
+            return View(await _context.Deals.ToListAsync());
+        }
+
+        // GET: Deals/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var deal = await _context.Deals
+                .FirstOrDefaultAsync(m => m.DealsId == id);
+            if (deal == null)
+            {
+                return NotFound();
+            }
+
+            return View(deal);
         }
 
         // GET: Deals/Create
         public IActionResult Create()
         {
-            ViewBag.DealsType = new SelectList(Enum.GetValues(typeof(DealsType)));
-            ViewBag.ProductCategories = new SelectList(_context.Products.Select(p => p.ProductCategory).Distinct());
-
             return View();
         }
-
 
         // POST: Deals/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DealsId,DealsType,DealsName,DealsDescription,StartDate,EndDate,DPercentage,DPercentageMinimumPrice,DPrice,DPriceMinimumPrice,DCouponCode,DCodeMinimumPrice,FSMinimumPrice,GProductId,CDiscountPercentage,CDMinimumPrice,Point")] Deals deals)
+        public async Task<IActionResult> Create([Bind("DealsId,DealsType,DealsName,DealsDescription,StartDate,EndDate,minimumsepettutari,DPercentage,DPrice,xProduct,yProduct,DCouponCode,ShippingId,Point,GProductId")] Deals deal)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(deals);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    _context.Add(deal);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    // Log the exception details
+                    // Return to the view with an error message
+                }
             }
-            ViewBag.DealsType = new SelectList(Enum.GetValues(typeof(DealsType)), deals.DealsType);
-            return View(deals);
+            return View(deal);
         }
-
-
 
         // GET: Deals/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -60,7 +79,6 @@ namespace ShopAppProject.Controllers
             if (deal == null) return NotFound();
 
             ViewBag.DealsType = new SelectList(Enum.GetValues(typeof(DealsType)), deal.DealsType);
-            ViewBag.ProductCategories = new SelectList(_context.Products.Select(p => p.ProductCategory).Distinct(), deal.ProductCategory);
 
             return View(deal);
         }
@@ -68,7 +86,7 @@ namespace ShopAppProject.Controllers
         // POST: Deals/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("DealsId,DealsType,DealsName,DealsDescription,StartDate,EndDate,DPercentage,DPercentageMinimumPrice,DPrice,DPriceMinimumPrice,DCouponCode,DCodeMinimumPrice,FSMinimumPrice,GProductId,CDiscountPercentage,CDMinimumPrice,Point,ProductCategory")] Deals deal)
+        public async Task<IActionResult> Edit(int id, [Bind("DealsId,DealsType,DealsName,DealsDescription,StartDate,EndDate,minimumsepettutari,DPercentage,DPrice,xProduct,yProduct,DCouponCode,ShippingId,Point,GProductId")] Deals deal)
         {
             if (id != deal.DealsId) return NotFound();
 
@@ -87,13 +105,7 @@ namespace ShopAppProject.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewBag.DealsType = new SelectList(Enum.GetValues(typeof(DealsType)), deal.DealsType);
-            ViewBag.ProductCategories = new SelectList(_context.Products.Select(p => p.ProductCategory).Distinct(), deal.ProductCategory);
             return View(deal);
-        }
-
-        private bool DealExists(int id)
-        {
-            return _context.Deals.Any(e => e.DealsId == id);
         }
 
 
@@ -121,28 +133,14 @@ namespace ShopAppProject.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var deal = await _context.Deals.FindAsync(id);
-            if (deal == null)
-            {
-                return NotFound();
-            }
-
             _context.Deals.Remove(deal);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-
-        // GET: Deals/Details/5
-        public async Task<IActionResult> Details(int? id)
+        private bool DealExists(int id)
         {
-            if (id == null) return NotFound();
-
-            var deal = await _context.Deals.FirstOrDefaultAsync(m => m.DealsId == id);
-            if (deal == null) return NotFound();
-
-            return View(deal);
+            return _context.Deals.Any(e => e.DealsId == id);
         }
-
-
     }
 }

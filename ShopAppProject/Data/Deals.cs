@@ -1,6 +1,7 @@
 //Data/Deals.cs
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ShopAppProject.Data
 {
@@ -24,29 +25,36 @@ namespace ShopAppProject.Data
         [Display(Name = "End Date")]
         public DateTime EndDate { get; set; }
 
-        // Sabit İndirim Yüzdesi Kampanyası için Alanlar
-        public double? DPercentage { get; set; }
-        public double? DPercentageMinimumPrice { get; set; }
+        public double? minimumsepettutari { get; set; }
 
-        // Miktar İndirimi Kampanyası için Alanlar
+
+
+        //Sepette Yüzde İndirimi Kampanyası için Alanlar
+        public double? DPercentage { get; set; }
+
+
+        // Sepet Fiyat İndirimi Kampanyası için Alanlar
         public double? DPrice { get; set; }
-        public double? DPriceMinimumPrice { get; set; }
+
+        // x Al y Öde Kampanyası için Alanlar
+        public double? xProduct { get; set; }
+        public double? yProduct { get; set; }
+
+
 
         // İndirim Kuponu Kampanyası için Alanlar
         public string? DCouponCode { get; set; }
-        public double? DCodeMinimumPrice { get; set; }
+
 
         // Ücretsiz Kargo Kampanyası için Alan
-        public double? FSMinimumPrice { get; set; }
+        public int? ShippingId { get; set; }
+
+
+        [ForeignKey("ShippingId")]
+        public Shipping? Shipping { get; set; }
 
         // Hediye Ürün Kampanyası için Alan
         public int? GProductId { get; set; }
-
-        // Kategori İndirimleri Kampanyası için Alanlar
-        public string? ProductCategory { get; set; } // Add this line for category
-
-        public double? CDiscountPercentage { get; set; }
-        public double? CDMinimumPrice { get; set; }
 
         // Puan Kazanımları Kampanyası için Alan
         public int? Point { get; set; }
@@ -69,11 +77,13 @@ namespace ShopAppProject.Data
     }
     public enum DealsType
     {
-        [Display(Name = "Sabit İndirim Yüzdesi")]
+        [Display(Name = "Sepette Yüzde İndirimi")]
         DiscountPercentage,
 
-        [Display(Name = "Miktar İndirimi")]
+        [Display(Name = "Sepet Fiyat İndirimi")]
         DiscountPrice,
+        [Display(Name = "x Al y Öde")]
+        xydeal,
 
         [Display(Name = "İndirim Kuponu")]
         DiscountCoupon,
@@ -83,9 +93,6 @@ namespace ShopAppProject.Data
 
         [Display(Name = "Hediye Ürün")]
         GiftProduct,
-
-        [Display(Name = "Kategori İndirimleri")]
-        CategoryDiscount,
 
         [Display(Name = "Puan Kazanımları")]
         PointEarning,

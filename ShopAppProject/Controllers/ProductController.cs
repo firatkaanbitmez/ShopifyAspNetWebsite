@@ -137,6 +137,7 @@ namespace ShopAppProject.Controllers
             try
             {
                 var product = _context.Products
+                 .Include(p => p.User)
                     .Include(p => p.Comments)
                     .Include(p => p.UserProductLists)
                     .Include(p => p.Images) // Ürün resimlerini de yükle

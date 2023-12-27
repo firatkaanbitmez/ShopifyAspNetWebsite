@@ -68,6 +68,9 @@
                 case 'DiscountPrice':
                     addDiscountPriceFields(fieldsContainer);
                     break;
+                case 'xydeal':
+                    addxydealsFields(fieldsContainer);
+                    break;
                 case 'DiscountCoupon':
                     addDiscountCouponFields(fieldsContainer);
                     break;
@@ -77,9 +80,6 @@
                 case 'GiftProduct':
                     addGiftProductFields(fieldsContainer);
                     break;
-                case 'CategoryDiscount':
-                    addCategoryDiscountFields(fieldsContainer);
-                    break;
                 case 'PointEarning':
                     addPointEarningFields(fieldsContainer);
                     break;
@@ -87,55 +87,44 @@
                     fieldsContainer.innerHTML = '';
             }
         }
-
         function addDiscountPercentageFields(container) {
-            container.innerHTML += '<div class="form-group"><label for="DPercentage">İndirim Yüzdesi</label><input type="number" class="form-control" name="DPercentage" value="@Model.DPercentage" /></div>';
-            container.innerHTML += '<div class="form-group"><label for="DPercentageMinimumPrice">İndirim İçin Minimum Fiyat</label><input type="number" class="form-control" name="DPercentageMinimumPrice" value="@Model.DPercentageMinimumPrice" /></div>';
+            container.innerHTML += '<div class="form-group"><label for="DPercentage">İndirim Yüzdesi</label><input type="number" class="form-control" name="DPercentage" /></div>';
+
+            container.innerHTML += '<div class="form-group"><label for="minimumsepettutari">Minimum Sepet Tutarı</label><input type="number" class="form-control" name="minimumsepettutari" /></div>';
         }
 
         function addDiscountPriceFields(container) {
-            container.innerHTML += '<div class="form-group"><label for="DPrice">İndirim Fiyatı</label><input type="number" class="form-control" name="DPrice" value="@Model.DPrice" /></div>';
-            container.innerHTML += '<div class="form-group"><label for="DPriceMinimumPrice">İndirim İçin Minimum Fiyat</label><input type="number" class="form-control" name="DPriceMinimumPrice" value="@Model.DPriceMinimumPrice" /></div>';
+            container.innerHTML += '<div class="form-group"><label for="DPrice">İndirim Miktarı</label><input type="number" class="form-control" name="DPrice" /></div>';
+
+            container.innerHTML += '<div class="form-group"><label for="minimumsepettutari">Minimum Sepet Tutarı</label><input type="number" class="form-control" name="minimumsepettutari" /></div>';
+        }
+        function addxydealsFields(container) {
+            container.innerHTML += '<div class="form-group"><label for="xProduct">x Adet Satın Alınan Ürün Sayısı</label><input type="number" class="form-control" name="xProduct" /></div>';
+            container.innerHTML += '<div class="form-group"><label for="yProduct">y Adet Ödenecek Ürün Sayısı</label><input type="number" class="form-control" name="yProduct" /></div>';
+            container.innerHTML += '<div class="form-group"><label for="minimumsepettutari">Minimum Sepet Tutarı</label><input type="number" class="form-control" name="minimumsepettutari" /></div>';
         }
 
         function addDiscountCouponFields(container) {
-            container.innerHTML += '<div class="form-group"><label for="DCouponCode">Kupon Kodu</label><input type="text" class="form-control" name="DCouponCode" value="@Model.DCouponCode" /></div>';
-            container.innerHTML += '<div class="form-group"><label for="DCodeMinimumPrice">Kupon İçin Minimum Fiyat</label><input type="number" class="form-control" name="DCodeMinimumPrice" value="@Model.DCodeMinimumPrice" /></div>';
+            container.innerHTML += '<div class="form-group"><label for="DCouponCode">Kupon Kodu</label><input type="text" class="form-control" name="DCouponCode" /></div>';
+
+            container.innerHTML += '<div class="form-group"><label for="minimumsepettutari">Minimum Sepet Tutarı</label><input type="number" class="form-control" name="minimumsepettutari" /></div>';
         }
 
         function addFreeShippingFields(container) {
-            container.innerHTML += '<div class="form-group"><label for="FSMinimumPrice">Ücretsiz Kargo İçin Minimum Fiyat</label><input type="number" class="form-control" name="FSMinimumPrice" value="@Model.FSMinimumPrice" /></div>';
+
+            container.innerHTML += '<div class="form-group"><label for="minimumsepettutari">Minimum Sepet Tutarı</label><input type="number" class="form-control" name="minimumsepettutari" /></div>';
         }
 
         function addGiftProductFields(container) {
-            container.innerHTML += '<div class="form-group"><label for="GProductId">Hediye Ürün ID</label><input type="number" class="form-control" name="GProductId" value="@Model.GProductId" /></div>';
+            container.innerHTML += '<div class="form-group"><label for="GProductId">Hediye Ürünün ID si </label><input type="number" class="form-control" name="GProductId" /></div>';
+            container.innerHTML += '<div class="form-group"><label for="minimumsepettutari">Minimum Sepet Tutarı</label><input type="number" class="form-control" name="minimumsepettutari" /></div>';
         }
 
-        function addCategoryDiscountFields(container) {
-            var categorySelectHtml = '<select class="form-control" name="ProductCategory">';
-            categorySelectHtml += '<option value="">Bir Kategori Seçin</option>';
-
-            @foreach (var category in ViewBag.ProductCategories)
-            {
-                if (category.Value == Model.ProductCategory)
-                {
-                    <text>categorySelectHtml += '<option value="@category.Value" selected>@category.Text</option>';</text>
-                }
-                else
-                {
-                    <text>categorySelectHtml += '<option value="@category.Value">@category.Text</option>';</text>
-                }
-            }
-
-            categorySelectHtml += '</select>';
-
-            container.innerHTML += '<div class="form-group"><label for="CDiscountPercentage">Kategori İndirim Yüzdesi</label><input type="number" class="form-control" name="CDiscountPercentage" value="@Model.CDiscountPercentage" /></div>';
-            container.innerHTML += '<div class="form-group"><label for="CDMinimumPrice">Kategori İndirim İçin Minimum Fiyat</label><input type="number" class="form-control" name="CDMinimumPrice" value="@Model.CDMinimumPrice" /></div>';
-            container.innerHTML += '<div class="form-group"><label for="ProductCategory">Ürün Kategorisi</label>' + categorySelectHtml + '</div>';
-        }
 
         function addPointEarningFields(container) {
-            container.innerHTML += '<div class="form-group"><label for="Point">Kazanılan Puan</label><input type="number" class="form-control" name="Point" value="@Model.Point" /></div>';
+            container.innerHTML += '<div class="form-group"><label for="Point">Kazanılacak Puan Tutarı</label><input type="number" class="form-control" name="Point" /></div>';
+            container.innerHTML += '<div class="form-group"><label for="minimumsepettutari">Minimum Sepet Tutarı</label><input type="number" class="form-control" name="minimumsepettutari" /></div>';
         }
     </script>
+
 }

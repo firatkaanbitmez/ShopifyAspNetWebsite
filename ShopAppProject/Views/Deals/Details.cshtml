@@ -36,41 +36,27 @@
                         <dt class="col-sm-4">İndirim Yüzdesi</dt>
                         <dd class="col-sm-5">@Model.DPercentage%</dd>
 
-                        <dt class="col-sm-4">Minimum Fiyat</dt>
-                        <dd class="col-sm-5">@Model.DPercentageMinimumPrice</dd>
                         break;
 
                     case ShopAppProject.Data.DealsType.DiscountPrice:
                         <dt class="col-sm-4">İndirim Miktarı</dt>
                         <dd class="col-sm-5">@Model.DPrice</dd>
-                        <dt class="col-sm-4">Minimum Fiyat (Miktar İndirimi)</dt>
-                        <dd class="col-sm-5">@Model.DPriceMinimumPrice</dd>
+
                         break;
 
                     case ShopAppProject.Data.DealsType.DiscountCoupon:
                         <dt class="col-sm-4">Kupon Kodu</dt>
                         <dd class="col-sm-5">@Model.DCouponCode</dd>
-                        <dt class="col-sm-4">Minimum Fiyat (Kupon)</dt>
-                        <dd class="col-sm-5">@Model.DCodeMinimumPrice</dd>
+
                         break;
 
                     case ShopAppProject.Data.DealsType.FreeShipping:
-                        <dt class="col-sm-4">Minimum Fiyat (Ücretsiz Kargo)</dt>
-                        <dd class="col-sm-5">@Model.FSMinimumPrice</dd>
+
                         break;
 
                     case ShopAppProject.Data.DealsType.GiftProduct:
                         <dt class="col-sm-4">Hediye Ürün ID'si</dt>
                         <dd class="col-sm-5">@Model.GProductId</dd>
-                        break;
-
-                    case ShopAppProject.Data.DealsType.CategoryDiscount:
-                        <dt class="col-sm-4">Kategori İndirimi Yüzdesi</dt>
-                        <dd class="col-sm-5">@Model.CDiscountPercentage%</dd>
-                        <dt class="col-sm-4">Minimum Fiyat (Kategori İndirimi)</dt>
-                        <dd class="col-sm-5">@Model.CDMinimumPrice</dd>
-                        <dt class="col-sm-4">İndirim Uygulanan Kategori</dt>
-                        <dd class="col-sm-5">@Model.ProductCategory</dd>
                         break;
 
                     case ShopAppProject.Data.DealsType.PointEarning:

@@ -108,6 +108,85 @@
     box-shadow: 0 4px 8px rgba(0, 123, 255, 0.5);
 }
 
+
+h1, h2, h3, h4, h5, h6 {
+    margin-bottom: 20px;
+}
+
+/* Başlık stilleri */
+h1 {
+    font-size: 36px;
+    color: #333;
+}
+
+h2 {
+    font-size: 24px;
+    color: #555;
+}
+
+
+
+/* Form stilleri */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    font-weight: bold;
+    color: #333;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+/* Tablo stilleri */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+table, th, td {
+    border: 1px solid #ccc;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+
+
+/* Duyuru kutusu stil */
+.alert {
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+
+
+
 </style>
 
 <div class="container py-4">
@@ -116,15 +195,15 @@
         <div class="col-md-3 tab-menu" style="margin-left: -200px;">
             <ul class="nav flex-column nav-pills" id="myTabs">
                 <li class="nav-item">
-                    <a class="nav-link active" id="campaign-type-tab" data-bs-toggle="pill"
+                    <a class="nav-link disabled active" id="campaign-type-tab" data-bs-toggle="pill"
                         href="#campaign-type">Kampanya Bilgileri</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="campaign-specifics-tab" data-bs-toggle="pill"
+                    <a class="nav-link disabled" id="campaign-specifics-tab" data-bs-toggle="pill"
                         href="#campaign-specifics">Kampanya Detayları</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="campaign-select-tab" data-bs-toggle="pill"
+                    <a class="nav-link disabled" id="campaign-select-tab" data-bs-toggle="pill"
                         href="#campaign-select">Kampanya Kapsamı</a>
                 </li>
             </ul>
@@ -134,7 +213,7 @@
  
         <!-- Tab Content -->
         <div class="col-md-9">
-            <form asp-action="Create" method="post" id="dealsForm" class="needs-validation" novalidate>
+<form asp-action="Create" method="post" id="dealsForm" class="needs-validation" novalidate>
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="campaign-type">
                         <!-- Campaign Type Selection -->
@@ -145,7 +224,7 @@
                                 var attributes = (DisplayAttribute[])fieldInfo.GetCustomAttributes(typeof(DisplayAttribute), false);
                                 var displayName = attributes.Length > 0 ? attributes[0].Name : dealType.ToString();
 
-                                <div class="col-md-4">
+                                <div class="col-md-4">  
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="DealsType" id="dealType-@dealType"
                                             value="@dealType" onchange="showRelevantFields('@dealType')">
@@ -182,18 +261,28 @@
                             </div>
                             
                         </div>
+                        <button type="button" class="btn btn-secondary" onclick="showTab('#campaign-specifics')">İleri</button>
 
                     </div>
                     <!-- Placeholder for Dynamic Form Fields -->
                     <div class="tab-pane fade" id="campaign-specifics">
-
+    <div id="dynamic-deal-fields">
+        <!-- Dynamic deal-specific fields will be injected here -->
+    </div>
+  <div class="mt-4">
+        <button type="button" class="btn btn-secondary" onclick="showTab('#campaign-type')">Geri</button>
+        <button type="button" class="btn btn-secondary" onclick="showTab('#campaign-select')">İleri</button>
+    </div>
+                     
                     </div>
                     <div class="tab-pane fade" id="campaign-select">
                         <!-- Submit Button -->
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                            <button type="button" class="btn btn-secondary" onclick="showTab('#campaign-specifics')">Geri</button>
                             <button type="submit" class="btn btn-primary btn-lg">Oluştur</button>
                         </div>
                     </div>
+                    
                 </div>
             </form>
         </div>
@@ -209,15 +298,33 @@
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
     <script>
+function showTab(tabSelector) {
+    $('.nav-pills .nav-link').each(function(){
+        $(this).removeClass('active');
+    });
+
+    $('.tab-content .tab-pane').each(function(){
+        $(this).removeClass('show active');
+    });
+
+    $(tabSelector + '-tab').addClass('active');
+    $(tabSelector).addClass('show active');
+}
+
+
+
         function showRelevantFields(selectedType) {
-            var fieldsContainer = document.getElementById("campaign-specifics");
-            fieldsContainer.innerHTML = '';
+            var fieldsContainer = document.getElementById("dynamic-deal-fields");
+    fieldsContainer.innerHTML = '';
             switch (selectedType) {
                 case 'DiscountPercentage':
                     addDiscountPercentageFields(fieldsContainer);
                     break;
                 case 'DiscountPrice':
                     addDiscountPriceFields(fieldsContainer);
+                    break;
+                case 'xydeal':
+                    addxydealsFields(fieldsContainer);
                     break;
                 case 'DiscountCoupon':
                     addDiscountCouponFields(fieldsContainer);
@@ -228,9 +335,6 @@
                 case 'GiftProduct':
                     addGiftProductFields(fieldsContainer);
                     break;
-                case 'CategoryDiscount':
-                    addCategoryDiscountFields(fieldsContainer);
-                    break;
                 case 'PointEarning':
                     addPointEarningFields(fieldsContainer);
                     break;
@@ -240,50 +344,42 @@
         }
 
         function addDiscountPercentageFields(container) {
-            container.innerHTML += '<div class="form-group"><label for="DPercentage">Discount Percentage</label><input type="number" class="form-control" name="DPercentage" /></div>';
-            container.innerHTML += '<div class="form-group"><label for="DPercentageMinimumPrice">Minimum Price for Discount Percentage</label><input type="number" class="form-control" name="DPercentageMinimumPrice" /></div>';
+            container.innerHTML += '<div class="form-group"><label for="DPercentage">İndirim Yüzdesi</label><input type="number" class="form-control" name="DPercentage" /></div>';
+            
+              container.innerHTML += '<div class="form-group"><label for="minimumsepettutari">Minimum Sepet Tutarı</label><input type="number" class="form-control" name="minimumsepettutari" /></div>';
         }
 
         function addDiscountPriceFields(container) {
-            container.innerHTML += '<div class="form-group"><label for="DPrice">Discount Price</label><input type="number" class="form-control" name="DPrice" /></div>';
-            container.innerHTML += '<div class="form-group"><label for="DPriceMinimumPrice">Minimum Price for Discount Price</label><input type="number" class="form-control" name="DPriceMinimumPrice" /></div>';
+            container.innerHTML += '<div class="form-group"><label for="DPrice">İndirim Miktarı</label><input type="number" class="form-control" name="DPrice" /></div>';
+     
+              container.innerHTML += '<div class="form-group"><label for="minimumsepettutari">Minimum Sepet Tutarı</label><input type="number" class="form-control" name="minimumsepettutari" /></div>';
+        }
+         function addxydealsFields(container) {
+            container.innerHTML += '<div class="form-group"><label for="xProduct">x Adet Satın Alınan Ürün Sayısı</label><input type="number" class="form-control" name="xProduct" /></div>';
+            container.innerHTML += '<div class="form-group"><label for="yProduct">y Adet Ödenecek Ürün Sayısı</label><input type="number" class="form-control" name="yProduct" /></div>';
+            container.innerHTML += '<div class="form-group"><label for="minimumsepettutari">Minimum Sepet Tutarı</label><input type="number" class="form-control" name="minimumsepettutari" /></div>';
         }
 
         function addDiscountCouponFields(container) {
-            container.innerHTML += '<div class="form-group"><label for="DCouponCode">Coupon Code</label><input type="text" class="form-control" name="DCouponCode" /></div>';
-            container.innerHTML += '<div class="form-group"><label for="DCodeMinimumPrice">Minimum Price for Coupon Code</label><input type="number" class="form-control" name="DCodeMinimumPrice" /></div>';
+            container.innerHTML += '<div class="form-group"><label for="DCouponCode">Kupon Kodu</label><input type="text" class="form-control" name="DCouponCode" /></div>';
+         
+              container.innerHTML += '<div class="form-group"><label for="minimumsepettutari">Minimum Sepet Tutarı</label><input type="number" class="form-control" name="minimumsepettutari" /></div>';
         }
 
         function addFreeShippingFields(container) {
-            container.innerHTML += '<div class="form-group"><label for="FSMinimumPrice">Minimum Price for Free Shipping</label><input type="number" class="form-control" name="FSMinimumPrice" /></div>';
+           
+              container.innerHTML += '<div class="form-group"><label for="minimumsepettutari">Minimum Sepet Tutarı</label><input type="number" class="form-control" name="minimumsepettutari" /></div>';
         }
 
         function addGiftProductFields(container) {
-            container.innerHTML += '<div class="form-group"><label for="GProductId">Gift Product ID</label><input type="number" class="form-control" name="GProductId" /></div>';
+            container.innerHTML += '<div class="form-group"><label for="GProductId">Hediye Ürünün ID si </label><input type="number" class="form-control" name="GProductId" /></div>';
+              container.innerHTML += '<div class="form-group"><label for="minimumsepettutari">Minimum Sepet Tutarı</label><input type="number" class="form-control" name="minimumsepettutari" /></div>';
         }
 
-        function addCategoryDiscountFields(container) {
-            var categorySelectHtml = '<select class="form-control" name="ProductCategory">';
-            categorySelectHtml += '<option value="">Select a Category</option>';
-
-            // Assuming you populate categories here from ViewBag or similar
-            // For example:
-        @foreach (var category in ViewBag.ProductCategories)
-        {
-            <text>
-                        categorySelectHtml += '<option value="@category.Value">@category.Text</option>';
-            </text>
-        }
-
-                categorySelectHtml += '</select>';
-
-            container.innerHTML += '<div class="form-group"><label for="CDiscountPercentage">Category Discount Percentage</label><input type="number" class="form-control" name="CDiscountPercentage" /></div>';
-            container.innerHTML += '<div class="form-group"><label for="CDMinimumPrice">Minimum Price for Category Discount</label><input type="number" class="form-control" name="CDMinimumPrice" /></div>';
-            container.innerHTML += '<div class="form-group"><label for="ProductCategory">Product Category</label>' + categorySelectHtml + '</div>';
-        }
-
+   
         function addPointEarningFields(container) {
-            container.innerHTML += '<div class="form-group"><label for="Point">Points</label><input type="number" class="form-control" name="Point" /></div>';
+            container.innerHTML += '<div class="form-group"><label for="Point">Kazanılacak Puan Tutarı</label><input type="number" class="form-control" name="Point" /></div>';
+              container.innerHTML += '<div class="form-group"><label for="minimumsepettutari">Minimum Sepet Tutarı</label><input type="number" class="form-control" name="minimumsepettutari" /></div>';
         }
     </script>
 }

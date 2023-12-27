@@ -163,7 +163,7 @@
             <span class="text-muted">/Adet Fiyatı</span>
           </div>
 
-        
+
 
        
             <!-- col.// -->
@@ -190,17 +190,17 @@
                                 {
                                     if (item.UserId == User.FindFirstValue(ClaimTypes.NameIdentifier))
                                     {
-                                        <button class="btn btn-primary" disabled>Sepete Ekle(myProduct)</button>
+                                        <button style="margin-top:20px; " class="btn btn-primary" disabled>Sepete Ekle(myProduct)</button>
                                     }
                                     else
                                     {
                                           @if (item.ProductStock == 0)
                                         {
-                                            <p class="out-of-stock-message">Stokta Yok</p>
+                                            <p style="margin-top:20px; " class="out-of-stock-message">Stokta Yok</p>
                                         }
                                         else
                                         {
-                                            <button asp-controller="Product" asp-action="Order" class="btn btn-primary  add-to-cart-btn" style="   padding: 10px 20px !important; " id="Sepetid" data-product-id="@item.ProductId">
+                                            <button asp-controller="Product" asp-action="Order" class="btn btn-primary  add-to-cart-btn" style=" margin-top:20px;   padding: 10px 20px !important; " id="Sepetid" data-product-id="@item.ProductId">
                                                 <h7  class="status-text">Sepete Ekle</h7>
                                             </button>
                                         }
@@ -208,17 +208,17 @@
                                 }
                                 else
                                 {
-                                    <a href="/Account/Login" class="btn btn-primary">Sepete Ekle</a>
+                                    <a style="margin-top:20px; " href="/Account/Login" class="btn btn-primary">Sepete Ekle</a>
                                 }
                             @if (User.Identity.IsAuthenticated && Model.UserProductLists.Any(entry => entry.UserId == User.FindFirstValue(ClaimTypes.NameIdentifier) && entry.ProductId == Model.ProductId))
 {
-    <a href="@Url.Action("RemoveFromList", "Product", new { id = Model.ProductId })" class="btn btn-success py-2 icon-hover px-3" style="font-size: 14px;">
+    <a href="@Url.Action("RemoveFromList", "Product", new { id = Model.ProductId })" class="btn btn-success py-2 icon-hover px-3" style="margin-top:20px; font-size: 14px;">
         <i class="fa-solid fa-xmark"></i> <span style="color: white !important;">Listenizde Mevcut</span>
     </a>
 }
 else
 {
-    <a href="@Url.Action("AddToList", "Product", new { id = Model.ProductId })" class="btn btn-light border border-secondary py-2 icon-hover px-3" id="listemeEkleButton" style="font-size: 14px;">
+    <a href="@Url.Action("AddToList", "Product", new { id = Model.ProductId })" class="btn btn-light border border-secondary py-2 icon-hover px-3" id="listemeEkleButton" style="margin-top:20px;  font-size: 14px;">
         <i class="fas fa-plus"></i> <span style="color: #131921 !important;">Listeme Ekle</span>
     </a>
 }
@@ -226,13 +226,25 @@ else
 
 
 
-                                <p>
+                                <p style="margin-top:20px; ">
                                     Bu ürünü Listesine Ekleyen Sayısı: @Model.UserProductLists.Count
                                 </p>
 
 
+<div class="seller-info" style="max-width:300px; margin-left: 0px; padding: 10px; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); display: flex; align-items: center;">
+    <span style="font-size: 14px; color: #666; font-weight: 500; margin-right: 5px;">
+        Satıcı:
+    </span>
+    <span style="color: #f8694c; font-weight: 600; font-size: 18px;">
+        @Model.User.BusinessCompany
+    </span>
+</div>
+
+
+
 
         </div>
+        
       </main>
     </div>
   </div>
