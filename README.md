@@ -1,6 +1,5 @@
-![Opera Snapshot_2023-12-25_195727_localhost](https://github.com/firatkaanbitmez/ShopfiyAspNetWebsite/assets/74864221/9c7f4f6d-239a-4cda-be37-010397b80671)
 
-
+![Opera Snapshot_2023-12-27_031340_localhost](https://github.com/firatkaanbitmez/ShopfiyAspNetWebsite/assets/74864221/926c0bb8-0603-4cd8-bd02-8d8bc77c26c2)
 
 # ShopAppProject: ASP.NET Core MVC Shopping Website
 
