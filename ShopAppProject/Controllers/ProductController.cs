@@ -31,23 +31,31 @@ namespace ShopAppProject.Controllers
 
             if (!string.IsNullOrEmpty(query))
             {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
                 products = products.Where(p =>
                     p.ProductTitle.IndexOf(query.ToUpper(), StringComparison.OrdinalIgnoreCase) >= 0 ||
                     p.ProductDesc.IndexOf(query.ToUpper(), StringComparison.OrdinalIgnoreCase) >= 0 ||
                     p.ProductCategory.IndexOf(query.ToUpper(), StringComparison.OrdinalIgnoreCase) >= 0
                 );
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
             }
             ViewBag.Category = category;
             return View(await products.ToListAsync());
         }
         public IActionResult AddToList(int id)
         {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             if (!User.Identity.IsAuthenticated)
             {
 
 
                 return RedirectToAction("Login", "Account");
             }
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
 
             var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -59,14 +67,19 @@ namespace ShopAppProject.Controllers
             if (existingEntry == null)
             {
                 // Create a new entry in the user's list
+#pragma warning disable CS8601 // Possible null reference assignment.
+                var user = _context.Users.Find(userId);
                 var userProductListEntry = new UserProductList
                 {
-                    UserId = userId, // Ensure that userId is not null
-                    ProductId = id
+                    UserId = userId,
+                    ProductId = id,
+                    User = user // Set the User property
                 };
 
-                _context.UserProductLists.Add(userProductListEntry);
-                _context.SaveChanges();
+#pragma warning restore CS8601 // Possible null reference assignment.
+
+                _ = _context.UserProductLists.Add(userProductListEntry);
+                _ = _context.SaveChanges();
             }
 
             // Redirect back to the product details page
@@ -74,10 +87,12 @@ namespace ShopAppProject.Controllers
         }
         public IActionResult RemoveFromList(int id)
         {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             if (!User.Identity.IsAuthenticated)
             {
                 return RedirectToAction("Login", "Account");
             }
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -88,8 +103,8 @@ namespace ShopAppProject.Controllers
             {
                 try
                 {
-                    _context.UserProductLists.Remove(userProduct);
-                    _context.SaveChanges();
+                    _ = _context.UserProductLists.Remove(userProduct);
+                    _ = _context.SaveChanges();
                     return RedirectToAction("Details", new { id });
                 }
                 catch (Exception ex)
@@ -145,7 +160,9 @@ namespace ShopAppProject.Controllers
 
                 var randomProducts = _context.Products.AsEnumerable().OrderBy(p => Guid.NewGuid()).Take(5).ToList();
 
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
                 ViewBag.ProductTitle = product.ProductTitle;
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
                 ViewBag.Category = product.ProductCategory;
 
                 ViewData["randomProducts"] = randomProducts;
@@ -164,7 +181,9 @@ namespace ShopAppProject.Controllers
         public async Task<IActionResult> AddComment(int productId, string content)
         {
             var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             var userName = HttpContext.User.Identity.Name;
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
             var comment = new Comment
             {
@@ -175,14 +194,17 @@ namespace ShopAppProject.Controllers
                 CreatedAt = DateTime.Now
             };
 
-            _context.Comments.Add(comment);
-            await _context.SaveChangesAsync();
+            _ = _context.Comments.Add(comment);
+            _ = await _context.SaveChangesAsync();
 
             return RedirectToAction("Details", new { id = productId });
         }
 
         public IActionResult Search(string query)
         {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             var products = _context.Products
             .Include(p => p.Images)
 
@@ -191,6 +213,9 @@ namespace ShopAppProject.Controllers
                             p.ProductTitle.Contains(query, StringComparison.OrdinalIgnoreCase) ||
                             p.ProductDesc.Contains(query, StringComparison.OrdinalIgnoreCase) ||
                             p.ProductCategory.Contains(query, StringComparison.OrdinalIgnoreCase));
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
             ViewBag.SearchQuery = query;
 
@@ -245,10 +270,10 @@ namespace ShopAppProject.Controllers
                         Quantity = 1
                     };
 
-                    _context.CartItems.Add(newCartItem);
+                    _ = _context.CartItems.Add(newCartItem);
                 }
 
-                _context.SaveChanges();
+                _ = _context.SaveChanges();
 
 
                 return _context.CartItems.Count(c => c.UserId == userId);

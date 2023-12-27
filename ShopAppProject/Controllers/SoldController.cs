@@ -23,6 +23,7 @@ namespace ShopAppProject.Controllers
         {
             var sellerId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             var solds = await _context.Solds
                 .Include(s => s.Order)
                 .ThenInclude(o => o.OrderDetails)
@@ -30,6 +31,7 @@ namespace ShopAppProject.Controllers
                 .Where(s => s.SellerId == sellerId)
                 .OrderByDescending(s => s.SoldDate)
                 .ToListAsync();
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
             return View(solds);
         }
@@ -53,7 +55,7 @@ namespace ShopAppProject.Controllers
                     sold.Order.ShipmentTrackingInfo = shipmentTrackingInfo;
                 }
 
-                _context.SaveChanges();
+                _ = _context.SaveChanges();
                 return RedirectToAction("Details", new { id = soldId });
             }
 
@@ -66,11 +68,13 @@ namespace ShopAppProject.Controllers
         {
             var sellerId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             var sold = await _context.Solds
                 .Include(s => s.Order)
                 .ThenInclude(o => o.OrderDetails)
                 .ThenInclude(od => od.Product)
                 .FirstOrDefaultAsync(s => s.SoldId == id && s.SellerId == sellerId);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
             if (sold == null)
             {

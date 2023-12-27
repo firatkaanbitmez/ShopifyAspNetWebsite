@@ -9,7 +9,7 @@
     .details-container {
         background: #fff;
         border-radius: 10px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         padding: 20px;
         margin-top: 30px;
     }
@@ -65,16 +65,19 @@
     .back-button {
         margin-bottom: 20px;
     }
+
     .shipment-info {
         background-color: #f9f9f9;
         padding: 15px;
         border-radius: 5px;
         margin-top: 20px;
     }
+
     .shipment-info-label {
         font-weight: bold;
         margin-right: 10px;
     }
+
     .shipment-info-value {
         color: #007bff;
     }
@@ -101,9 +104,9 @@
             <dt>Satış Tarihi:</dt>
             <dd>@Model.SoldDate.ToString("yyyy-MM-dd HH:mm:ss")</dd>
             <dt>Sipariş ID:</dt>
-            <dd>@Model.Order.OrderId</dd>
+            <dd>@Model?.Order?.OrderId</dd>
             <dt>Toplam Ödeme:</dt>
-            <dd>@Model.Order.TotalAmount.ToString("C")</dd>
+            <dd>@Model?.Order?.TotalAmount.ToString("C")</dd>
         </dl>
     </div>
 
@@ -118,35 +121,45 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var orderDetail in Model.Order.OrderDetails)
+                @if (Model?.Order?.OrderDetails != null)
+                {
+                    foreach (var orderDetail in Model.Order.OrderDetails)
+                    {
+                        <tr>
+                            <td>@orderDetail?.Product?.ProductTitle</td>
+                            <td>@orderDetail?.Quantity</td>
+                            <td>@orderDetail?.UnitPrice.ToString("C")</td>
+                        </tr>
+                    }
+                }
+                else
                 {
                     <tr>
-                        <td>@orderDetail.Product.ProductTitle</td>
-                        <td>@orderDetail.Quantity</td>
-                        <td>@orderDetail.UnitPrice.ToString("C")</td>
+                        <td colspan="3">Order details not available.</td>
                     </tr>
                 }
+
             </tbody>
         </table>
     </div>
 
 
-        <div class="shipment-info mb-5" >
-            <span class="shipment-info-label">Kargo Takip Kodu:</span>
-            <span class="shipment-info-value">@Model.ShipmentTrackingInfo</span>
-        </div>
-    
-
-   <div class="shipment-form mb-5">
-          <form asp-controller="Sold" asp-action="UpdateShipmentInfo" method="post">
-    <div class="form-group">
-        <label for="shipmentTrackingInfo">Kargo Takip Bilgisi:</label>
-        <input type="text" id="shipmentTrackingInfo" name="shipmentTrackingInfo" class="form-control" required>
-        <input type="hidden" name="soldId" value="@Model.SoldId">
+    <div class="shipment-info mb-5">
+        <span class="shipment-info-label">Kargo Takip Kodu:</span>
+        <span class="shipment-info-value">@Model?.ShipmentTrackingInfo</span>
     </div>
-    <button type="submit" class="btn btn-secondary">Kargo Bilgisini Güncelle</button>
-</form>
 
-        </div>
-    
+
+    <div class="shipment-form mb-5">
+        <form asp-controller="Sold" asp-action="UpdateShipmentInfo" method="post">
+            <div class="form-group">
+                <label for="shipmentTrackingInfo">Kargo Takip Bilgisi:</label>
+                <input type="text" id="shipmentTrackingInfo" name="shipmentTrackingInfo" class="form-control" required>
+                <input type="hidden" name="soldId" value="@Model?.SoldId">
+            </div>
+            <button type="submit" class="btn btn-secondary">Kargo Bilgisini Güncelle</button>
+        </form>
+
+    </div>
+
 </div>

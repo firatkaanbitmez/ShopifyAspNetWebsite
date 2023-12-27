@@ -81,12 +81,16 @@ namespace ShopAppProject.Controllers
                         await image.CopyToAsync(stream);
                     }
 
-                    model.Images.Add(new ProductImage { ImagePath = imagePath });
+                    model.Images.Add(new ProductImage
+                    {
+                        ImagePath = imagePath,
+                        Product = model // Set the Product property
+                    });
                 }
             }
 
-            _context.Products.Add(model); // Add the product to the context
-            await _context.SaveChangesAsync(); // Save changes
+            _ = _context.Products.Add(model); // Add the product to the context
+            _ = await _context.SaveChangesAsync(); // Save changes
 
             return RedirectToAction("Index"); // Redirect after successful creation
         }
@@ -116,8 +120,8 @@ namespace ShopAppProject.Controllers
                 CreatedAt = DateTime.Now
             };
 
-            _context.Comments.Add(comment);
-            await _context.SaveChangesAsync();
+            _ = _context.Comments.Add(comment);
+            _ = await _context.SaveChangesAsync();
 
             return RedirectToAction("Details", new { id = productId });
         }
@@ -200,7 +204,9 @@ namespace ShopAppProject.Controllers
             // Silme işlemleri
             foreach (var imageId in deleteImages)
             {
+#pragma warning disable CS8604 // Possible null reference argument.
                 var image = product.Images.FirstOrDefault(i => i.Id == imageId);
+#pragma warning restore CS8604 // Possible null reference argument.
                 if (image != null)
                 {
                     var imagePath = image.ImagePath;
@@ -208,22 +214,32 @@ namespace ShopAppProject.Controllers
                     {
                         System.IO.File.Delete(imagePath);
                     }
-                    _context.ProductImages.Remove(image);
+                    _ = _context.ProductImages.Remove(image);
                 }
             }
 
             // Yeni resimleri ekleme
             foreach (var newImage in newImages)
             {
-                var uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(newImage.FileName);
-                var imagePath = Path.Combine("wwwroot/images", uniqueFileName);
-                using (var stream = new FileStream(imagePath, FileMode.Create))
+                if (newImage != null && newImage.Length > 0)
                 {
-                    await newImage.CopyToAsync(stream);
-                }
+                    var uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(newImage.FileName);
+                    var imagePath = Path.Combine("wwwroot/images", uniqueFileName);
+                    using (var stream = new FileStream(imagePath, FileMode.Create))
+                    {
+                        await newImage.CopyToAsync(stream);
+                    }
 
-                product.Images.Add(new ProductImage { ImagePath = imagePath });
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+                    product.Images.Add(new ProductImage
+                    {
+                        ImagePath = imagePath,
+                        Product = product // Set the Product property here
+                    });
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+                }
             }
+
             // Update all properties including the category
             product.ProductTitle = model.ProductTitle;
             product.ProductDesc = model.ProductDesc;
@@ -232,7 +248,7 @@ namespace ShopAppProject.Controllers
             product.ProductImage = model.ProductImage;
             product.ProductCategory = model.ProductCategory; // Update the category
 
-            await _context.SaveChangesAsync();
+            _ = await _context.SaveChangesAsync();
 
             return RedirectToAction("Index");
         }
@@ -248,8 +264,8 @@ namespace ShopAppProject.Controllers
                 {
                     System.IO.File.Delete(imagePath);
                 }
-                _context.ProductImages.Remove(image);
-                await _context.SaveChangesAsync();
+                _ = _context.ProductImages.Remove(image);
+                _ = await _context.SaveChangesAsync();
             }
 
             // Kullanıcıyı aynı ürünün düzenleme sayfasına geri yönlendir
@@ -314,6 +330,7 @@ namespace ShopAppProject.Controllers
 
             // Delete related images and other data
 
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             foreach (var image in product.Images)
             {
                 var imagePath = image.ImagePath;
@@ -321,12 +338,13 @@ namespace ShopAppProject.Controllers
                 {
                     System.IO.File.Delete(imagePath);
                 }
-                _context.ProductImages.Remove(image);
+                _ = _context.ProductImages.Remove(image);
             }
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
             // Remove the product from the context and save changes
-            _context.Products.Remove(product);
-            await _context.SaveChangesAsync();
+            _ = _context.Products.Remove(product);
+            _ = await _context.SaveChangesAsync();
             if (!User.IsInRole("Admin") && product.UserId != userId)
             {
                 return RedirectToAction("AccessDenied"); // Add this line

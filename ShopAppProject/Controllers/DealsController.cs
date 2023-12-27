@@ -57,11 +57,11 @@ namespace ShopAppProject.Controllers
             {
                 try
                 {
-                    _context.Add(deal);
-                    await _context.SaveChangesAsync();
+                    _ = _context.Add(deal);
+                    _ = await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     // Log the exception details
                     // Return to the view with an error message
@@ -94,8 +94,8 @@ namespace ShopAppProject.Controllers
             {
                 try
                 {
-                    _context.Update(deal);
-                    await _context.SaveChangesAsync();
+                    _ = _context.Update(deal);
+                    _ = await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -133,8 +133,10 @@ namespace ShopAppProject.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var deal = await _context.Deals.FindAsync(id);
-            _context.Deals.Remove(deal);
-            await _context.SaveChangesAsync();
+#pragma warning disable CS8604 // Possible null reference argument.
+            _ = _context.Deals.Remove(deal);
+#pragma warning restore CS8604 // Possible null reference argument.
+            _ = await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

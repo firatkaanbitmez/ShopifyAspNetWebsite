@@ -24,7 +24,7 @@ else
                     <tbody>
                         @foreach (var userProduct in Model)
                         {
-                            @Html.Partial("_UserProductListItem", userProduct)
+                            <partial name="_UserProductListItem" model="userProduct" />
                         }
                     </tbody>
                 </table>

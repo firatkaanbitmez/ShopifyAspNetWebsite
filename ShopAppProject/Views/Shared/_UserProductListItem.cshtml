@@ -40,7 +40,7 @@
 <tr>
     <td class="align-middle product-info">
         <!-- Product Image -->
-        @if (Model.Product.Images != null && Model.Product.Images.Any())
+        @if (Model.Product?.Images != null && Model.Product.Images.Any())
         {
             var firstImage = Model.Product.Images.First();
             <img src="@Url.Content(firstImage.FullImagePath)" class="product-image" alt="@Model.Product.ProductTitle">
@@ -51,25 +51,28 @@
         }
 
         <!-- Product Title -->
-        <a href="@Url.Action("Details", "Product", new { id = Model.Product.ProductId })" class="product-title">@Model.Product.ProductTitle</a>
+        <a href="@Url.Action("Details", "Product", new { id = Model.Product?.ProductId })"
+            class="product-title">@Model.Product?.ProductTitle</a>
     </td>
 
     <td class="align-middle">
-        <p>@Model.Product.ProductStock</p>
+        <p>@Model.Product?.ProductStock</p>
     </td>
 
     <td class="align-middle">
-        <p>@Model.Product.ProductPrice.ToString("C")</p>
+        <p>@Model.Product?.ProductPrice.ToString("C")</p>
     </td>
 
     <td class="align-middle">
         <!-- Action Buttons -->
         <div class="action-buttons">
             <form method="post" action="/MyList/RemoveFromList">
-                <input type="hidden" name="productId" value="@Model.Product.ProductId" />
+                <input type="hidden" name="productId" value="@Model.Product?.ProductId" />
                 <button type="submit" class="btn btn-danger">Sil</button>
             </form>
-            <a href="@Url.Action("Details", "Product", new { id = Model.Product.ProductId })" class="btn btn-info">Ürüne Git</a>
+            <a href="@Url.Action("Details", "Product", new { id = Model.Product?.ProductId })"
+                class="btn btn-info">Ürüne
+                Git</a>
         </div>
     </td>
 </tr>

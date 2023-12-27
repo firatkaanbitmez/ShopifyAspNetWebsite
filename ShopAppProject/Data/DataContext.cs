@@ -19,15 +19,15 @@ namespace ShopAppProject.Data
             base.OnModelCreating(builder);
 
             // Identity tablolarını ekleyin
-            builder.Entity<ApplicationUser>().ToTable("AspNetUsers");
-            builder.Entity<IdentityRole>().ToTable("AspNetRoles");
-            builder.Entity<IdentityUserClaim<string>>().ToTable("AspNetUserClaims");
-            builder.Entity<IdentityUserRole<string>>().ToTable("AspNetUserRoles");
-            builder.Entity<IdentityUserLogin<string>>().ToTable("AspNetUserLogins");
-            builder.Entity<IdentityRoleClaim<string>>().ToTable("AspNetRoleClaims");
-            builder.Entity<IdentityUserToken<string>>().ToTable("AspNetUserTokens");
+            _ = builder.Entity<ApplicationUser>().ToTable("AspNetUsers");
+            _ = builder.Entity<IdentityRole>().ToTable("AspNetRoles");
+            _ = builder.Entity<IdentityUserClaim<string>>().ToTable("AspNetUserClaims");
+            _ = builder.Entity<IdentityUserRole<string>>().ToTable("AspNetUserRoles");
+            _ = builder.Entity<IdentityUserLogin<string>>().ToTable("AspNetUserLogins");
+            _ = builder.Entity<IdentityRoleClaim<string>>().ToTable("AspNetRoleClaims");
+            _ = builder.Entity<IdentityUserToken<string>>().ToTable("AspNetUserTokens");
 
-            builder.Entity<Order>()
+            _ = builder.Entity<Order>()
     .HasOne(o => o.User)  // Update this to reference the User property in the Order entity
     .WithMany()
     .HasForeignKey(o => o.UserId);

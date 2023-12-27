@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using ShopAppProject.Data;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using ShopAppProject.Models;
 using Microsoft.EntityFrameworkCore; // Bu satırı ekleyin
 

@@ -34,7 +34,7 @@ namespace ShopAppProject.Controllers
                 // Add logic to add to cart with the seller ID
                 // ...
 
-                await _context.SaveChangesAsync();
+                _ = await _context.SaveChangesAsync();
 
                 return await _context.CartItems.CountAsync(c => c.UserId == userId);
             }
@@ -55,11 +55,13 @@ namespace ShopAppProject.Controllers
 
         private Dictionary<string, decimal> CalculateTotalAmount(string userId)
         {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             var cartItems = _context.CartItems
                 .Where(c => c.UserId == userId)
                 .Include(c => c.Product)
                 .Include(c => c.Product.User) // Include the User navigation property
                 .ToList();
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
             var totalAmounts = new Dictionary<string, decimal>();
 
@@ -69,10 +71,12 @@ namespace ShopAppProject.Controllers
                 {
                     var sellerId = cartItem.Product.UserId;
 
+#pragma warning disable CS8604 // Possible null reference argument.
                     if (!totalAmounts.ContainsKey(sellerId))
                     {
                         totalAmounts[sellerId] = 0;
                     }
+#pragma warning restore CS8604 // Possible null reference argument.
 
                     totalAmounts[sellerId] += (decimal)cartItem.Quantity * cartItem.Product.ProductPrice;
                 }
@@ -93,8 +97,8 @@ namespace ShopAppProject.Controllers
 
             if (cartItem != null)
             {
-                _context.CartItems.Remove(cartItem);
-                await _context.SaveChangesAsync();
+                _ = _context.CartItems.Remove(cartItem);
+                _ = await _context.SaveChangesAsync();
             }
 
             return RedirectToAction("Index");
@@ -137,7 +141,7 @@ namespace ShopAppProject.Controllers
 
                     }
 
-                    await _context.SaveChangesAsync();
+                    _ = await _context.SaveChangesAsync();
                 }
 
                 return RedirectToAction("Index");
@@ -154,12 +158,16 @@ namespace ShopAppProject.Controllers
             var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var wallet = await _context.Wallets.FirstOrDefaultAsync(w => w.UserId == userId);
             ViewBag.WalletBalance = wallet?.Balance;
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             var cartItems = await _context.CartItems
                                     .Where(c => c.UserId == userId)
                                     .Include(c => c.Product)
                                         .ThenInclude(p => p.Images) // Eğer ürün resimleri de gerekliyse bu satırı ekleyin
                                     .ToListAsync();
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8604 // Possible null reference argument.
             var totalAmounts = CalculateTotalAmount(userId);
+#pragma warning restore CS8604 // Possible null reference argument.
 
             var cartModel = new CartViewModel
             {

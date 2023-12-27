@@ -1,18 +1,25 @@
-
 <!--Views/myProduct/Details.cshtml-->
 @model Product
 
 <!-- Ürün Detayları... -->
 
 <h4>Yorumlar</h4>
-<ul>
-    @foreach (var comment in Model.Comments)
-    {
-        <li>
-            <strong>@comment.UserName:</strong> @comment.Content
-        </li>
-    }
-</ul>
+@if (Model.Comments != null && Model.Comments.Any())
+{
+    <ul>
+        @foreach (var comment in Model.Comments)
+        {
+            <li>
+                <strong>@comment.UserName:</strong> @comment.Content
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>Henüz yorum yok.</p>
+}
+
 
 <!-- Yorum Ekleme Formu... -->
 <form asp-controller="myProduct" asp-action="AddComment" method="post">

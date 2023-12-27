@@ -19,12 +19,14 @@ public class MyListController : Controller
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
         var userProductList = _context.UserProductLists
             .Include(upl => upl.Product)
                                            .ThenInclude(p => p.Images) // Make sure to include images
 
             .Where(upl => upl.UserId == userId)
             .ToList();
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
         return View(userProductList);
     }
@@ -39,8 +41,8 @@ public class MyListController : Controller
 
         if (userProduct != null)
         {
-            _context.UserProductLists.Remove(userProduct);
-            _context.SaveChanges();
+            _ = _context.UserProductLists.Remove(userProduct);
+            _ = _context.SaveChanges();
         }
 
         return RedirectToAction("Index");

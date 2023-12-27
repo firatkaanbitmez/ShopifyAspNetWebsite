@@ -34,8 +34,8 @@ namespace ShopAppProject.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(shipping);
-                await _context.SaveChangesAsync();
+                _ = _context.Add(shipping);
+                _ = await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(shipping);
@@ -70,8 +70,8 @@ namespace ShopAppProject.Controllers
             {
                 try
                 {
-                    _context.Update(shipping);
-                    await _context.SaveChangesAsync();
+                    _ = _context.Update(shipping);
+                    _ = await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -110,8 +110,10 @@ namespace ShopAppProject.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var shipping = await _context.Shippings.FindAsync(id);
-            _context.Shippings.Remove(shipping);
-            await _context.SaveChangesAsync();
+#pragma warning disable CS8604 // Possible null reference argument.
+            _ = _context.Shippings.Remove(shipping);
+#pragma warning restore CS8604 // Possible null reference argument.
+            _ = await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

@@ -218,20 +218,30 @@ th {
                     <div class="tab-pane fade show active" id="campaign-type">
                         <!-- Campaign Type Selection -->
                         <div class="row g-3">
-                            @foreach (var dealType in Enum.GetValues(typeof(ShopAppProject.Data.DealsType)))
+                          @foreach (var dealType in Enum.GetValues(typeof(ShopAppProject.Data.DealsType)))
                             {
-                                var fieldInfo = dealType.GetType().GetField(dealType.ToString());
-                                var attributes = (DisplayAttribute[])fieldInfo.GetCustomAttributes(typeof(DisplayAttribute), false);
-                                var displayName = attributes.Length > 0 ? attributes[0].Name : dealType.ToString();
+                                var dealTypeName = dealType.ToString();
+                                if (dealTypeName != null)
+                                {
+                                    var fieldInfo = dealType.GetType().GetField(dealTypeName);
+                                    if (fieldInfo != null)
+                                    {
+                                        var attributes = (DisplayAttribute[])fieldInfo.GetCustomAttributes(typeof(DisplayAttribute), false);
+                                        var displayName = attributes.Length > 0 ? attributes[0].Name : dealTypeName;
 
-                                <div class="col-md-4">  
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="DealsType" id="dealType-@dealType"
-                                            value="@dealType" onchange="showRelevantFields('@dealType')">
-                                        <label class="form-check-label" for="dealType-@dealType">@displayName</label>
-                                    </div>
-                                </div>
+                                        <div class="col-md-4">  
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="DealsType" id="dealType-@dealType"
+                                                    value="@dealType" onchange="showRelevantFields('@dealType')">
+                                                <label class="form-check-label" for="dealType-@dealType">@displayName</label>
+                                            </div>
+                                        </div>
+                                    }
+                                }
                             }
+
+
+
                         </div>
                         <!-- Campaign Information Fields -->
                         <div class="row g-3 mt-3">

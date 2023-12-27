@@ -11,8 +11,8 @@ namespace ShopAppProject.Data
         public int Id { get; set; }
 
         [Required]
-        public string UserId { get; set; }
-        public ApplicationUser User { get; set; }
+        public required string UserId { get; set; }
+        public required ApplicationUser User { get; set; }
 
         // Foreign key for the product
         public int ProductId { get; set; }

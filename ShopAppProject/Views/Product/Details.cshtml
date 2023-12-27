@@ -152,14 +152,17 @@
             </div>
   
         <span class="comment-span">
-            <i class="far fa-comment"></i> <span id="commentCount">@Model.Comments.Count</span>
+<i class="far fa-comment"></i> <span id="commentCount">@Model.Comments?.Count</span>
+
+
+
         </span>
-            <span class="text-success ms-4">Stok Durumu:             @Model.ProductStock
+            <span class="text-success ms-4">Stok Durumu:             @Model?.ProductStock
 </span>
           </div>
 
           <div class="mb-3">
-            <span style="color: #0f1111; font-weight: 800;" class="h5">@String.Format("{0:N2}", Model.ProductPrice) ₺</span>
+            <span style="color: #0f1111; font-weight: 800;" class="h5">@String.Format("{0:N2}", Model?.ProductPrice) ₺</span>
             <span class="text-muted">/Adet Fiyatı</span>
           </div>
 
@@ -186,21 +189,21 @@
                                 var item = Model;
                                 }
 
-                                 @if (User.Identity.IsAuthenticated)
+@if (User?.Identity?.IsAuthenticated == true)
                                 {
-                                    if (item.UserId == User.FindFirstValue(ClaimTypes.NameIdentifier))
+                                    if (item?.UserId == User.FindFirstValue(ClaimTypes.NameIdentifier))
                                     {
                                         <button style="margin-top:20px; " class="btn btn-primary" disabled>Sepete Ekle(myProduct)</button>
                                     }
                                     else
                                     {
-                                          @if (item.ProductStock == 0)
+                                          @if (item?.ProductStock == 0)
                                         {
                                             <p style="margin-top:20px; " class="out-of-stock-message">Stokta Yok</p>
                                         }
                                         else
                                         {
-                                            <button asp-controller="Product" asp-action="Order" class="btn btn-primary  add-to-cart-btn" style=" margin-top:20px;   padding: 10px 20px !important; " id="Sepetid" data-product-id="@item.ProductId">
+                                            <button asp-controller="Product" asp-action="Order" class="btn btn-primary  add-to-cart-btn" style=" margin-top:20px;   padding: 10px 20px !important; " id="Sepetid" data-product-id="@item?.ProductId">
                                                 <h7  class="status-text">Sepete Ekle</h7>
                                             </button>
                                         }
@@ -210,7 +213,7 @@
                                 {
                                     <a style="margin-top:20px; " href="/Account/Login" class="btn btn-primary">Sepete Ekle</a>
                                 }
-                            @if (User.Identity.IsAuthenticated && Model.UserProductLists.Any(entry => entry.UserId == User.FindFirstValue(ClaimTypes.NameIdentifier) && entry.ProductId == Model.ProductId))
+@if (User?.Identity?.IsAuthenticated == true && Model?.UserProductLists?.Any(entry => entry.UserId == User.FindFirstValue(ClaimTypes.NameIdentifier) && entry.ProductId == Model.ProductId) == true)
 {
     <a href="@Url.Action("RemoveFromList", "Product", new { id = Model.ProductId })" class="btn btn-success py-2 icon-hover px-3" style="margin-top:20px; font-size: 14px;">
         <i class="fa-solid fa-xmark"></i> <span style="color: white !important;">Listenizde Mevcut</span>
@@ -218,7 +221,7 @@
 }
 else
 {
-    <a href="@Url.Action("AddToList", "Product", new { id = Model.ProductId })" class="btn btn-light border border-secondary py-2 icon-hover px-3" id="listemeEkleButton" style="margin-top:20px;  font-size: 14px;">
+    <a href="@Url.Action("AddToList", "Product", new { id = Model?.ProductId })" class="btn btn-light border border-secondary py-2 icon-hover px-3" id="listemeEkleButton" style="margin-top:20px;  font-size: 14px;">
         <i class="fas fa-plus"></i> <span style="color: #131921 !important;">Listeme Ekle</span>
     </a>
 }
@@ -227,7 +230,7 @@ else
 
 
                                 <p style="margin-top:20px; ">
-                                    Bu ürünü Listesine Ekleyen Sayısı: @Model.UserProductLists.Count
+                                    Bu ürünü Listesine Ekleyen Sayısı: @Model?.UserProductLists?.Count
                                 </p>
 
 
@@ -235,9 +238,8 @@ else
     <span style="font-size: 14px; color: #666; font-weight: 500; margin-right: 5px;">
         Satıcı:
     </span>
-    <span style="color: #f8694c; font-weight: 600; font-size: 18px;">
-        @Model.User.BusinessCompany
-    </span>
+   <span style="color: #f8694c; font-weight: 600; font-size: 18px;">@Model.User.BusinessCompany</span>
+
 </div>
 
 
@@ -276,9 +278,9 @@ else
           <!-- Pills content -->
           <div class="tab-content" id="Desc">
             <div class="tab-pane fade show active" id="ex1-pills-1" role="tabpanel" >
-               @Model.ProductTitle <br />
+               @Model?.ProductTitle <br />
               <p>
-              @Model.ProductDesc
+              @Model?.ProductDesc
               </p>          
        
             </div>
@@ -295,14 +297,14 @@ else
     <div id="commentsContainer">
          <!-- Yorum Ekleme Formu... -->
     <form  asp-controller="Product" asp-action="AddComment" method="post" class="mt-4 mb-3">
-        <input type="hidden" name="productId" value="@Model.ProductId" />
+<input type="hidden" name="productId" value="@Model?.ProductId" />
         <div class="form-group">
             <label for="content">Yorumunuz:</label>
             <textarea class="form-control"  name="content" required></textarea> 
         </div>
         <button type="submit" class="btn btn-primary mt-2">Yorum Ekle</button>
     </form>
-        @foreach (var comment in Model.Comments)
+        @foreach (var comment in Model?.Comments)
         {
             <div class="card mb-3">
                 <div class="card-body">
@@ -500,10 +502,8 @@ $(document).ready(function () {
     // Load comments when the "Yorumlar" tab is clicked
     $("#comments").on("click", function () {
         // Make an AJAX request to get comments data
-        $.ajax({
-            url: "/Product/GetComments", // Change the URL to the actual endpoint
-            method: "GET",
-            data: { productId: @Model.ProductId },
+        $.ajax({ url: "/Product/GetComments", method: "GET", data: { productId: @Model.ProductId }
+,
             success: function (data) {
                 // Replace the content of commentsContainer with the loaded comments
                 $("#commentsContainer").html(data);

@@ -2,12 +2,12 @@
 
 @model Product
 <style>
-
-   .delete-checkbox {
-        display: none; /* Hide the default checkbox */
+    .delete-checkbox {
+        display: none;
+        /* Hide the default checkbox */
     }
 
-    .delete-checkbox + label {
+    .delete-checkbox+label {
         cursor: pointer;
         display: inline-block;
         width: 20px;
@@ -17,8 +17,9 @@
         position: relative;
     }
 
-    .delete-checkbox:checked + label::before {
-        content: '✖'; /* Unicode character for a cross */
+    .delete-checkbox:checked+label::before {
+        content: '✖';
+        /* Unicode character for a cross */
         color: #d9534f;
         position: absolute;
         top: 50%;
@@ -58,7 +59,7 @@
         border: 1px solid #ddd;
         border-radius: 4px;
         padding: 10px;
-               cursor: pointer;
+        cursor: pointer;
     }
 
     .image-container img {
@@ -77,7 +78,8 @@
 
     <div class="mb-3">
         <label asp-for="ProductCategory" class="form-label">Ürün Kategorisi</label>
-        <select asp-for="ProductCategory" asp-items="@(new SelectList(ViewBag.CategoryList, "Value", "Text"))" class="form-control">
+        <select asp-for="ProductCategory" asp-items="@(new SelectList(ViewBag.CategoryList, "Value", "Text"))"
+            class="form-control">
             <option value="">Kategori Seç</option>
         </select>
         <span asp-validation-for="ProductCategory" class="text-danger"></span>
@@ -107,29 +109,39 @@
         <span asp-validation-for="ProductPrice" class="text-danger"></span>
     </div>
 
-  
+
     <div>
         <div class="mb-3">
-    <label for="newImages" class="form-label">Yeni Resimler</label>
-    <input type="file" name="newImages" class="form-control" multiple accept="image/*">
-</div>
+            <label for="newImages" class="form-label">Yeni Resimler</label>
+            <input type="file" name="newImages" class="form-control" multiple accept="image/*">
+        </div>
 
- 
-    <h3>Mevcut Resimler</h3>
-@foreach (var image in Model.Images)
-{
-    <div class="image-container" onclick="toggleCheckbox(this)">
-        <img src="@Url.Content(image.FullImagePath)" alt="Ürün Resmi" style="width: 250px; height: 250px;"/>
-        <input type="checkbox" name="deleteImages" value="@image.Id" class="delete-checkbox" id="delete-@image.Id">
-        <label for="delete-@image.Id"></label> Sil
+
+        <div>
+            <h3>Mevcut Resimler</h3>
+            @if (Model.Images != null && Model.Images.Any())
+            {
+                foreach (var image in Model.Images)
+                {
+                    <div class="image-container" onclick="toggleCheckbox(this)">
+                        <img src="@Url.Content(image.FullImagePath)" alt="Ürün Resmi" style="width: 250px; height: 250px;" />
+                        <input type="checkbox" name="deleteImages" value="@image.Id" class="delete-checkbox"
+                            id="delete-@image.Id">
+                        <label for="delete-@image.Id"></label> Sil
+                    </div>
+                }
+            }
+            else
+            {
+                <p>Resim bulunamadı.</p>
+            }
+        </div>
+
+
+
+
     </div>
-}
-
-
-
-
     </div>
-</div>
 
     <button type="submit" class="btn btn-primary">Kaydet</button>
 </form>

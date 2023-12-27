@@ -63,7 +63,7 @@
             {
                 <div class="col-md-3 mb-3">
                     <div class="card h-100">
-                        @if (item.Images.Any())
+                        @if (item.Images != null && item.Images.Any())
                         {
                             var firstImage = item.Images.First();
                             <img src="@Url.Content(firstImage.FullImagePath)" class="card-img-top" alt="Ürün Resmi">
@@ -105,7 +105,7 @@
             {
                 <div class="col-md-3 mb-3">
                     <div class="card h-100">
-                        @if (item.Images.Any())
+                        @if (item.Images != null && item.Images.Any())
                         {
                             var firstImage = item.Images.First();
                             <img src="@Url.Content(firstImage.FullImagePath)" class="card-img-top" alt="Ürün Resmi">

@@ -31,12 +31,14 @@ namespace ShopAppProject.Controllers
                 var user = await _userManager.GetUserAsync(User);
                 if (user != null)
                 {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
                     user.UserProductLists = _context.UserProductLists
                                                        .Include(upl => upl.Product)
-                                                                                      .ThenInclude(p => p.Images) // Make sure to include images
+                                                        .ThenInclude(p => p.Images)
 
                                                        .Where(upl => upl.UserId == user.Id)
                                                        .ToList();
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
                     var roles = await _userManager.GetRolesAsync(user);
                     ViewBag.Roles = roles;

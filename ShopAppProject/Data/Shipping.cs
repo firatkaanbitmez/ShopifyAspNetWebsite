@@ -9,7 +9,7 @@ namespace ShopAppProject.Data
         public int ShippingId { get; set; }
 
         [Required]
-        public string ShippingMethodName { get; set; }
+        public required string ShippingMethodName { get; set; }
 
         [DataType(DataType.Currency)]
         public decimal ShippingCost { get; set; }

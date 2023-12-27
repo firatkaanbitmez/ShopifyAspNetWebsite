@@ -67,7 +67,9 @@ namespace ShopAppProject.Controllers
                 return RedirectToAction("Index", "Cart");
             }
 
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             var groupedCartItems = cartItems.GroupBy(c => c.Product.UserId);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
             using var transaction = _context.Database.BeginTransaction();
 
@@ -75,6 +77,8 @@ namespace ShopAppProject.Controllers
             {
                 foreach (var sellerGroup in groupedCartItems)
                 {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
                     var order = new Order
                     {
                         UserId = userId,
@@ -86,12 +90,14 @@ namespace ShopAppProject.Controllers
                             UnitPrice = c.Product.ProductPrice
                         }).ToList()
                     };
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
                     // Var olan Order örneğini takip etmeyi bırak
                     _context.Entry(order).State = EntityState.Detached;
 
-                    _context.Orders.Add(order);
-                    await _context.SaveChangesAsync();
+                    _ = _context.Orders.Add(order);
+                    _ = await _context.SaveChangesAsync();
 
                     var buyer = await _context.Users.FindAsync(userId);
 
@@ -121,7 +127,7 @@ namespace ShopAppProject.Controllers
                             OrderIdLink = order.OrderId.ToString()
                         });
 
-                        await _context.SaveChangesAsync();
+                        _ = await _context.SaveChangesAsync();
                     }
                     bool soldOperationPerformed = false;
 
@@ -140,7 +146,7 @@ namespace ShopAppProject.Controllers
                             {
                                 // Update the product stock
                                 product.ProductStock -= orderDetail.Quantity;
-                                await _context.SaveChangesAsync();
+                                _ = await _context.SaveChangesAsync();
                             }
                             else
                             {
@@ -166,14 +172,14 @@ namespace ShopAppProject.Controllers
                                 // Var olan Sold örneğini takip etmeyi bırak
                                 _context.Entry(sold).State = EntityState.Detached;
 
-                                _context.Solds.Add(sold);
+                                _ = _context.Solds.Add(sold);
 
 
                                 sold.SoldDate = DateTime.Now;
                                 sold.SoldId = sold.SoldId; // Ensure that SoldId is updated in the context
                                 sold.SoldIdLink = sold.SoldId.ToString();
 
-                                await _context.SaveChangesAsync();
+                                _ = await _context.SaveChangesAsync();
                                 // Satıcı ödeme işlemi
                                 var sellerWallet = await _context.Wallets
                                     .Include(w => w.Transactions)
@@ -181,7 +187,10 @@ namespace ShopAppProject.Controllers
 
                                 if (sellerWallet != null)
                                 {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
                                     sellerWallet.Balance += sellerGroup.Sum(c => c.Quantity * c.Product.ProductPrice);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
                                     sellerWallet.Transactions.Add(new Transaction
                                     {
                                         Date = DateTime.Now,
@@ -189,8 +198,9 @@ namespace ShopAppProject.Controllers
                                         Info = "Ödeme Alındı - Satış No: " + sold.SoldId,
                                         SoldIdLink = sold.SoldId.ToString()
                                     });
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
-                                    await _context.SaveChangesAsync();
+                                    _ = await _context.SaveChangesAsync();
                                 }
                                 // Mark that the sold operation has been performed for this seller group
                                 soldOperationPerformed = true;
@@ -200,20 +210,20 @@ namespace ShopAppProject.Controllers
 
                     // Sepeti temizle
                     _context.CartItems.RemoveRange(sellerGroup);
-                    await _context.SaveChangesAsync();
+                    _ = await _context.SaveChangesAsync();
                 }
 
                 // Tüm işlemler başarılı oldu, işlemi tamamla
                 transaction.Commit();
             }
-            catch (DbUpdateConcurrencyException ex)
+            catch (DbUpdateConcurrencyException)
             {
                 // Veritabanı hatası, işlemi geri al ve hata sayfasına yönlendir
                 transaction.Rollback();
                 // Hata sayfasına yönlendir...
                 return RedirectToAction("Index", "Error");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Genel bir hata durumu, işlemi geri al ve hata sayfasına yönlendir
                 transaction.Rollback();

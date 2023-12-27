@@ -18,7 +18,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 {
     var config = builder.Configuration;
     var connectionString = config.GetConnectionString("mydb");
-    options.UseSqlite(connectionString);
+    _ = options.UseSqlite(connectionString);
 });
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
@@ -64,19 +64,19 @@ using (var scope = app.Services.CreateScope())
         if (!await roleManager.RoleExistsAsync("Company"))
         {
             var role = new IdentityRole("Company");
-            await roleManager.CreateAsync(role);
+            _ = await roleManager.CreateAsync(role);
         }
         // "Customer" adlı rolü oluştur
         if (!await roleManager.RoleExistsAsync("Customer"))
         {
             var role = new IdentityRole("Customer");
-            await roleManager.CreateAsync(role);
+            _ = await roleManager.CreateAsync(role);
         }
 
         if (!await roleManager.RoleExistsAsync("Admin"))
         {
             var role = new IdentityRole("Admin");
-            await roleManager.CreateAsync(role);
+            _ = await roleManager.CreateAsync(role);
         }
 
         // Default admin kullanıcısını oluştur
@@ -99,7 +99,7 @@ using (var scope = app.Services.CreateScope())
             if (result.Succeeded)
             {
                 // Admin kullanıcısına "Entrepreneur" rolünü ata
-                await userManager.AddToRoleAsync(adminUser, "Admin");
+                _ = await userManager.AddToRoleAsync(adminUser, "Admin");
             }
         }
     }
@@ -112,9 +112,9 @@ using (var scope = app.Services.CreateScope())
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
+    _ = app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    _ = app.UseHsts();
 }
 
 app.UseHttpsRedirection();
