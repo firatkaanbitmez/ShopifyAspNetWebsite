@@ -216,6 +216,13 @@ namespace ShopAppProject.Controllers
                 .Include(p => p.UserProductLists)
                 .Include(p => p.Images)
                 .FirstOrDefault(p => p.ProductId == id);
+
+                if (product != null)
+                {
+#pragma warning disable CS8604 // Possible null reference argument.
+                    product.HasCommented = product.Comments.Any(c => c.UserId == userId);
+#pragma warning restore CS8604 // Possible null reference argument.
+                }
 #pragma warning restore CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
 
                 var randomProducts = _context.Products
@@ -232,7 +239,10 @@ namespace ShopAppProject.Controllers
                 ViewBag.ProductTitle = product.ProductTitle;
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
                 ViewBag.Category = product.ProductCategory;
-                ViewBag.UserHasPurchased = userHasPurchased;
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+                ViewBag.UserHasPurchased = _context.OrderDetails
+                         .Any(od => od.ProductId == id && od.Order.UserId == userId);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
                 ViewData["randomProducts"] = randomProducts;
                 return View(product);
             }
@@ -353,6 +363,35 @@ namespace ShopAppProject.Controllers
                 return -1;
             }
         }
+
+        [HttpPost]
+        public IActionResult BlockComment(int commentId)
+        {
+            try
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var comment = _context.Comments.FirstOrDefault(c => c.CommentId == commentId);
+
+                if (comment != null)
+                {
+                    // Yorumu engellemek için işaretle
+                    comment.IsBlocked = true;
+                    _context.Update(comment);
+                    _context.SaveChanges();
+
+                    return Json(new { success = true });
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Yorum bulunamadı." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
 
 
     }

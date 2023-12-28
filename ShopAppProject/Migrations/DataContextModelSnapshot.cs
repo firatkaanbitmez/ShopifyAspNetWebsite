@@ -275,6 +275,9 @@ namespace ShopAppProject.Migrations
                     b.Property<int>("Dislikes")
                         .HasColumnType("INTEGER");
 
+                    b.Property<bool>("IsBlocked")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("Likes")
                         .HasColumnType("INTEGER");
 
@@ -435,6 +438,9 @@ namespace ShopAppProject.Migrations
                 {
                     b.Property<int>("ProductId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("HasCommented")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ProductCategory")

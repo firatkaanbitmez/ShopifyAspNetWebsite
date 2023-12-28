@@ -212,6 +212,7 @@ namespace ShopAppProject.Migrations
                     ProductPrice = table.Column<decimal>(type: "TEXT", nullable: false),
                     ProductCategory = table.Column<string>(type: "TEXT", nullable: true),
                     ProductImage = table.Column<string>(type: "TEXT", nullable: true),
+                    HasCommented = table.Column<bool>(type: "INTEGER", nullable: false),
                     UserId = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
@@ -352,6 +353,7 @@ namespace ShopAppProject.Migrations
                     UserName = table.Column<string>(type: "TEXT", nullable: true),
                     Content = table.Column<string>(type: "TEXT", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    IsBlocked = table.Column<bool>(type: "INTEGER", nullable: false),
                     Likes = table.Column<int>(type: "INTEGER", nullable: false),
                     Dislikes = table.Column<int>(type: "INTEGER", nullable: false),
                     Rating = table.Column<int>(type: "INTEGER", nullable: false)

@@ -2,6 +2,7 @@
 @model Product
 @using System.Security.Claims
 @using System.Linq
+
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css">
 
 <style>
@@ -132,6 +133,13 @@
     color: #333;
     margin-right: 5px;
 }
+.btn-like-disabled, .btn-dislike-disabled {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #333;
+    margin-right: 5px;
+}
 
 .btn-report {
     margin-left: auto;
@@ -207,8 +215,11 @@
         }
     }
 }
+@{
+    bool userHasCommented = Model.HasCommented; // Assuming this is the flag from your model
+}
 
-<section class="py-5">
+<section class="py-4">
   <div class="container">
     <div class="row gx-5">
 <aside class="col-lg-6">
@@ -359,8 +370,8 @@ else
 </section>
 <!-- content -->
 
-<section class="bg-light border-top py-4">
-  <div class="container">
+
+  <div class="container ">
     <div class="row gx-4">
       <div class="col-lg-8 mb-4">
         <div class="border rounded-2 px-3 py-2 bg-white">
@@ -403,7 +414,9 @@ else
     <div class="comments-container">
         @if (User?.Identity?.IsAuthenticated == true && ViewBag.UserHasPurchased == true || User?.IsInRole("Admin")==true )
         {
-            <form asp-controller="Product" asp-action="AddComment" method="post" class="comment-form">
+            if (!userHasCommented)
+    {
+        <form asp-controller="Product" asp-action="AddComment" method="post" class="comment-form">
                 <input type="hidden" name="productId" value="@Model?.ProductId" />
                 <div class="form-group">
                     <label for="content">Yorumunuz:</label>
@@ -411,18 +424,25 @@ else
                 </div>
                 <button type="submit" class="btn btn-primary mt-2">Yorum Ekle</button>
             </form>
+    }
+    else
+    {
+        <p id="alreadyCommented">Daha önce yorum yaptınız.</p>
+    }
         }
         else
         {
-            <p>Yalnızca bu ürünü satın alan müşteriler yorum bırakabilir.</p>
+            <p>Yalnızca bu ürünü satın alan müşteriler yorum yazabilir.</p>
         }
         
         @if (Model?.Comments != null)
         {
-     @foreach (var comment in Model.Comments)
+                        var sortedComments = Model.Comments.OrderByDescending(c => c.CreatedAt);
+
+     @foreach (var comment in sortedComments)
     {
 
-    var userReaction = comment.Reactions.FirstOrDefault(r => r.UserId == User.FindFirstValue(ClaimTypes.NameIdentifier));
+    var userReaction = comment.Reactions.FirstOrDefault(r => r.UserId == User?.FindFirstValue(ClaimTypes.NameIdentifier));
 bool hasLiked = userReaction != null && userReaction.IsLike;
 bool hasDisliked = userReaction != null && !userReaction.IsLike;
 
@@ -443,15 +463,40 @@ bool hasDisliked = userReaction != null && !userReaction.IsLike;
             </div>
         </div>
         <div class="comment-body" style="margin-left: 20px;">
-            <p>@comment.Content</p>
+               
+            @if (comment.IsBlocked)
+            {
+                <p><em>Bu yorum yönetici tarafından engellendi.</em></p>
+            }else{
+                    <p>@comment.Content</p>
+            }
         </div>
         <div class="comment-footer">
             <span>Bu değerlendirme faydalı mı?</span> 
-<button class="btn-like" data-comment-id="@comment.CommentId" @(hasLiked ? "disabled" : "")>👍</button>
-        <span class="like-count">@comment.Likes</span>
+            @if(User?.Identity?.IsAuthenticated==true){
+                if (User.IsInRole("Admin"))
+            {
+  @if (!comment.IsBlocked)
+        {
+            <button class="btn btn-danger" onclick="blockComment(@comment.CommentId)">Engelle</button>
+        }
 
-<button class="btn-dislike" data-comment-id="@comment.CommentId" @(hasDisliked ? "disabled" : "")>👎</button>
-        <span class="dislike-count">@comment.Dislikes</span>
+            }
+<button class="btn-like" data-comment-id="@comment.CommentId" @(hasLiked ? "disabled" : "")><i class="fa-solid fa-thumbs-up" style="color: #ffc83d;"></i></button>
+        <span class="like-count">(@comment.Likes)</span>
+
+<button class="btn-dislike" data-comment-id="@comment.CommentId" @(hasDisliked ? "disabled" : "")><i class="fa-solid fa-thumbs-down" style="color: #ffc83d;"></i></button>
+        <span class="dislike-count">(@comment.Dislikes)</span>
+
+            }else{
+                <button class="btn-like-disabled"  ><i class="fa-solid fa-thumbs-up" style="color: #ffc83d;"></i></button>
+        <span class="like-count">(@comment.Likes)</span>
+
+<button class="btn-dislike-disabled" ><i class="fa-solid fa-thumbs-down" style="color: #ffc83d;"></i></button>
+        <span class="dislike-count">(@comment.Dislikes)</span>
+        <span>    Sadece Üyeler Bildirimde Bulunabilir.</span>
+            }
+            
 
         
             <button class="btn-report">Bildir</button>
@@ -493,11 +538,36 @@ bool hasDisliked = userReaction != null && !userReaction.IsLike;
 
     </div>
   </div>
-</section>
+  <div class="py-5"><p></p></div>
+</>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
 
 <script>
+
+function blockComment(commentId) {
+    $.ajax({
+        url: '/Product/BlockComment',
+        type: 'POST',
+        data: { commentId: commentId },
+        success: function (response) {
+            if (response.success) {
+                // Yorum engellendi, sayfayı yeniden yükle veya yorumu gizle
+                location.reload(); // Sayfayı yeniden yüklemek için
+                // veya
+                // $('#comment_' + commentId).hide(); // Yorumu gizlemek için
+            } else {
+                alert('Yorum engellenemedi: ' + response.message);
+            }
+        },
+        error: function (error) {
+            alert('Bir hata oluştu: ' + error.statusText);
+        }
+    });
+}
+
+
+
 $(document).ready(function () {
     $('.btn-like').click(function () {
         var btn = $(this);
@@ -534,11 +604,9 @@ $(document).ready(function () {
     });
 });
 $(document).ready(function () {
+    
     $('.btn-like, .btn-dislike').click(function () {
         var btn = $(this);
-        if (btn.is(':disabled')) {
-            return;
-        }
         var commentId = btn.data('comment-id');
         var isLike = btn.hasClass('btn-like');
         var url = isLike ? '/Product/LikeComment' : '/Product/DislikeComment';
@@ -548,15 +616,15 @@ $(document).ready(function () {
             url: url,
             data: { commentId: commentId },
             success: function (response) {
+                var commentFooter = btn.closest('.comment-footer');
                 var countSpan = isLike ? '.like-count' : '.dislike-count';
-                btn.closest('.comment').find(countSpan).text(response.LikesCount || response.DislikesCount);
-                
+                commentFooter.find(countSpan).text(response.LikesCount || response.DislikesCount);
+                                    commentFooter.find('.btn-like, .btn-dislike, .like-count, .dislike-count').hide();
+
                 // Display thank you message
                 var thankYouMessage = $('<span class="thank-you-message">Teşekkürler!</span>');
                 btn.after(thankYouMessage);
-                setTimeout(function() {
-                    thankYouMessage.remove();
-                }, 3000);
+              
             },
             error: function () {
                 console.log('Error processing your request');
@@ -564,6 +632,7 @@ $(document).ready(function () {
         });
     });
 });
+
 
  $(document).ready(function () {
         // Attach click event to the "Listeme Ekle" button
