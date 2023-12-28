@@ -1,7 +1,7 @@
 //Data/Comment.cs
 
 using System.ComponentModel.DataAnnotations;
-
+using System.Collections.Generic;
 namespace ShopAppProject.Data
 {
     public class Comment
@@ -15,6 +15,15 @@ namespace ShopAppProject.Data
         public string? Content { get; set; }
         public DateTime CreatedAt { get; set; }
 
+        public int Likes { get; set; }
+        public int Dislikes { get; set; }
+        public int Rating { get; set; }
+        public virtual ICollection<CommentReaction> Reactions { get; set; }
+
+        public Comment()
+        {
+            Reactions = new HashSet<CommentReaction>();
+        }
     }
 
 }

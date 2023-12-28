@@ -41,6 +41,7 @@ namespace ShopAppProject.Data
         public DbSet<Shipping> Shippings { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }
 
+        public DbSet<CommentReaction> CommentReactions { get; set; }
         public DbSet<UserProductList> UserProductLists { get; set; }
         public DbSet<Deals> Deals { get; set; }
         public DbSet<CartItem> CartItems { get; set; }

@@ -11,7 +11,7 @@ using ShopAppProject.Data;
 namespace ShopAppProject.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231228153050_InitialCreate")]
+    [Migration("20231228201443_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -275,7 +275,16 @@ namespace ShopAppProject.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("Dislikes")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Likes")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("ProductId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Rating")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("UserId")
@@ -291,6 +300,30 @@ namespace ShopAppProject.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("ShopAppProject.Data.CommentReaction", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CommentId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsLike")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CommentId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("CommentReactions");
                 });
 
             modelBuilder.Entity("ShopAppProject.Data.Deals", b =>
@@ -678,6 +711,23 @@ namespace ShopAppProject.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("ShopAppProject.Data.CommentReaction", b =>
+                {
+                    b.HasOne("ShopAppProject.Data.Comment", "Comment")
+                        .WithMany("Reactions")
+                        .HasForeignKey("CommentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ShopAppProject.Data.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Comment");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("ShopAppProject.Data.Deals", b =>
                 {
                     b.HasOne("ShopAppProject.Data.Shipping", "Shipping")
@@ -808,6 +858,11 @@ namespace ShopAppProject.Migrations
                     b.Navigation("UserProductLists");
 
                     b.Navigation("Wallet");
+                });
+
+            modelBuilder.Entity("ShopAppProject.Data.Comment", b =>
+                {
+                    b.Navigation("Reactions");
                 });
 
             modelBuilder.Entity("ShopAppProject.Data.Order", b =>

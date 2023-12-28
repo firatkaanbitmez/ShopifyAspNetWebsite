@@ -43,6 +43,111 @@
     transform: scale(1.1);
 }
 
+.nav-link.active {
+    background-color: #f8694c !important;
+    border-color: #f8694c !important;
+    color: white; /* Beyaz metin varsayılan olarak */
+    /* Diğer istediğiniz stilleri de ekleyebilirsiniz */
+}
+
+/* Aktif .nav-link üzerine gelindiğinde */
+.nav-link.active:hover {
+    background-color: #bf4800 !important;
+    border-color: #bf4800 !important;
+    /* Üzerine gelindiğinde uygulanacak diğer stiller */
+}
+/* Yorum formu stilleri */
+.comment-form {
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+/* Yorum kartı stilleri */
+.comment {
+    background: #f8f9fa;
+    border: 1px solid #e1e1e1;
+    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+/* Yorum başlık stilleri */
+.comment-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+/* Kullanıcı baş harfleri */
+.user-initials {
+    background: #e1e1e1;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+/* Yıldız puanı ve tarih */
+.rating-and-date {
+    display: flex;
+    align-items: center;
+}
+
+.rating {
+    color: #ffc107;
+    margin-right: 10px;
+}
+
+.comment-date {
+    color: #666;
+    font-size: 0.875rem;
+}
+
+/* Yorum içeriği */
+.comment-body p {
+    margin: 0 0 10px 0;
+    color: #333;
+}
+
+/* Yorum alt bilgileri */
+.comment-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.comment-footer span {
+    margin-right: 10px;
+    color: #666;
+}
+
+.btn-like, .btn-dislike, .btn-report {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #333;
+    margin-right: 5px;
+}
+
+.btn-report {
+    margin-left: auto;
+}
+
+/* Admin için ekstra stiller */
+.btn-like:hover, .btn-dislike:hover, .btn-report:hover {
+    text-decoration: underline;
+}
+
+.thank-you-message {
+    margin-left: 10px;
+    color: green;
+    font-weight: bold;
+}
+
 </style>
 
 @{
@@ -295,65 +400,77 @@ else
 </div>
 
 <div class="tab-pane fade mb-2" id="ex1-pills-4" role="tabpanel">
-    <div id="commentsContainer">
-@if (User?.Identity?.IsAuthenticated == true && ViewBag.UserHasPurchased == true || User?.IsInRole("Admin")==true )
-    {
-    
-    <form  asp-controller="Product" asp-action="AddComment" method="post" class="mt-4 mb-3">
-<input type="hidden" name="productId" value="@Model?.ProductId" />
-        <div class="form-group">
-            <label for="content">Yorumunuz:</label>
-            <textarea class="form-control"  name="content" required></textarea> 
-        </div>
-        <button type="submit" class="btn btn-primary mt-2">Yorum Ekle</button>
-    </form>
-    }
-    else
-{
-    <p>Yalnızca bu ürünü satın alan müşteriler yorum bırakabilir.</p>
-}
-    @if (Model?.Comments != null)
-{
-        @foreach (var comment in Model.Comments)
+    <div class="comments-container">
+        @if (User?.Identity?.IsAuthenticated == true && ViewBag.UserHasPurchased == true || User?.IsInRole("Admin")==true )
         {
-            <div class="card mb-3">
-                <div class="card-body">
-                    <div class="d-flex flex-start">
-<i class="fas fa-user fa-2x"></i>                        <div class="w-100">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h6 class="text-primary fw-bold mb-0">
-                                @(comment.User?.FullName ?? "Unknown User")
-                                    <span class="text-dark ms-2">@comment.Content</span>
-                                </h6>
-                                <p class="mb-0">@comment.CreatedAt.ToString("dd/MM/yyyy HH:mm")</p>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center">
-                                   @if (User?.IsInRole("Admin")==true ){
-                                   <p class="small mb-0" style="color: #aaa;">
-                                    <a href="#!" class="link-grey">Remove</a> •
-                                    <a href="#!" class="link-grey">Reply</a> •
-                                    <a href="#!" class="link-grey">Translate</a>
-                                </p>
-                                        }
-                             
-                                <div class="d-flex flex-row">
-                                    <i class="fas fa-star text-warning me-2"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <form asp-controller="Product" asp-action="AddComment" method="post" class="comment-form">
+                <input type="hidden" name="productId" value="@Model?.ProductId" />
+                <div class="form-group">
+                    <label for="content">Yorumunuz:</label>
+                    <textarea class="form-control" name="content" required></textarea> 
+                </div>
+                <button type="submit" class="btn btn-primary mt-2">Yorum Ekle</button>
+            </form>
+        }
+        else
+        {
+            <p>Yalnızca bu ürünü satın alan müşteriler yorum bırakabilir.</p>
+        }
+        
+        @if (Model?.Comments != null)
+        {
+     @foreach (var comment in Model.Comments)
+    {
+
+    var userReaction = comment.Reactions.FirstOrDefault(r => r.UserId == User.FindFirstValue(ClaimTypes.NameIdentifier));
+bool hasLiked = userReaction != null && userReaction.IsLike;
+bool hasDisliked = userReaction != null && !userReaction.IsLike;
+
+    <div class="comment">
+        <div class="comment-header">
+            <div class="user-initials">
+                @comment.User?.FullName?.Substring(0, 1) 
+            </div>
+            <div class="rating-and-date">
+                <div class="rating">
+                    @for (int i = 0; i < comment.Rating; i++) {
+                        <i class="fas fa-star text-warning"></i>
+                    }
+                </div>
+                <div class="comment-date">
+                    @comment.CreatedAt.ToString("dd MMMM, ddd")
                 </div>
             </div>
-        }
-        }
-else
-{
-    // Optionally handle the case when Comments is null
-    // For example, display a message or do nothing
-}
+        </div>
+        <div class="comment-body" style="margin-left: 20px;">
+            <p>@comment.Content</p>
+        </div>
+        <div class="comment-footer">
+            <span>Bu değerlendirme faydalı mı?</span> 
+<button class="btn-like" data-comment-id="@comment.CommentId" @(hasLiked ? "disabled" : "")>👍</button>
+        <span class="like-count">@comment.Likes</span>
+
+<button class="btn-dislike" data-comment-id="@comment.CommentId" @(hasDisliked ? "disabled" : "")>👎</button>
+        <span class="dislike-count">@comment.Dislikes</span>
+
+        
+            <button class="btn-report">Bildir</button>
+        </div>
+        <span>     Kullanıcı bu ürünü @Model.User?.BusinessCompany satıcısından aldı.</span>
+
     </div>
-   
+}
+
+
+        }
+        else
+        {
+            <p>Henüz yorum yapılmamış.</p>
+        }
+    </div>
 </div>
+
+
 
           </div>
         </div>
@@ -381,6 +498,72 @@ else
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
 
 <script>
+$(document).ready(function () {
+    $('.btn-like').click(function () {
+        var btn = $(this);
+        var commentId = btn.data('comment-id');
+
+        $.ajax({
+            type: 'POST',
+            url: '/Product/LikeComment',
+            data: { commentId: commentId },
+            success: function (response) {
+                btn.closest('.comment').find('.like-count').text(response.LikesCount);
+            },
+            error: function () {
+                alert('Error processing your request');
+            }
+        });
+    });
+
+    $('.btn-dislike').click(function () {
+        var btn = $(this);
+        var commentId = btn.data('comment-id');
+
+        $.ajax({
+            type: 'POST',
+            url: '/Product/DislikeComment',
+            data: { commentId: commentId },
+            success: function (response) {
+                btn.closest('.comment').find('.dislike-count').text(response.DislikesCount);
+            },
+            error: function () {
+                alert('Error processing your request');
+            }
+        });
+    });
+});
+$(document).ready(function () {
+    $('.btn-like, .btn-dislike').click(function () {
+        var btn = $(this);
+        if (btn.is(':disabled')) {
+            return;
+        }
+        var commentId = btn.data('comment-id');
+        var isLike = btn.hasClass('btn-like');
+        var url = isLike ? '/Product/LikeComment' : '/Product/DislikeComment';
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: { commentId: commentId },
+            success: function (response) {
+                var countSpan = isLike ? '.like-count' : '.dislike-count';
+                btn.closest('.comment').find(countSpan).text(response.LikesCount || response.DislikesCount);
+                
+                // Display thank you message
+                var thankYouMessage = $('<span class="thank-you-message">Teşekkürler!</span>');
+                btn.after(thankYouMessage);
+                setTimeout(function() {
+                    thankYouMessage.remove();
+                }, 3000);
+            },
+            error: function () {
+                console.log('Error processing your request');
+            }
+        });
+    });
+});
 
  $(document).ready(function () {
         // Attach click event to the "Listeme Ekle" button

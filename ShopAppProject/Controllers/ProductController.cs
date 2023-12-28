@@ -146,6 +146,61 @@ namespace ShopAppProject.Controllers
 
             return NotFound();
         }
+        [HttpPost]
+        public async Task<IActionResult> LikeComment(int commentId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var existingReaction = _context.CommentReactions.FirstOrDefault(cr => cr.CommentId == commentId && cr.UserId == userId);
+
+            if (existingReaction == null)
+            {
+                var reaction = new CommentReaction
+                {
+                    UserId = userId,
+                    CommentId = commentId,
+                    IsLike = true
+                };
+                _context.CommentReactions.Add(reaction);
+
+                var comment = _context.Comments.FirstOrDefault(c => c.CommentId == commentId);
+                if (comment != null)
+                {
+                    comment.Likes++;
+                    _context.Update(comment);
+                }
+                await _context.SaveChangesAsync();
+            }
+            var likesCount = _context.Comments.FirstOrDefault(c => c.CommentId == commentId)?.Likes ?? 0;
+            return Json(new { LikesCount = likesCount });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DislikeComment(int commentId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var existingReaction = _context.CommentReactions.FirstOrDefault(cr => cr.CommentId == commentId && cr.UserId == userId);
+
+            if (existingReaction == null)
+            {
+                var reaction = new CommentReaction
+                {
+                    UserId = userId,
+                    CommentId = commentId,
+                    IsLike = false
+                };
+                _context.CommentReactions.Add(reaction);
+
+                var comment = _context.Comments.FirstOrDefault(c => c.CommentId == commentId);
+                if (comment != null)
+                {
+                    comment.Dislikes++;
+                    _context.Update(comment);
+                }
+                await _context.SaveChangesAsync();
+            }
+            var dislikesCount = _context.Comments.FirstOrDefault(c => c.CommentId == commentId)?.Dislikes ?? 0;
+            return Json(new { DislikesCount = dislikesCount });
+        }
 
         public IActionResult Details(int id)
         {
