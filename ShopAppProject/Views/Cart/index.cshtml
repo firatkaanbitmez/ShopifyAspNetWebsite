@@ -38,61 +38,64 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach (var item in Model.CartItems)
+                                        @if (Model.CartItems != null && Model.CartItems.Count > 0)
                                         {
-                                            <tr>
-                                                <td class="align-middle">
-                                                    <div class="d-flex align-items-center">
-                                                        <a
-                                                            href="@Url.Action("Details", "Product", new { id = item.ProductId })">
-                                                            <img src="@Url.Content(item?.Product?.Images?.FirstOrDefault()?.FullImagePath ?? "/img/defaultproduct.png")"
-                                                                class="img-fluid rounded-3" style="width: 50px;"
-                                                                alt="Product Image">
+                                            @foreach (var item in Model.CartItems)
+                                            {
+                                                <tr>
+                                                    <td class="align-middle">
+                                                        <div class="d-flex align-items-center">
+                                                            <a
+                                                                href="@Url.Action("Details", "Product", new { id = item.ProductId })">
+                                                                <img src="@Url.Content(item?.Product?.Images?.FirstOrDefault()?.FullImagePath ?? "/img/defaultproduct.png")"
+                                                                    class="img-fluid rounded-3" style="width: 50px;"
+                                                                    alt="Product Image">
 
-                                                            <!-- ... existing content ... -->
+                                                                <!-- ... existing content ... -->
 
-                                                        </a>
-                                                        <div class="flex-column ms-4">
-                                                            <p class="mb-2 text-center">
-                                                                <a href="@Url.Action("Details", "Product", new { id = item?.ProductId })"
-                                                                    class="text-decoration-none text-dark fw">@item?.Product?.ProductTitle</a>
-                                                            </p>
+                                                            </a>
+                                                            <div class="flex-column ms-4">
+                                                                <p class="mb-2 text-center">
+                                                                    <a href="@Url.Action("Details", "Product", new { id = item?.ProductId })"
+                                                                        class="text-decoration-none text-dark fw">@item?.Product?.ProductTitle</a>
+                                                                </p>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </td>
-                                                <td class="align-middle">
-                                                    <div class="d-flex flex-row align-items-center">
-                                                        <form asp-action="UpdateQuantity" method="post" class="d-flex">
+                                                    </td>
+                                                    <td class="align-middle">
+                                                        <div class="d-flex flex-row align-items-center">
+                                                            <form asp-action="UpdateQuantity" method="post" class="d-flex">
+                                                                <input type="hidden" name="productId" value="@item?.ProductId" />
+
+                                                                <button type="submit" name="decreaseQuantity"
+                                                                    value="@(item?.Quantity - 1)"
+                                                                    class="btn btn-link px-3 quantity-button">
+                                                                    <i class="fas fa-minus"></i>
+                                                                </button>
+                                                                <input id="form1" min="0" name="quantity" value="@item?.Quantity"
+                                                                    type="number" class="form-control form-control-sm mx-2"
+                                                                    style="width: 60px;" />
+                                                                <button type="submit" name="increaseQuantity"
+                                                                    value="@(item?.Quantity + 1)"
+                                                                    class="btn btn-link px-3 quantity-button">
+                                                                    <i class="fas fa-plus"></i>
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    </td>
+
+                                                    <td class="align-middle">
+                                                        <p class="mb-0" style="font-weight: 500;">
+                                                            @item?.Product?.ProductPrice.ToString("C")</p>
+                                                    </td>
+                                                    <td class="align-middle">
+                                                        <form method="post" action="/Cart/RemoveFromCart">
                                                             <input type="hidden" name="productId" value="@item?.ProductId" />
-
-                                                            <button type="submit" name="decreaseQuantity"
-                                                                value="@(item?.Quantity - 1)"
-                                                                class="btn btn-link px-3 quantity-button">
-                                                                <i class="fas fa-minus"></i>
-                                                            </button>
-                                                            <input id="form1" min="0" name="quantity" value="@item?.Quantity"
-                                                                type="number" class="form-control form-control-sm mx-2"
-                                                                style="width: 60px;" />
-                                                            <button type="submit" name="increaseQuantity"
-                                                                value="@(item?.Quantity + 1)"
-                                                                class="btn btn-link px-3 quantity-button">
-                                                                <i class="fas fa-plus"></i>
-                                                            </button>
+                                                            <button type="submit" class="btn btn-danger">Sil</button>
                                                         </form>
-                                                    </div>
-                                                </td>
-
-                                                <td class="align-middle">
-                                                    <p class="mb-0" style="font-weight: 500;">
-                                                        @item?.Product?.ProductPrice.ToString("C")</p>
-                                                </td>
-                                                <td class="align-middle">
-                                                    <form method="post" action="/Cart/RemoveFromCart">
-                                                        <input type="hidden" name="productId" value="@item?.ProductId" />
-                                                        <button type="submit" class="btn btn-danger">Sil</button>
-                                                    </form>
-                                                </td>
-                                            </tr>
+                                                    </td>
+                                                </tr>
+                                            }
                                         }
                                     </tbody>
                                 </table>

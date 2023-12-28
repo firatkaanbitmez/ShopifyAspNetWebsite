@@ -152,7 +152,8 @@
             </div>
   
         <span class="comment-span">
-<i class="far fa-comment"></i> <span id="commentCount">@Model.Comments?.Count</span>
+<i class="far fa-comment"></i> <span id="commentCount">@Model.Comments?.Count </span>
+
 
 
 
@@ -238,7 +239,7 @@ else
     <span style="font-size: 14px; color: #666; font-weight: 500; margin-right: 5px;">
         Satıcı:
     </span>
-   <span style="color: #f8694c; font-weight: 600; font-size: 18px;">@Model.User.BusinessCompany</span>
+   <span style="color: #f8694c; font-weight: 600; font-size: 18px;">@Model?.User?.BusinessCompany</span>
 
 </div>
 
@@ -295,7 +296,9 @@ else
 
 <div class="tab-pane fade mb-2" id="ex1-pills-4" role="tabpanel">
     <div id="commentsContainer">
-         <!-- Yorum Ekleme Formu... -->
+@if (User?.Identity?.IsAuthenticated == true && ViewBag.UserHasPurchased == true || User?.IsInRole("Admin")==true )
+    {
+    
     <form  asp-controller="Product" asp-action="AddComment" method="post" class="mt-4 mb-3">
 <input type="hidden" name="productId" value="@Model?.ProductId" />
         <div class="form-group">
@@ -304,7 +307,14 @@ else
         </div>
         <button type="submit" class="btn btn-primary mt-2">Yorum Ekle</button>
     </form>
-        @foreach (var comment in Model?.Comments)
+    }
+    else
+{
+    <p>Yalnızca bu ürünü satın alan müşteriler yorum bırakabilir.</p>
+}
+    @if (Model?.Comments != null)
+{
+        @foreach (var comment in Model.Comments)
         {
             <div class="card mb-3">
                 <div class="card-body">
@@ -332,6 +342,12 @@ else
                 </div>
             </div>
         }
+        }
+else
+{
+    // Optionally handle the case when Comments is null
+    // For example, display a message or do nothing
+}
     </div>
    
 </div>
@@ -367,7 +383,7 @@ else
         // Attach click event to the "Listeme Ekle" button
         $("#listemeEkleButton").on("click", function () {
             // Check if the user is not authenticated
-            if (!@User.Identity.IsAuthenticated)
+            if (!@User?.Identity?.IsAuthenticated)
             {
                 // Show an alert
                 alert("Lütfen ürünü listenize eklemek için giriş yapın.");
@@ -390,7 +406,7 @@ else
         $.ajax({
             url: "/Product/GetSellerInfo",
             method: "GET",
-            data: { userId: '@Model.UserId' },
+            data: { userId: '@Model?.UserId' },
             success: function (data) {
                 $("#sellerInfoContainer").html(data);
             },
@@ -502,8 +518,7 @@ $(document).ready(function () {
     // Load comments when the "Yorumlar" tab is clicked
     $("#comments").on("click", function () {
         // Make an AJAX request to get comments data
-        $.ajax({ url: "/Product/GetComments", method: "GET", data: { productId: @Model.ProductId }
-,
+$.ajax({ url: "/Product/GetComments", method: "GET", data: { productId: @Model?.ProductId },
             success: function (data) {
                 // Replace the content of commentsContainer with the loaded comments
                 $("#commentsContainer").html(data);

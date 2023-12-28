@@ -52,7 +52,7 @@
 </style>
 
 <h2>Ürün Listem</h2>
-@if (User.Identity.IsAuthenticated)
+@if (User.Identity?.IsAuthenticated == true)
 {
     @if (User.IsInRole("Admin"))
     {

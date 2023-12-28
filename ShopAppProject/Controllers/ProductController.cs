@@ -151,20 +151,30 @@ namespace ShopAppProject.Controllers
         {
             try
             {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
                 var product = _context.Products
-                 .Include(p => p.User)
-                    .Include(p => p.Comments)
-                    .Include(p => p.UserProductLists)
-                    .Include(p => p.Images) // Ürün resimlerini de yükle
-                    .FirstOrDefault(p => p.ProductId == id);
+                .Include(p => p.User)
+                .Include(p => p.Comments)
+                .Include(p => p.UserProductLists)
+                .Include(p => p.Images)
+                .FirstOrDefault(p => p.ProductId == id);
 
-                var randomProducts = _context.Products.AsEnumerable().OrderBy(p => Guid.NewGuid()).Take(5).ToList();
+                var randomProducts = _context.Products
+                .AsEnumerable()
+                .OrderBy(p => Guid.NewGuid())
+                .Take(5)
+                .ToList();
 
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+                var userHasPurchased = _context.OrderDetails
+                .Any(od => od.ProductId == id && od.Order.UserId == userId);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
                 ViewBag.ProductTitle = product.ProductTitle;
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
                 ViewBag.Category = product.ProductCategory;
-
+                ViewBag.UserHasPurchased = userHasPurchased;
                 ViewData["randomProducts"] = randomProducts;
                 return View(product);
             }
