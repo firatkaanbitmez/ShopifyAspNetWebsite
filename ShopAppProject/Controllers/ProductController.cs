@@ -153,12 +153,15 @@ namespace ShopAppProject.Controllers
             {
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+#pragma warning disable CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
                 var product = _context.Products
                 .Include(p => p.User)
                 .Include(p => p.Comments)
+                  .ThenInclude(c => c.User)
                 .Include(p => p.UserProductLists)
                 .Include(p => p.Images)
                 .FirstOrDefault(p => p.ProductId == id);
+#pragma warning restore CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
 
                 var randomProducts = _context.Products
                 .AsEnumerable()

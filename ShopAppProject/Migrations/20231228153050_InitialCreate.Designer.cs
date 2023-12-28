@@ -11,7 +11,7 @@ using ShopAppProject.Data;
 namespace ShopAppProject.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231228140025_InitialCreate")]
+    [Migration("20231228153050_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -287,6 +287,8 @@ namespace ShopAppProject.Migrations
                     b.HasKey("CommentId");
 
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Comments");
                 });
@@ -668,6 +670,12 @@ namespace ShopAppProject.Migrations
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("ShopAppProject.Data.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ShopAppProject.Data.Deals", b =>

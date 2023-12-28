@@ -108,6 +108,10 @@ span {
     color: #fff;
 }
 
+.dropdown-item:active {
+    background-color: #f8694b;
+}
+
 .dropdown-menu-custom li {
     height: 40px;
     line-height: 40px;
@@ -207,4 +211,14 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
+}
+
+.btn-primary {
+    background-color: #f8694c !important;
+    border-color: #f8694c !important;
+}
+
+.btn-primary:hover {
+    background-color: #bf4800 !important;
+    border-color: #bf4800 !important;
 }

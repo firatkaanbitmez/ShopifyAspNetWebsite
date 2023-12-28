@@ -322,17 +322,20 @@ else
 <i class="fas fa-user fa-2x"></i>                        <div class="w-100">
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <h6 class="text-primary fw-bold mb-0">
-                                    @comment.UserName
+                                @(comment.User?.FullName ?? "Unknown User")
                                     <span class="text-dark ms-2">@comment.Content</span>
                                 </h6>
                                 <p class="mb-0">@comment.CreatedAt.ToString("dd/MM/yyyy HH:mm")</p>
                             </div>
                             <div class="d-flex justify-content-between align-items-center">
-                                <p class="small mb-0" style="color: #aaa;">
+                                   @if (User?.IsInRole("Admin")==true ){
+                                   <p class="small mb-0" style="color: #aaa;">
                                     <a href="#!" class="link-grey">Remove</a> •
                                     <a href="#!" class="link-grey">Reply</a> •
                                     <a href="#!" class="link-grey">Translate</a>
                                 </p>
+                                        }
+                             
                                 <div class="d-flex flex-row">
                                     <i class="fas fa-star text-warning me-2"></i>
                                 </div>
