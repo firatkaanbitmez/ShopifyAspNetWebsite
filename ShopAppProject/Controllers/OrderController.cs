@@ -165,7 +165,6 @@ namespace ShopAppProject.Controllers
                                     BuyerId = userId,
                                     BuyerFirstName = buyer?.FirstName,
                                     BuyerLastName = buyer?.LastName,
-                                    BuyerAddress = buyer?.Address,
                                     BuyerPhoneNumber = buyer?.PhoneNumber
                                 };
 

@@ -9,7 +9,8 @@ namespace ShopAppProject.Data
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
 
-        public string? Address { get; set; }
+        public virtual ICollection<Address>? Addresses { get; set; }
+
         public new string? PhoneNumber { get; set; }
 
         public string? FullName => $"{FirstName} {LastName}";

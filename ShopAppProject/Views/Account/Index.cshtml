@@ -28,6 +28,9 @@
         <li class="nav-item">
             <a class="nav-link" id="mylist-info-tab" data-toggle="tab" href="#mylist-info">Listem</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" id="addresses-tab" data-toggle="tab" href="#addresses-info">Adreslerim</a>
+        </li>
     </ul>
 
     <div class="tab-content mt-2">
@@ -86,7 +89,7 @@
                         <div class="col-md-6">
                             <label for="address">Kayıtlı Adres</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" id="address" value="@Model.Address" readonly>
+                                <input type="text" class="form-control" id="address">
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-secondary" type="button" data-toggle="modal"
                                         data-target="#addressModal">
@@ -214,15 +217,242 @@
                 </div>
             </div>
         }
+        <div class="tab-pane fade" id="addresses-info">
+            <button class="btn btn-primary mt-3 mb-3" data-toggle="modal" data-target="#addAddressModal">Yeni Adres
+                Ekle</button>
+            @if (Model.Addresses != null && Model.Addresses.Any())
+            {
+                foreach (var address in Model.Addresses)
+                {
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Adres</h5>
+                                <p class="card-text">@address.Street, @address.City, @address.State, @address.ZipCode,
+                                    @address.Country</p>
+
+                                <button class="btn btn-primary"
+                                    onclick="editAddress(@address.Id, '@address.Street', '@address.City', '@address.State', '@address.ZipCode', '@address.Country')">Düzenle</button>
+
+                                <button class="btn btn-danger" onclick="deleteAddress(@address.Id)">Sil</button>
+
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p>Hiç adres eklenmemiş.</p>
+            }
+
+            <!-- Yeni Adres Ekleme Modalı -->
+            <div id="addAddressModal" class="modal fade" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Yeni Adres Ekle</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="addAddressForm">
+                                <div class="form-group">
+                                    <label for="street">Sokak</label>
+                                    <input type="text" class="form-control" id="street" name="street" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="city">Şehir</label>
+                                    <input type="text" class="form-control" id="city" name="city" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="state">Eyalet</label>
+                                    <input type="text" class="form-control" id="state" name="state">
+                                </div>
+                                <div class="form-group">
+                                    <label for="zipcode">Posta Kodu</label>
+                                    <input type="text" class="form-control" id="zipcode" name="zipcode">
+                                </div>
+                                <div class="form-group">
+                                    <label for="country">Ülke</label>
+                                    <input type="text" class="form-control" id="country" name="country" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Kaydet</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Adres Düzenleme Modalı -->
+            <div id="editAddressModal" class="modal fade" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Adres Düzenle</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="editAddressForm">
+                                <input type="hidden" id="editAddressId" name="addressId">
+
+                                <div class="form-group">
+                                    <label for="editStreet">Sokak</label>
+                                    <input type="text" class="form-control" id="editStreet" name="street" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="editCity">Şehir</label>
+                                    <input type="text" class="form-control" id="editCity" name="city" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="editState">Eyalet</label>
+                                    <input type="text" class="form-control" id="editState" name="state">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="editZipCode">Posta Kodu</label>
+                                    <input type="text" class="form-control" id="editZipCode" name="zipcode">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="editCountry">Ülke</label>
+                                    <input type="text" class="form-control" id="editCountry" name="country" required>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">Kaydet</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+        </div>
 
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-    crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
-    integrity="sha384-UoWvMSZp8U1YSF4+dXnjs+U0Fh7fe3lFiiBs2qtPcHqrI" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-    crossorigin="anonymous"></script>
+
+<script>
+
+    function editAddress(id, street, city, state, zipCode, country) {
+        // Form alanlarını doldur
+        $("#editAddressId").val(id);
+        $("#editStreet").val(street);
+        $("#editCity").val(city);
+        $("#editState").val(state);
+        $("#editZipCode").val(zipCode);
+        $("#editCountry").val(country);
+
+        // Modalı göster
+        $("#editAddressModal").modal('show');
+    }
+
+    // AJAX ile Düzenleme İsteği Gönderme
+    $("#editAddressForm").submit(function (event) {
+        event.preventDefault();
+        var formData = {
+            Id: $("#editAddressId").val(),
+            Street: $("#editStreet").val(),
+            City: $("#editCity").val(),
+            State: $("#editState").val(),
+            ZipCode: $("#editZipCode").val(),
+            Country: $("#editCountry").val()
+        };
+
+        $.ajax({
+            url: '/Account/EditAddress', // Doğru URL kontrolü
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function (result) {
+                if (result.success) {
+                    // Başarılı işlem
+                    $("#editAddressModal").modal('hide');
+                    location.reload();
+                } else {
+                    alert("Adres düzenlenemedi: " + result.message);
+                }
+            },
+            error: function (xhr) {
+                console.error("Hata: ", xhr.responseText);
+                alert("Bir hata oluştu: " + xhr.responseText);
+            }
+        });
+    });
+
+
+
+
+    $(document).ready(function () {
+        // Bootstrap Tab işlevselliğini manuel olarak etkinleştirme
+        $('#myTabs a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        });
+
+        $("#addAddressForm").submit(function (event) {
+            event.preventDefault();
+            var formData = {
+                street: $("#street").val(),
+                city: $("#city").val(),
+                state: $("#state").val(),
+                zipcode: $("#zipcode").val(),
+                country: $("#country").val()
+            };
+
+            $.ajax({
+                url: '@Url.Action("AddAddress", "Account")',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                success: function (result) {
+                    if (result.success) {
+                        // İşlem başarılı
+                        $("#addAddressForm")[0].reset();
+                        $("#addAddressModal").modal('hide');
+                    } else {
+                        // Hata mesajı
+                        alert("Adres eklenemedi.");
+                    }
+                },
+                error: function () {
+                    // AJAX hatası
+                    alert("Bir hata oluştu.");
+                }
+            });
+        });
+
+    });
+
+
+
+
+    function deleteAddress(addressId) {
+        if (confirm("Bu adresi silmek istediğinizden emin misiniz?")) {
+            $.ajax({
+                url: '@Url.Action("DeleteAddress", "Account")' + '?addressId=' + addressId,
+                type: 'POST',
+                success: function (result) {
+                    if (result.success) {
+                        alert("Adres başarıyla silindi.");
+                        location.reload(); // Sayfayı yenileyerek güncel adres listesini göster
+                    } else {
+                        alert("Adres silinemedi.");
+                    }
+                },
+                error: function () {
+                    alert("Bir hata oluştu.");
+                }
+            });
+        }
+    }
+</script>

@@ -145,6 +145,37 @@ namespace ShopAppProject.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("ShopAppProject.Data.Address", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("City")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Country")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("State")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Street")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ZipCode")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Addresses");
+                });
+
             modelBuilder.Entity("ShopAppProject.Data.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -152,9 +183,6 @@ namespace ShopAppProject.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("Address")
-                        .HasColumnType("TEXT");
 
                     b.Property<string>("BusinessAddress")
                         .HasColumnType("TEXT");
@@ -682,6 +710,15 @@ namespace ShopAppProject.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ShopAppProject.Data.Address", b =>
+                {
+                    b.HasOne("ShopAppProject.Data.ApplicationUser", "User")
+                        .WithMany("Addresses")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("ShopAppProject.Data.CartItem", b =>
                 {
                     b.HasOne("ShopAppProject.Data.Product", "Product")
@@ -858,6 +895,8 @@ namespace ShopAppProject.Migrations
 
             modelBuilder.Entity("ShopAppProject.Data.ApplicationUser", b =>
                 {
+                    b.Navigation("Addresses");
+
                     b.Navigation("UserProductLists");
 
                     b.Navigation("Wallet");

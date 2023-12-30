@@ -46,6 +46,8 @@ namespace ShopAppProject.Controllers
                     // Load the wallet balance and transactions
                     var wallet = _context.Wallets.Include(w => w.Transactions).FirstOrDefault(w => w.UserId == user.Id);
                     ViewBag.WalletBalance = wallet?.Balance;
+                    user.Addresses = _context.Addresses.Where(a => a.UserId == user.Id).ToList();
+
 
                     return View(user);
                 }
@@ -136,7 +138,6 @@ namespace ShopAppProject.Controllers
                     Email = model.Email,
                     FirstName = model.FirstName,
                     LastName = model.LastName,
-                    Address = model.Address,
                     PhoneNumber = model.PhoneNumber,
 
                 };
@@ -196,7 +197,6 @@ namespace ShopAppProject.Controllers
                     Email = model.Email,
                     FirstName = model.FirstName,
                     LastName = model.LastName,
-                    Address = model.Address,
                     PhoneNumber = model.PhoneNumber,
                     BusinessCompany = model.BusinessCompany,
                     BusinessID = model.BusinessID,
@@ -365,7 +365,6 @@ namespace ShopAppProject.Controllers
                     // Update user properties with the edited values
                     user.FirstName = model.FirstName ?? user.FirstName;
                     user.LastName = model.LastName ?? user.LastName;
-                    user.Address = model.Address ?? user.Address;
                     user.PhoneNumber = model.PhoneNumber ?? user.PhoneNumber;
 
                     var result = await _userManager.UpdateAsync(user);
@@ -386,7 +385,80 @@ namespace ShopAppProject.Controllers
             // If ModelState is not valid, redisplay the edit form with validation errors
             return View(model);
         }
+        [HttpPost]
+        public async Task<IActionResult> EditAddress([FromBody] AddressViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Json(new { success = false, message = "Geçersiz model." });
+            }
 
+            var address = await _context.Addresses.FindAsync(model.Id);
+            if (address == null)
+            {
+                return Json(new { success = false, message = "Adres bulunamadı." });
+            }
+
+            // Modelden gelen verilerle adresi güncelle
+            address.Street = model.Street;
+            address.City = model.City;
+            address.State = model.State;
+            address.ZipCode = model.ZipCode;
+            address.Country = model.Country;
+
+            _context.Addresses.Update(address);
+            await _context.SaveChangesAsync();
+
+            return Json(new { success = true });
+        }
+
+
+
+
+        [HttpGet]
+        public IActionResult AddAddress()
+        {
+            return View(new AddressViewModel());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddAddress([FromBody] AddressViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.GetUserAsync(User);
+                if (user != null)
+                {
+                    var address = new Address
+                    {
+                        Street = model.Street,
+                        City = model.City,
+                        State = model.State,
+                        ZipCode = model.ZipCode,
+                        Country = model.Country,
+                        UserId = user.Id
+                    };
+
+                    _context.Addresses.Add(address);
+                    await _context.SaveChangesAsync();
+
+                    return Json(new { success = true });
+                }
+            }
+            return Json(new { success = false });
+        }
+        [HttpPost]
+        public async Task<IActionResult> DeleteAddress(int addressId)
+        {
+            var address = await _context.Addresses.FindAsync(addressId);
+            if (address != null)
+            {
+                _context.Addresses.Remove(address);
+                await _context.SaveChangesAsync();
+                return Json(new { success = true });
+            }
+            return Json(new { success = false });
+        }
 
         [HttpGet]
         public IActionResult ChangePassword()
