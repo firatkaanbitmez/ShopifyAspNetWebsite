@@ -11,6 +11,89 @@
 }
 
 
+<style>
+    /* Style for Tabs */
+    .nav-tabs .nav-item.show .nav-link,
+    .nav-tabs .nav-link.active {
+        color: #fff;
+        background-color: #f8694c;
+        border-color: #f8694c;
+    }
+
+    .bg-light {
+        background-color: #e9ecef !important;
+    }
+
+    .card {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        border: none;
+        margin-bottom: 20px;
+    }
+
+    .custom-modal .modal-dialog {
+        max-width: 600px;
+        margin: 30px auto;
+    }
+
+    .custom-modal .modal-content {
+        border-radius: 8px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .custom-modal .modal-header {
+        background-color: #f8694c;
+        color: white;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        padding: 15px;
+        border: none;
+    }
+
+    .custom-modal .modal-header h5 {
+        margin: 0;
+    }
+
+    .custom-modal .close {
+        color: white;
+        opacity: 1;
+    }
+
+    .custom-modal .modal-body {
+        padding: 20px;
+        background-color: #fff;
+    }
+
+    .custom-modal .form-group label {
+        color: #333;
+        font-weight: bold;
+    }
+
+    .custom-modal .form-control {
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .custom-modal .form-control:focus {
+        border-color: #f8694c;
+        box-shadow: none;
+    }
+
+    .custom-modal .btn-primary {
+        background-color: #f8694c;
+        border-color: #f8694c;
+        padding: 10px 20px;
+        font-size: 14px;
+        border-radius: 4px;
+    }
+
+    .custom-modal .btn-primary:hover {
+        background-color: #e65a00;
+        border-color: #e65a00;
+    }
+</style>
+
 
 <div class="container mt-5">
     <h4 class="pb-4 border-bottom" readonly onmousedown="return false;" style="cursor: default;">Hesap Ayarları</h4>
@@ -217,34 +300,36 @@
                 </div>
             </div>
         }
-        <div class="tab-pane fade" id="addresses-info">
+       <div class="tab-pane fade" id="addresses-info">
             <button class="btn btn-primary mt-3 mb-3" data-toggle="modal" data-target="#addAddressModal">Yeni Adres
                 Ekle</button>
-            @if (Model.Addresses != null && Model.Addresses.Any())
-            {
-                foreach (var address in Model.Addresses)
-                {
-                    <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Adres</h5>
-                                <p class="card-text">@address.Street, @address.City, @address.State, @address.ZipCode,
-                                    @address.Country</p>
 
-                                <button class="btn btn-primary"
+            <!-- Adres Listesi -->
+            <div class="row">
+                @if (Model.Addresses != null && Model.Addresses.Any())
+                {
+                    foreach (var address in Model.Addresses)
+                    {
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Adres</h5>
+                                    <p class="card-text">@address.Street, @address.City, @address.State, @address.ZipCode,
+                                        @address.Country</p>
+                                            <button class="btn btn-primary"
                                     onclick="editAddress(@address.Id, '@address.Street', '@address.City', '@address.State', '@address.ZipCode', '@address.Country')">Düzenle</button>
 
-                                <button class="btn btn-danger" onclick="deleteAddress(@address.Id)">Sil</button>
-
+                                    <button class="btn btn-danger" onclick="deleteAddress(@address.Id)">Sil</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    }
                 }
-            }
-            else
-            {
-                <p>Hiç adres eklenmemiş.</p>
-            }
+                else
+                {
+                    <p>Hiç adres eklenmemiş.</p>
+                }
+            </div>
 
             <!-- Yeni Adres Ekleme Modalı -->
             <div id="addAddressModal" class="modal fade" tabindex="-1" role="dialog">
