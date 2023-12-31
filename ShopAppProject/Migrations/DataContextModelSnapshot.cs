@@ -151,10 +151,19 @@ namespace ShopAppProject.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("AdSoyad")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AdresBasligi")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("City")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Country")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DetayliAdres")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("State")
@@ -163,10 +172,16 @@ namespace ShopAppProject.Migrations
                     b.Property<string>("Street")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("TCKimlikNo")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("UserId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ZipCode")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("mobilephone")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");

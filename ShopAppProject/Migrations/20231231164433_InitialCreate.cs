@@ -98,11 +98,16 @@ namespace ShopAppProject.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    AdresBasligi = table.Column<string>(type: "TEXT", nullable: true),
+                    AdSoyad = table.Column<string>(type: "TEXT", nullable: true),
                     Street = table.Column<string>(type: "TEXT", nullable: true),
                     City = table.Column<string>(type: "TEXT", nullable: true),
                     State = table.Column<string>(type: "TEXT", nullable: true),
                     ZipCode = table.Column<string>(type: "TEXT", nullable: true),
                     Country = table.Column<string>(type: "TEXT", nullable: true),
+                    DetayliAdres = table.Column<string>(type: "TEXT", nullable: true),
+                    mobilephone = table.Column<string>(type: "TEXT", nullable: true),
+                    TCKimlikNo = table.Column<string>(type: "TEXT", nullable: true),
                     UserId = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>

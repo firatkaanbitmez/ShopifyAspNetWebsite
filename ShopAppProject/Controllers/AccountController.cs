@@ -401,10 +401,17 @@ namespace ShopAppProject.Controllers
 
             // Modelden gelen verilerle adresi güncelle
             address.Street = model.Street;
+            address.AdresBasligi = model.AdresBasligi;
+            address.AdSoyad = model.AdSoyad;
             address.City = model.City;
             address.State = model.State;
             address.ZipCode = model.ZipCode;
             address.Country = model.Country;
+            address.DetayliAdres = model.DetayliAdres;
+            address.mobilephone = model.mobilephone;
+            address.TCKimlikNo = model.TCKimlikNo;
+
+
 
             _context.Addresses.Update(address);
             await _context.SaveChangesAsync();
@@ -433,9 +440,15 @@ namespace ShopAppProject.Controllers
                     {
                         Street = model.Street,
                         City = model.City,
+                        AdresBasligi = model.AdresBasligi,
+                        AdSoyad = model.AdSoyad,
                         State = model.State,
                         ZipCode = model.ZipCode,
                         Country = model.Country,
+                        DetayliAdres = model.DetayliAdres,
+                        mobilephone = model.mobilephone,
+                        TCKimlikNo = model.TCKimlikNo,
+
                         UserId = user.Id
                     };
 
