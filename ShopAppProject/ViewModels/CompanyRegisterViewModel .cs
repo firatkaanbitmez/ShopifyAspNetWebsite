@@ -29,9 +29,7 @@ namespace ShopAppProject.Data
         [Display(Name = "Last Name")]
         public string? LastName { get; set; }
 
-        [Required]
-        [Display(Name = "Address")]
-        public string? Address { get; set; }
+
 
         [Required]
         [Display(Name = "Phone Number")]
