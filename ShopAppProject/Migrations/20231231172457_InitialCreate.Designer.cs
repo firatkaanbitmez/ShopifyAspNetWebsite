@@ -11,7 +11,7 @@ using ShopAppProject.Data;
 namespace ShopAppProject.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231231164433_InitialCreate")]
+    [Migration("20231231172457_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -168,6 +168,9 @@ namespace ShopAppProject.Migrations
 
                     b.Property<string>("DetayliAdres")
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("State")
                         .HasColumnType("TEXT");

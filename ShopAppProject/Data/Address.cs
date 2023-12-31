@@ -16,6 +16,8 @@ namespace ShopAppProject.Data
         public string? mobilephone { get; set; }
         public string? TCKimlikNo { get; set; }
         public string? UserId { get; set; }
+        public bool IsDefault { get; set; }
+
         public virtual ApplicationUser? User { get; set; }
     }
 }

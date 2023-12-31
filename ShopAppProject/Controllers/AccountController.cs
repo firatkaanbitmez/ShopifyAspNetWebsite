@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+
 
 
 namespace ShopAppProject.Controllers
@@ -472,6 +474,42 @@ namespace ShopAppProject.Controllers
             }
             return Json(new { success = false });
         }
+        [HttpPost]
+        public async Task<IActionResult> SetDefaultAddress(int addressId)
+        {
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (userId == null)
+                {
+                    return Json(new { success = false, message = "User ID not found." });
+                }
+
+                // Önceki varsayılan adresi sıfırla
+                var previousDefault = _context.Addresses.Where(a => a.UserId == userId && a.IsDefault).ToList();
+                foreach (var address in previousDefault)
+                {
+                    address.IsDefault = false;
+                }
+
+                // Yeni varsayılan adresi ayarla
+                var newDefaultAddress = await _context.Addresses.FindAsync(addressId);
+                if (newDefaultAddress == null)
+                {
+                    return Json(new { success = false, message = "Address not found." });
+                }
+                newDefaultAddress.IsDefault = true;
+
+                await _context.SaveChangesAsync();
+
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
 
         [HttpGet]
         public IActionResult ChangePassword()

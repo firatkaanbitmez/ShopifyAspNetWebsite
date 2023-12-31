@@ -166,6 +166,9 @@ namespace ShopAppProject.Migrations
                     b.Property<string>("DetayliAdres")
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("State")
                         .HasColumnType("TEXT");
 

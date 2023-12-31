@@ -108,7 +108,8 @@ namespace ShopAppProject.Migrations
                     DetayliAdres = table.Column<string>(type: "TEXT", nullable: true),
                     mobilephone = table.Column<string>(type: "TEXT", nullable: true),
                     TCKimlikNo = table.Column<string>(type: "TEXT", nullable: true),
-                    UserId = table.Column<string>(type: "TEXT", nullable: true)
+                    UserId = table.Column<string>(type: "TEXT", nullable: true),
+                    IsDefault = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {

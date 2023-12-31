@@ -7,6 +7,7 @@
     var roles = ViewBag.Roles as IList<string>;
     var walletBalance = ViewBag.WalletBalance as decimal?;
 
+    var defaultAddress = Model.Addresses?.FirstOrDefault(a => a.IsDefault);
 
 }
 
@@ -92,6 +93,160 @@
         background-color: #e65a00;
         border-color: #e65a00;
     }
+
+    /* Adres Kartı Stilleri */
+    .address-card {
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        margin-bottom: 20px;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .address-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .address-card-body {
+        padding: 20px;
+    }
+
+    .address-title {
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 15px;
+    }
+
+    .address-text {
+        font-size: 14px;
+        color: #666;
+        line-height: 1.5;
+    }
+
+    .address-actions {
+        text-align: right;
+        margin-top: 15px;
+    }
+
+    /* Modal Stilleri */
+    .modal-header {
+        background-color: #f8694c;
+        color: white;
+        border-bottom: none;
+    }
+
+    .modal-footer {
+        border-top: none;
+    }
+
+    .modal-content {
+        border-radius: 8px;
+    }
+
+    /* Düzenle ve Sil Butonları */
+    .btn-edit,
+    .btn-delete {
+        margin-left: 5px;
+    }
+
+    .btn-edit {
+        color: #007bff;
+    }
+
+    .btn-delete {
+        color: #dc3545;
+    }
+
+
+    h4,
+    h5 {
+        color: #333;
+    }
+
+    /* Navigasyon ve Sekme Stilleri */
+    .nav-tabs .nav-link {
+        color: #333;
+        background-color: #e9ecef;
+
+
+    }
+
+    .nav-tabs .nav-link.active {
+        color: #fff;
+    }
+
+    /* Kart Stilleri */
+    .card {
+        background-color: #fff;
+        border-radius: 0.25rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+
+    /* Modal Stilleri */
+    .modal-content {
+        border-radius: 0.25rem;
+    }
+
+    .default-address-card {
+        position: relative;
+        border: 2px solid gold;
+        /* Varsayılan adres için altın çerçeve */
+    }
+
+    /* General Style Improvements */
+    .addresses-container {
+        display: flex;
+        flex: 1;
+        gap: 20px;
+    }
+
+    /* Address Card Styling */
+    .address-card {
+        flex: 0 1 calc(33% - 20px);
+        /* Adjust the width minus gap for 3 columns layout */
+        max-width: calc(33% - 20px);
+        /* Ensure maximum width */
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease-in-out;
+        overflow: hidden;
+    }
+
+    .address-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .address-card-body {
+        padding: 20px;
+    }
+
+    .address-title,
+    .address-text {
+        font-size: 14px;
+        /* Adjust font size for consistency */
+        color: #666;
+        line-height: 1.5;
+        margin-bottom: 10px;
+        /* Spacing between elements */
+    }
+
+    /* Adjustments for Default Address Card */
+    .default-address-card {
+        border: 2px solid gold;
+        /* Highlight for default address */
+    }
+
+    .default-address-card .fa-star {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        color: gold;
+        font-size: 20px;
+    }
 </style>
 
 
@@ -169,18 +324,52 @@
                         </div>
                     </div>
                     <div class="row py-2">
+                        <!-- Varsayılan Adres ve İkon -->
                         <div class="col-md-6">
-                            <label for="address">Kayıtlı Adres</label>
+                            <label for="address">Varsayılan Adres</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" id="address">
+                                <input type="text" class="form-control" id="address"
+                                    value="@Model.Addresses?.FirstOrDefault(a => a.IsDefault)?.AdresBasligi" readonly
+                                    onmousedown="return false;" style="cursor: default;">
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-secondary" type="button" data-toggle="modal"
-                                        data-target="#addressModal">
-                                        <i class="fas fa-map-marker-alt"></i>
+                                        data-target="#defaultAddressModal">
+                                        <i class="fas fa-info-circle"></i>
                                     </button>
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Varsayılan Adres Detayları Modalı -->
+                        <div class="modal fade" id="defaultAddressModal" tabindex="-1" role="dialog"
+                            aria-labelledby="defaultAddressModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="defaultAddressModalLabel">Varsayılan Adres Detayları
+                                        </h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p><strong>Adres Başlığı:</strong> @defaultAddress?.AdresBasligi</p>
+                                        <p><strong>Ad Soyad:</strong> @defaultAddress?.AdSoyad</p>
+                                        <!-- Diğer adres bilgileri -->
+                                        <p><strong>Ülke:</strong> @defaultAddress?.Country</p>
+                                        <p><strong>İl:</strong> @defaultAddress?.City</p>
+                                        <p><strong>İlçe:</strong> @defaultAddress?.State</p>
+                                        <p><strong>Mahalle/Sokak/Köy:</strong> @defaultAddress?.Street</p>
+                                        <p><strong>Detaylı Adres:</strong> @defaultAddress?.DetayliAdres</p>
+                                        <p><strong>Posta Kodu:</strong> @defaultAddress?.ZipCode</p>
+                                        <p><strong>Cep Telefonu:</strong> @defaultAddress?.mobilephone</p>
+                                        <p><strong>TC Kimlik/Passaport No:</strong> @defaultAddress?.TCKimlikNo</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
                         <div class="col-md-6 pt-md-0 pt-3">
                             @if (roles != null && (roles.Contains("Admin") || roles.Contains("Company") ||
                             roles.Contains("Customer")))
@@ -304,11 +493,53 @@
             <button class="btn btn-primary mt-3 mb-3" data-toggle="modal" data-target="#addAddressModal">Yeni Adres
                 Ekle</button>
 
+
             <!-- Adres Listesi -->
-            <div class="row">
+            <div class="addresses-container">
+
                 @if (Model.Addresses != null && Model.Addresses.Any())
                 {
-                    foreach (var address in Model.Addresses)
+                    @* Varsayılan adres ilk sırada *@
+                    @if (defaultAddress != null)
+                    {
+                        <div class="col-md-4">
+                            <div class="card default-address-card">
+                                <i class="fas fa-star">
+                                    <h8>Varsayılan Adres</h8>
+                                </i> @* Yıldız simgesi *@
+                                <div class="card-body">
+                                    <p class="card-text">
+                                    <h2>@defaultAddress.AdresBasligi</h2>
+                                    Ad Soyad: @defaultAddress.AdSoyad
+                                    <br>
+                                    Telefon Numarası:<span style="color:Black; font-size:larger;">@defaultAddress.mobilephone
+                                    </span>
+                                    <br>
+                                    TC Kimlik/Passaport No: @defaultAddress.TCKimlikNo
+                                    <br>
+                                    Ülke: @defaultAddress.Country
+                                    <br>
+                                    İl: @defaultAddress.City
+                                    <br>
+                                    İlçe: @defaultAddress.State
+                                    <br>
+                                    Mahalle/Sokak/Köy: @defaultAddress.Street
+                                    <br>
+                                    Adres Detayı: @defaultAddress.DetayliAdres
+                                    <br>
+                                    Posta Kodu: @defaultAddress.ZipCode
+                                    </p>
+                                    <button class="btn btn-primary"
+                                        onclick="editAddress(@defaultAddress.Id, '@defaultAddress.Street', '@defaultAddress.City', '@defaultAddress.State', '@defaultAddress.ZipCode', '@defaultAddress.Country', '@defaultAddress.AdresBasligi', '@defaultAddress.AdSoyad', '@defaultAddress.DetayliAdres', '@defaultAddress.mobilephone', '@defaultAddress.TCKimlikNo')">Düzenle</button>
+                                    <button class="btn btn-danger" onclick="deleteAddress(@defaultAddress.Id)">Sil</button>
+
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    @* Diğer adresler *@
+                    @foreach (var address in Model.Addresses.Where(a => a.Id != defaultAddress?.Id))
                     {
                         <div class="col-md-4">
                             <div class="card">
@@ -338,15 +569,15 @@
                                     <button class="btn btn-primary"
                                         onclick="editAddress(@address.Id, '@address.Street', '@address.City', '@address.State', '@address.ZipCode', '@address.Country', '@address.AdresBasligi', '@address.AdSoyad', '@address.DetayliAdres', '@address.mobilephone', '@address.TCKimlikNo')">Düzenle</button>
                                     <button class="btn btn-danger" onclick="deleteAddress(@address.Id)">Sil</button>
+                                    <button class="btn btn-secondary" onclick="setDefaultAddress(@address.Id) ">Varsayılan
+                                        Adresim
+                                        Yap</button>
                                 </div>
                             </div>
                         </div>
                     }
                 }
-                else
-                {
-                    <p>Hiç adres eklenmemiş.</p>
-                }
+
             </div>
 
 
@@ -555,6 +786,26 @@
 
 
 
+    function setDefaultAddress(addressId) {
+        $.ajax({
+            url: '/Account/SetDefaultAddress',
+            type: 'POST',
+            data: { addressId: addressId },
+            success: function (result) {
+                if (result.success) {
+                    alert("Default address updated.");
+                    location.reload();
+                } else {
+                    alert("Could not update the default address.");
+                }
+            },
+            error: function (xhr) {
+                console.error("Error occurred: ", xhr.responseText);
+                alert("An error occurred: " + xhr.responseText);
+            }
+        });
+    }
+
 
     $(document).ready(function () {
         // Bootstrap Tab işlevselliğini manuel olarak etkinleştirme
@@ -601,17 +852,27 @@
     });
 
 
+    $(document).ready(function () {
+        // Adres kartlarına hover efekti ekle
+        $('.address-card').hover(function () {
+            $(this).addClass('shadow-lg').css('cursor', 'pointer');
+        }, function () {
+            $(this).removeClass('shadow-lg');
+        });
+    });
 
-
+    // Adres Silme İşlemi
     function deleteAddress(addressId) {
         if (confirm("Bu adresi silmek istediğinizden emin misiniz?")) {
+            // AJAX isteği ile adresi sil
             $.ajax({
-                url: '@Url.Action("DeleteAddress", "Account")' + '?addressId=' + addressId,
+                url: '/Account/DeleteAddress',
                 type: 'POST',
+                data: { addressId: addressId },
                 success: function (result) {
                     if (result.success) {
                         alert("Adres başarıyla silindi.");
-                        location.reload(); // Sayfayı yenileyerek güncel adres listesini göster
+                        location.reload();
                     } else {
                         alert("Adres silinemedi.");
                     }
@@ -622,4 +883,5 @@
             });
         }
     }
+
 </script>
