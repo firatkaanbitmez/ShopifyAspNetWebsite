@@ -11,7 +11,7 @@ using ShopAppProject.Data;
 namespace ShopAppProject.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231231172457_InitialCreate")]
+    [Migration("20231231211024_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -567,17 +567,20 @@ namespace ShopAppProject.Migrations
                     b.Property<string>("BuyerAddress")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("BuyerFirstName")
+                    b.Property<string>("BuyerCountry")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("BuyerId")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("BuyerLastName")
+                    b.Property<string>("BuyerName")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("BuyerPhoneNumber")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("BuyerZipcode")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("OrderId")

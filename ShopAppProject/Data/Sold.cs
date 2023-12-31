@@ -28,9 +28,12 @@ namespace ShopAppProject.Data
         public DateTime SoldDate { get; set; } = DateTime.Now;
         public string? SoldIdLink { get; set; }
 
-        public string? BuyerFirstName { get; set; }
-        public string? BuyerLastName { get; set; }
+        public string? BuyerName { get; set; }
         public string? BuyerAddress { get; set; }
+        public string? BuyerCountry { get; set; }
+        public string? BuyerZipcode { get; set; }
+
+
         public string? BuyerPhoneNumber { get; set; }
         public string? ShipmentTrackingInfo { get; set; }
 

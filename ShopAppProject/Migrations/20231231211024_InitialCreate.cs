@@ -314,9 +314,10 @@ namespace ShopAppProject.Migrations
                     BuyerId = table.Column<string>(type: "TEXT", nullable: false),
                     SoldDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     SoldIdLink = table.Column<string>(type: "TEXT", nullable: true),
-                    BuyerFirstName = table.Column<string>(type: "TEXT", nullable: true),
-                    BuyerLastName = table.Column<string>(type: "TEXT", nullable: true),
+                    BuyerName = table.Column<string>(type: "TEXT", nullable: true),
                     BuyerAddress = table.Column<string>(type: "TEXT", nullable: true),
+                    BuyerCountry = table.Column<string>(type: "TEXT", nullable: true),
+                    BuyerZipcode = table.Column<string>(type: "TEXT", nullable: true),
                     BuyerPhoneNumber = table.Column<string>(type: "TEXT", nullable: true),
                     ShipmentTrackingInfo = table.Column<string>(type: "TEXT", nullable: true)
                 },

@@ -70,7 +70,15 @@ namespace ShopAppProject.Controllers
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
             var groupedCartItems = cartItems.GroupBy(c => c.Product.UserId);
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
+            var defaultAddress = await _context.Addresses
+                 .FirstOrDefaultAsync(a => a.UserId == userId && a.IsDefault);
 
+            if (defaultAddress == null)
+            {
+                // Handle case where no default address is set
+                TempData["ErrorMessage"] = "No default address set.";
+                return RedirectToAction("Index", "Cart");
+            }
             using var transaction = _context.Database.BeginTransaction();
 
             try
@@ -163,9 +171,12 @@ namespace ShopAppProject.Controllers
                                     OrderId = order.OrderId,
                                     SellerId = sellerId,
                                     BuyerId = userId,
-                                    BuyerFirstName = buyer?.FirstName,
-                                    BuyerLastName = buyer?.LastName,
-                                    BuyerPhoneNumber = buyer?.PhoneNumber
+                                    BuyerName = defaultAddress.AdSoyad,
+                                    BuyerPhoneNumber = defaultAddress.mobilephone,
+                                    BuyerAddress = defaultAddress.Street + "   " + defaultAddress.DetayliAdres,
+                                    BuyerCountry = defaultAddress.State + " /" + defaultAddress.City + " /" + defaultAddress.Country,
+                                    BuyerZipcode = defaultAddress.ZipCode
+
                                 };
 
                                 // Var olan Sold örneğini takip etmeyi bırak
