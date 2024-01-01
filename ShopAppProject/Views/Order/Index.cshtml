@@ -1,144 +1,144 @@
 <style>
     .card {
-            position: relative;
-            z-index: 0;
-            background-color: #f5f5f5;
-            margin-top: 2%;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-        }
+        position: relative;
+        z-index: 0;
+        background-color: #f5f5f5;
+        margin-top: 2%;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+    }
 
-        .top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    .top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-        .order-info-container {
-            display: flex;
-            justify-content: space-between;
-        }
+    .order-info-container {
+        display: flex;
+        justify-content: space-between;
+    }
 
-        .order-info,
-        .payment-info {
-            width: 45%;
-        }
+    .order-info,
+    .payment-info {
+        width: 45%;
+    }
 
-        .show-button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            margin: 10px;
-            font-size: 20px;
-        }
+    .show-button {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        margin: 10px;
+        font-size: 20px;
+    }
 
-        .progressbar-container,
-        .icon-row,
-        .detail-button {
-            margin-bottom: 30px;
-            overflow: hidden;
-            color: #455A64;
-            padding-left: 0px;
-            margin-top: 30px;
-        }
+    .progressbar-container,
+    .icon-row,
+    .detail-button {
+        margin-bottom: 30px;
+        overflow: hidden;
+        color: #455A64;
+        padding-left: 0px;
+        margin-top: 30px;
+    }
 
-        .hidden {
-            display: none;
-        }
+    .hidden {
+        display: none;
+    }
 
-        .progressbar {
-            list-style-type: none;
-            display: flex;
-            justify-content: space-between;
-            padding: 0;
-            margin: 0;
-        }
+    .progressbar {
+        list-style-type: none;
+        display: flex;
+        justify-content: space-between;
+        padding: 0;
+        margin: 0;
+    }
 
-        .progressbar li {
-            flex: 1;
-            position: relative;
-        }
+    .progressbar li {
+        flex: 1;
+        position: relative;
+    }
 
-        .progressbar .step0:before {
-            font-family: FontAwesome;
-            content: "\f10c";
-            color: #fff;
-        }
+    .progressbar .step0:before {
+        font-family: FontAwesome;
+        content: "\f10c";
+        color: #fff;
+    }
 
-        .progressbar li:before {
-            width: 40px;
-            height: 40px;
-            line-height: 45px;
-            display: block;
-            font-size: 20px;
-            background: #C5CAE9;
-            border-radius: 50%;
-            margin: auto;
-            padding: 0px;
-        }
+    .progressbar li:before {
+        width: 40px;
+        height: 40px;
+        line-height: 45px;
+        display: block;
+        font-size: 20px;
+        background: #C5CAE9;
+        border-radius: 50%;
+        margin: auto;
+        padding: 0px;
+    }
 
-        .progressbar li:after {
-            content: '';
-            width: 100%;
-            height: 12px;
-            background: #C5CAE9;
-            position: absolute;
-            left: 0;
-            top: 16px;
-            z-index: -1;
-        }
+    .progressbar li:after {
+        content: '';
+        width: 100%;
+        height: 12px;
+        background: #C5CAE9;
+        position: absolute;
+        left: 0;
+        top: 16px;
+        z-index: -1;
+    }
 
-        .progressbar li:last-child:after {
-            border-top-right-radius: 10px;
-            border-bottom-right-radius: 10px;
-            position: absolute;
-            left: -50%;
-        }
+    .progressbar li:last-child:after {
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+        position: absolute;
+        left: -50%;
+    }
 
-        .progressbar li:nth-child(2):after,
-        .progressbar li:nth-child(3):after {
-            left: -50%;
-        }
+    .progressbar li:nth-child(2):after,
+    .progressbar li:nth-child(3):after {
+        left: -50%;
+    }
 
-        .progressbar li:first-child:after {
-            border-top-left-radius: 10px;
-            border-bottom-left-radius: 10px;
-            position: absolute;
-            left: 50%;
-        }
+    .progressbar li:first-child:after {
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+        position: absolute;
+        left: 50%;
+    }
 
-        .progressbar li:last-child:after {
-            border-top-right-radius: 10px;
-            border-bottom-right-radius: 10px;
-        }
+    .progressbar li:last-child:after {
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
 
-        .progressbar li:first-child:after {
-            border-top-left-radius: 10px;
-            border-bottom-left-radius: 10px;
-        }
+    .progressbar li:first-child:after {
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+    }
 
-        .progressbar li.active:before,
-        .progressbar li.active:after {
-            background: #0d6efd;
-        }
+    .progressbar li.active:before,
+    .progressbar li.active:after {
+        background: #0d6efd;
+    }
 
-        .progressbar li.active:before {
-            font-family: FontAwesome;
-            content: "\f00c";
-        }
+    .progressbar li.active:before {
+        font-family: FontAwesome;
+        content: "\f00c";
+    }
 
-        .icon-content {
-            display: inline-flex;
-            align-items: center;
-            flex-direction: column;
-            text-align: center;
-        }
+    .icon-content {
+        display: inline-flex;
+        align-items: center;
+        flex-direction: column;
+        text-align: center;
+    }
 
-        .icon {
-            width: 60px;
-            height: 60px;
-        }
+    .icon {
+        width: 60px;
+        height: 60px;
+    }
 </style>
 
 <script>
@@ -151,8 +151,8 @@
         var isHidden = progressbarContainer.classList.toggle('hidden');
         iconRow.classList.toggle('hidden', isHidden);
         siparisDetaylariButton.classList.toggle('hidden', isHidden);
-        detailButton.innerText = isHidden ? '▲' : '▼';
-        
+        detailButton.innerText = isHidden ? '⮝' : '⮟';
+
         detailButton.style.backgroundColor = isHidden ? '#0d6efd' : '#0275d8';
     }
 </script>
@@ -161,23 +161,24 @@
 
 <div class="container px-1 px-md-4 py-5 mx-auto">
     <h2 class="mb-4">Siparişlerim</h2>
-<hr>
+    <hr>
     @if (Model.Any())
     {
         foreach (var order in Model)
         {
             <div class="card">
                 <div class="row d-flex justify-content-between px-3 top">
-                    <div class="order-info-container" > 
+                    <div class="order-info-container">
                         <div class="order-info">
                             <h5>Sipariş No: <span class="text-primary font-weight-bold">@order.OrderId</span></h5>
                             <p>Sipariş Tarihi: <span> @order.OrderDate.ToString("yyyy-MM-dd HH:mm:ss")</span></p>
                         </div>
                         <div class="payment-info">
                             <p>Toplam Ödeme: <span class="font-weight-bold">@order.TotalAmount.ToString("C")</span></p>
-                        <p>Kargo Takip Kodu: <span class="font-weight-bold">@order.ShipmentTrackingInfo</span></p>
+                            <p>Kargo Takip Kodu: <span class="font-weight-bold">@order.ShipmentTrackingInfo</span></p>
                         </div>
-                        <a id="detail-button-@order.OrderId" class="btn btn-primary show-button" onclick="toggleProgress('@order.OrderId')">▲</a>
+                        <a id="detail-button-@order.OrderId" class="btn btn-primary show-button"
+                            onclick="toggleProgress('@order.OrderId')">⮝</a>
 
                     </div>
                 </div>
@@ -224,7 +225,8 @@
                 <div class="row justify-content-between top">
                     <div class="col-md-12">
                         <div class="d-flex justify-content-end">
-                            <a id="siparis-detaylari-button-@order.OrderId"  class="btn btn-primary hidden" asp-controller="Order" asp-action="Details" asp-route-id="@order.OrderId">Sipariş Detayları</a>
+                            <a id="siparis-detaylari-button-@order.OrderId" class="btn btn-primary hidden"
+                                asp-controller="Order" asp-action="Details" asp-route-id="@order.OrderId">Sipariş Detayları</a>
                         </div>
                     </div>
                 </div>
