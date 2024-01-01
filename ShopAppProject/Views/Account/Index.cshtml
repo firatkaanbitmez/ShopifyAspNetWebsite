@@ -294,17 +294,17 @@
                                     <span class="default-badge">Varsayılan</span>
                                 </div>
                                 <div class="card-body">
-                                    <h2 class="address-title">@defaultAddress.AdresBasligi</h2>
+                                    <h2 class="address-title">@defaultAddress?.AdresBasligi </h2>
                                     <p class="card-text">
-                                        Ad Soyad: @defaultAddress.AdSoyad<br>
-                                        Telefon Numarası: <span class="contact-info">@defaultAddress.mobilephone</span><br>
-                                        TC Kimlik/Passaport No: @defaultAddress.TCKimlikNo<br>
-                                        Ülke: @defaultAddress.Country<br>
-                                        İl: @defaultAddress.City<br>
-                                        İlçe: @defaultAddress.State<br>
-                                        Mahalle/Sokak/Köy: @defaultAddress.Street<br>
-                                        Adres Detayı: @defaultAddress.DetayliAdres<br>
-                                        Posta Kodu: @defaultAddress.ZipCode
+                                        Ad Soyad: @defaultAddress?.AdSoyad<br>
+                                        Telefon Numarası: <span class="contact-info">@defaultAddress?.mobilephone</span><br>
+                                        TC Kimlik/Passaport No: @defaultAddress?.TCKimlikNo<br>
+                                        Ülke: @defaultAddress?.Country<br>
+                                        İl: @defaultAddress?.City<br>
+                                        İlçe: @defaultAddress?.State<br>
+                                        Mahalle/Sokak/Köy: @defaultAddress?.Street<br>
+                                        Adres Detayı: @defaultAddress?.DetayliAdres<br>
+                                        Posta Kodu: @defaultAddress?.ZipCode
                                     </p>
                                     <button class="btn btn-primary edit-btn">Düzenle</button>
                                     <button class="btn btn-danger delete-btn">Sil</button>
@@ -324,17 +324,17 @@
                                     <span class="default-badge"></span>
                                 </div>
                                 <div class="card-body">
-                                    <h2 class="address-title">@defaultAddress.AdresBasligi</h2>
+                                    <h2 class="address-title">@address?.AdresBasligi </h2>
                                     <p class="card-text">
-                                        Ad Soyad: @defaultAddress.AdSoyad<br>
-                                        Telefon Numarası: <span class="contact-info">@defaultAddress.mobilephone</span><br>
-                                        TC Kimlik/Passaport No: @defaultAddress.TCKimlikNo<br>
-                                        Ülke: @defaultAddress.Country<br>
-                                        İl: @defaultAddress.City<br>
-                                        İlçe: @defaultAddress.State<br>
-                                        Mahalle/Sokak/Köy: @defaultAddress.Street<br>
-                                        Adres Detayı: @defaultAddress.DetayliAdres<br>
-                                        Posta Kodu: @defaultAddress.ZipCode
+                                        Ad Soyad: @address?.AdSoyad<br>
+                                        Telefon Numarası: <span class="contact-info">@address?.mobilephone</span><br>
+                                        TC Kimlik/Passaport No: @address?.TCKimlikNo<br>
+                                        Ülke: @address?.Country<br>
+                                        İl: @address?.City<br>
+                                        İlçe: @address?.State<br>
+                                        Mahalle/Sokak/Köy: @address?.Street<br>
+                                        Adres Detayı: @address?.DetayliAdres<br>
+                                        Posta Kodu: @address?.ZipCode
                                     </p>
                                     <button class="btn btn-primary"
                                         onclick="editAddress(@address.Id, '@address.Street', '@address.City', '@address.State', '@address.ZipCode', '@address.Country', '@address.AdresBasligi', '@address.AdSoyad', '@address.DetayliAdres', '@address.mobilephone', '@address.TCKimlikNo')">Düzenle</button>
