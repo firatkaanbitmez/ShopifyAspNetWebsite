@@ -306,8 +306,8 @@
                                         Adres Detayı: @defaultAddress?.DetayliAdres<br>
                                         Posta Kodu: @defaultAddress?.ZipCode
                                     </p>
-                                    <button class="btn btn-primary edit-btn">Düzenle</button>
-                                    <button class="btn btn-danger delete-btn">Sil</button>
+                                    <button class="btn btn-primary edit-btn disabled">Düzenle</button>
+                                    <button class="btn btn-danger delete-btn disabled">Sil</button>
                                 </div>
                             </div>
                         </div>
@@ -337,9 +337,9 @@
                                         Posta Kodu: @address?.ZipCode
                                     </p>
                                     <button class="btn btn-primary"
-                                        onclick="editAddress(@address.Id, '@address.Street', '@address.City', '@address.State', '@address.ZipCode', '@address.Country', '@address.AdresBasligi', '@address.AdSoyad', '@address.DetayliAdres', '@address.mobilephone', '@address.TCKimlikNo')">Düzenle</button>
-                                    <button class="btn btn-danger" onclick="deleteAddress(@address.Id)">Sil</button>
-                                    <button class="btn btn-secondary" onclick="setDefaultAddress(@address.Id) ">Varsayılan
+                                        onclick="editAddress(@address?.Id, '@address?.Street', '@address?.City', '@address?.State', '@address?.ZipCode', '@address?.Country', '@address?.AdresBasligi', '@address?.AdSoyad', '@address?.DetayliAdres', '@address?.mobilephone', '@address?.TCKimlikNo')">Düzenle</button>
+                                    <button class="btn btn-danger" onclick="deleteAddress(@address?.Id)">Sil</button>
+                                    <button class="btn btn-secondary" onclick="setDefaultAddress(@address?.Id) ">Varsayılan
                                         Adresim
                                         Yap</button>
                                 </div>

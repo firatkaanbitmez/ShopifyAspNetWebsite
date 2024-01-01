@@ -5,12 +5,12 @@ namespace ShopAppProject.Data
 {
     public class LoginViewModel
     {
-        [Required]
-        [EmailAddress]
+        [Required(ErrorMessage = "E-posta adresi gereklidir.")]
+        [EmailAddress(ErrorMessage = "Geçerli bir e-posta adresi giriniz.")]
         [Display(Name = "Email")]
         public string? Email { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Parola gereklidir.")]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string? Password { get; set; }
@@ -18,6 +18,7 @@ namespace ShopAppProject.Data
         [Display(Name = "Remember me")]
         public bool RememberMe { get; set; }
 
-
+        // Optionally, if you want to provide a redirect functionality after login
+        public string? ReturnUrl { get; set; }
     }
 }

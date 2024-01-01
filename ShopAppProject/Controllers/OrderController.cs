@@ -76,7 +76,7 @@ namespace ShopAppProject.Controllers
             if (defaultAddress == null)
             {
                 // Handle case where no default address is set
-                TempData["ErrorMessage"] = "No default address set.";
+                TempData["ErrorMessage"] = "Lütfen Hesabım Sayfasından Varsayılan Adresinizi Ayarlayın!";
                 return RedirectToAction("Index", "Cart");
             }
             using var transaction = _context.Database.BeginTransaction();

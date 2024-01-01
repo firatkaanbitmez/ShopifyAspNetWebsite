@@ -1,4 +1,3 @@
-//Data/RegisterViewModel.cs
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -6,39 +5,32 @@ namespace ShopAppProject.Data
 {
     public class RegisterViewModel
     {
-        [Required]
-        [EmailAddress]
+        [Required(ErrorMessage = "E-posta adresi gereklidir.")]
+        [EmailAddress(ErrorMessage = "Geçerli bir e-posta adresi giriniz.")]
         [Display(Name = "Email")]
         public string? Email { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Parola gereklidir.")]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string? Password { get; set; }
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm Password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Compare("Password", ErrorMessage = "Parolalar eşleşmiyor.")]
         public string? ConfirmPassword { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "İsim alanı gereklidir.")]
         [Display(Name = "First Name")]
         public string? FirstName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Soyisim alanı gereklidir.")]
         [Display(Name = "Last Name")]
         public string? LastName { get; set; }
 
-
-        [Required]
+        [Required(ErrorMessage = "Telefon numarası gereklidir.")]
         [Display(Name = "Phone Number")]
         [DataType(DataType.PhoneNumber)]
         public string? PhoneNumber { get; set; }
-
-
-
-
     }
-
-
 }
