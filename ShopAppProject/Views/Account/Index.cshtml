@@ -13,239 +13,25 @@
 
 
 <style>
-    /* Style for Tabs */
-    .nav-tabs .nav-item.show .nav-link,
-    .nav-tabs .nav-link.active {
-        color: #fff;
-        background-color: #f8694c;
-        border-color: #f8694c;
-    }
-
-    .bg-light {
-        background-color: #e9ecef !important;
-    }
-
-    .card {
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        border: none;
-        margin-bottom: 20px;
-    }
-
-    .custom-modal .modal-dialog {
-        max-width: 600px;
-        margin: 30px auto;
-    }
-
-    .custom-modal .modal-content {
-        border-radius: 8px;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    .custom-modal .modal-header {
-        background-color: #f8694c;
-        color: white;
-        border-top-left-radius: 8px;
-        border-top-right-radius: 8px;
-        padding: 15px;
-        border: none;
-    }
-
-    .custom-modal .modal-header h5 {
-        margin: 0;
-    }
-
-    .custom-modal .close {
-        color: white;
-        opacity: 1;
-    }
-
-    .custom-modal .modal-body {
-        padding: 20px;
-        background-color: #fff;
-    }
-
-    .custom-modal .form-group label {
-        color: #333;
-        font-weight: bold;
-    }
-
-    .custom-modal .form-control {
-        border-radius: 4px;
-        border: 1px solid #ccc;
-        padding: 10px;
-        font-size: 14px;
-    }
-
-    .custom-modal .form-control:focus {
-        border-color: #f8694c;
-        box-shadow: none;
-    }
-
-    .custom-modal .btn-primary {
-        background-color: #f8694c;
-        border-color: #f8694c;
-        padding: 10px 20px;
-        font-size: 14px;
-        border-radius: 4px;
-    }
-
-    .custom-modal .btn-primary:hover {
-        background-color: #e65a00;
-        border-color: #e65a00;
-    }
-
-    /* Adres Kartı Stilleri */
-    .address-card {
-        background-color: #f8f9fa;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
-        margin-bottom: 20px;
-        transition: transform 0.3s ease-in-out;
-    }
-
-    .address-card:hover {
-        transform: translateY(-5px);
-    }
-
-    .address-card-body {
-        padding: 20px;
-    }
-
-    .address-title {
-        font-size: 18px;
-        font-weight: bold;
-        color: #333;
-        margin-bottom: 15px;
-    }
-
-    .address-text {
-        font-size: 14px;
-        color: #666;
-        line-height: 1.5;
-    }
-
-    .address-actions {
-        text-align: right;
-        margin-top: 15px;
-    }
-
-    /* Modal Stilleri */
-    .modal-header {
-        background-color: #f8694c;
-        color: white;
-        border-bottom: none;
-    }
-
-    .modal-footer {
-        border-top: none;
-    }
-
-    .modal-content {
-        border-radius: 8px;
-    }
-
-    /* Düzenle ve Sil Butonları */
-    .btn-edit,
-    .btn-delete {
-        margin-left: 5px;
-    }
-
-    .btn-edit {
-        color: #007bff;
-    }
-
-    .btn-delete {
-        color: #dc3545;
-    }
-
-
-    h4,
-    h5 {
-        color: #333;
-    }
-
-    /* Navigasyon ve Sekme Stilleri */
-    .nav-tabs .nav-link {
-        color: #333;
-        background-color: #e9ecef;
-
-
-    }
-
-    .nav-tabs .nav-link.active {
-        color: #fff;
-    }
-
-    /* Kart Stilleri */
-    .card {
-        background-color: #fff;
-        border-radius: 0.25rem;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-
-    /* Modal Stilleri */
-    .modal-content {
-        border-radius: 0.25rem;
-    }
-
-    .default-address-card {
-        position: relative;
-        border: 2px solid gold;
-        /* Varsayılan adres için altın çerçeve */
-    }
-
-    /* General Style Improvements */
+    /* Styles for the addresses container */
     .addresses-container {
         display: flex;
-        flex: 1;
+        flex-wrap: wrap;
         gap: 20px;
+        /* This creates the space between the cards */
     }
 
-    /* Address Card Styling */
+    /* Styles for each address card */
     .address-card {
-        flex: 0 1 calc(33% - 20px);
-        /* Adjust the width minus gap for 3 columns layout */
-        max-width: calc(33% - 20px);
-        /* Ensure maximum width */
-        background-color: #f8f9fa;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease-in-out;
-        overflow: hidden;
-    }
-
-    .address-card:hover {
-        transform: translateY(-5px);
-    }
-
-    .address-card-body {
-        padding: 20px;
-    }
-
-    .address-title,
-    .address-text {
-        font-size: 14px;
-        /* Adjust font size for consistency */
-        color: #666;
-        line-height: 1.5;
-        margin-bottom: 10px;
-        /* Spacing between elements */
-    }
-
-    /* Adjustments for Default Address Card */
-    .default-address-card {
-        border: 2px solid gold;
-        /* Highlight for default address */
-    }
-
-    .default-address-card .fa-star {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        color: gold;
-        font-size: 20px;
+        flex: 1;
+        /* This allows each card to grow and fill the space */
+        /* Optional: set a max-width to control the card size */
+        max-width: calc(33.333% - 20px);
+        /* Adjust this percentage based on how many cards per row you want */
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+        /* Optional: adds a subtle shadow for better aesthetics */
+        margin-bottom: 20px;
+        /* Space between rows */
     }
 </style>
 
@@ -253,7 +39,7 @@
 <div class="container mt-5">
     <h4 class="pb-4 border-bottom" readonly onmousedown="return false;" style="cursor: default;">Hesap Ayarları</h4>
 
-    <ul class="nav nav-tabs" id="myTabs">
+    <ul class="nav nav-tabs" id="myTabs" readonly onmousedown="return false;" style="cursor: default;">
         <li class="nav-item">
             <a class="nav-link active" id="user-info-tab" data-toggle="tab" href="#user-info">Kullanıcı Bilgileri</a>
         </li>
@@ -334,7 +120,7 @@
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-secondary" type="button" data-toggle="modal"
                                         data-target="#defaultAddressModal">
-                                        <i class="fas fa-info-circle"></i>
+                                        <i style="color: #007bff;" class="fas fa-info-circle"></i>
                                     </button>
                                 </div>
                             </div>
@@ -504,38 +290,29 @@
                     {
                         <div class="col-md-4">
                             <div class="card default-address-card">
-                                <i class="fas fa-star">
-                                    <h8>Varsayılan Adres</h8>
-                                </i> @* Yıldız simgesi *@
+                                <div class="card-header">
+                                    <i class="fas fa-home"></i>
+                                    <span class="default-badge">Varsayılan</span>
+                                </div>
                                 <div class="card-body">
+                                    <h2 class="address-title">@defaultAddress.AdresBasligi</h2>
                                     <p class="card-text">
-                                    <h2>@defaultAddress.AdresBasligi</h2>
-                                    Ad Soyad: @defaultAddress.AdSoyad
-                                    <br>
-                                    Telefon Numarası:<span style="color:Black; font-size:larger;">@defaultAddress.mobilephone
-                                    </span>
-                                    <br>
-                                    TC Kimlik/Passaport No: @defaultAddress.TCKimlikNo
-                                    <br>
-                                    Ülke: @defaultAddress.Country
-                                    <br>
-                                    İl: @defaultAddress.City
-                                    <br>
-                                    İlçe: @defaultAddress.State
-                                    <br>
-                                    Mahalle/Sokak/Köy: @defaultAddress.Street
-                                    <br>
-                                    Adres Detayı: @defaultAddress.DetayliAdres
-                                    <br>
-                                    Posta Kodu: @defaultAddress.ZipCode
+                                        Ad Soyad: @defaultAddress.AdSoyad<br>
+                                        Telefon Numarası: <span class="contact-info">@defaultAddress.mobilephone</span><br>
+                                        TC Kimlik/Passaport No: @defaultAddress.TCKimlikNo<br>
+                                        Ülke: @defaultAddress.Country<br>
+                                        İl: @defaultAddress.City<br>
+                                        İlçe: @defaultAddress.State<br>
+                                        Mahalle/Sokak/Köy: @defaultAddress.Street<br>
+                                        Adres Detayı: @defaultAddress.DetayliAdres<br>
+                                        Posta Kodu: @defaultAddress.ZipCode
                                     </p>
-                                    <button class="btn btn-primary"
-                                        onclick="editAddress(@defaultAddress.Id, '@defaultAddress.Street', '@defaultAddress.City', '@defaultAddress.State', '@defaultAddress.ZipCode', '@defaultAddress.Country', '@defaultAddress.AdresBasligi', '@defaultAddress.AdSoyad', '@defaultAddress.DetayliAdres', '@defaultAddress.mobilephone', '@defaultAddress.TCKimlikNo')">Düzenle</button>
-                                    <button class="btn btn-danger" onclick="deleteAddress(@defaultAddress.Id)">Sil</button>
-
+                                    <button class="btn btn-primary edit-btn">Düzenle</button>
+                                    <button class="btn btn-danger delete-btn">Sil</button>
                                 </div>
                             </div>
                         </div>
+
                     }
 
                     @* Diğer adresler *@
@@ -543,28 +320,22 @@
                     {
                         <div class="col-md-4">
                             <div class="card">
+                                <div class="card-header">
+                                    <i class="fa-solid fa-location-dot"></i>
+                                    <span class="default-badge"></span>
+                                </div>
                                 <div class="card-body">
+                                    <h2 class="address-title">@defaultAddress.AdresBasligi</h2>
                                     <p class="card-text">
-
-                                    <h2>@address.AdresBasligi</h2>
-                                    Ad Soyad: @address.AdSoyad
-                                    <br>
-                                    Telefon Numarası:<span style="color:Black; font-size:larger;">@address.mobilephone </span>
-                                    <br>
-                                    TC Kimlik/Passaport No: @address.TCKimlikNo
-                                    <br>
-                                    Ülke: @address.Country
-                                    <br>
-                                    İl: @address.City
-                                    <br>
-                                    İlçe: @address.State
-                                    <br>
-                                    Mahalle/Sokak/Köy: @address.Street
-                                    <br>
-                                    Adres Detayı: @address.DetayliAdres
-                                    <br>
-                                    Posta Kodu: @address.ZipCode
-
+                                        Ad Soyad: @defaultAddress.AdSoyad<br>
+                                        Telefon Numarası: <span class="contact-info">@defaultAddress.mobilephone</span><br>
+                                        TC Kimlik/Passaport No: @defaultAddress.TCKimlikNo<br>
+                                        Ülke: @defaultAddress.Country<br>
+                                        İl: @defaultAddress.City<br>
+                                        İlçe: @defaultAddress.State<br>
+                                        Mahalle/Sokak/Köy: @defaultAddress.Street<br>
+                                        Adres Detayı: @defaultAddress.DetayliAdres<br>
+                                        Posta Kodu: @defaultAddress.ZipCode
                                     </p>
                                     <button class="btn btn-primary"
                                         onclick="editAddress(@address.Id, '@address.Street', '@address.City', '@address.State', '@address.ZipCode', '@address.Country', '@address.AdresBasligi', '@address.AdSoyad', '@address.DetayliAdres', '@address.mobilephone', '@address.TCKimlikNo')">Düzenle</button>

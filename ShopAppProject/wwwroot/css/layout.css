@@ -5,6 +5,7 @@ body {
     overflow-y: scroll;
     scrollbar-width: thin;
     scrollbar-color: #131921 #131921;
+    margin-bottom: 100px;
 }
 
 /* Form Styling */
@@ -16,7 +17,6 @@ body {
 .search-bar {
     width: 25%;
     margin: 0 auto;
-    z-index: 799;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
 }
@@ -221,4 +221,113 @@ table {
 .btn-primary:hover {
     background-color: #bf4800 !important;
     border-color: #bf4800 !important;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+
+/* Footer Stili */
+footer {
+    background-color: var(--primary-color);
+    color: white;
+    text-align: center;
+
+}
+
+
+/* Sekmeler */
+.nav-tabs {
+    border-bottom: 2px solid #f8694c;
+}
+
+.nav-tabs .nav-link {
+    border: none;
+    color: #333;
+    margin-right: 5px;
+}
+
+.nav-tabs .nav-link.active {
+    color: #fff;
+    background-color: #f8694c;
+}
+
+/* Kart Stilleri */
+.card {
+    background-color: #fff;
+    border: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #eaeaea;
+    padding: 15px;
+    font-weight: bold;
+}
+
+.card-body {
+    padding: 15px;
+}
+
+/* Form Stilleri */
+.form-control {
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.form-control:focus {
+    border-color: #f8694c;
+    box-shadow: none;
+}
+
+/* Buton Stilleri */
+.btn {
+    padding: 10px 15px;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+
+/* Modal Stilleri */
+.modal-content {
+    border-radius: 5px;
+}
+
+.modal-header {
+    background-color: #f8694c;
+    color: white;
+    padding: 15px;
+    border-bottom: none;
+}
+
+.modal-footer {
+    padding: 15px;
+    border-top: none;
+}
+
+
+/* Ek Stiller */
+.table {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.table th,
+.table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.border-bottom {
+    border-bottom: 1px solid #eaeaea;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
 }

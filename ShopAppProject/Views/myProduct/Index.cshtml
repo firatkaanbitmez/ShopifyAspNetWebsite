@@ -78,15 +78,17 @@
                             <p class="card-text">Stok Miktarı: @item.ProductStock</p>
                             <p class="card-text">Ürün Fiyatı: @String.Format("{0:N2}", item.ProductPrice) ₺</p>
                             <a asp-controller="Product" asp-action="Details" asp-route-id="@item.ProductId"
-                                class="btn btn-sm btn-success"><i class="fa-solid fa-arrow-up-right-from-square"></i> Ürün
+                                style=" font-size: small;" class="btn btn-sm btn-success"><i
+                                    class="fa-solid fa-arrow-up-right-from-square"></i> Ürün
                                 Sayfası</a>
                             <a asp-controller="myProduct" asp-action="Details" asp-route-id="@item.ProductId"
-                                class="btn btn-sm btn-info"><i class="fa-solid fa-comment"></i> Yorumlar</a>
+                                style=" font-size: small;" class="btn btn-sm btn-info"><i class="fa-solid fa-comment"></i>
+                                Yorumlar</a>
 
                             <a asp-controller="myProduct" asp-action="Edit" asp-route-id="@item.ProductId"
-                                class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Düzenle</a>
+                                style=" font-size: small;" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Düzenle</a>
                             <a asp-controller="myProduct" asp-action="Delete" asp-route-id="@item.ProductId"
-                                class="btn btn-danger btn-sm"
+                                style=" font-size: small;" class="btn btn-danger btn-sm"
                                 onclick="return confirm('Bu ürünü silmek istediğinizden emin misiniz?')"><i
                                     class="fas fa-trash-alt"></i> Sil</a>
                         </div>
@@ -120,17 +122,19 @@
                             <p class="card-text">Stok Miktarı: @item.ProductStock</p>
                             <p class="card-text">Ürün Fiyatı: @String.Format("{0:N2}", item.ProductPrice) ₺</p>
                             <a asp-controller="Product" asp-action="Details" asp-route-id="@item.ProductId"
-                                class="btn btn-sm btn-success"><i class="fa-solid fa-arrow-up-right-from-square"></i> Ürün
+                                style=" font-size: small;" class="btn btn-sm btn-success"><i
+                                    class="fa-solid fa-arrow-up-right-from-square"></i> Ürün
                                 Sayfası</a>
                             <a asp-controller="myProduct" asp-action="Details" asp-route-id="@item.ProductId"
-                                class="btn btn-sm btn-info"><i class="fa-solid fa-comment"></i> Yorumlar</a>
+                                style=" font-size: small;" class="btn btn-sm btn-info"><i class="fa-solid fa-comment"></i>
+                                Yorumlar</a>
 
                             @if (User.Identity.IsAuthenticated && item.UserId == User.FindFirstValue(ClaimTypes.NameIdentifier))
                             {
                                 <a asp-controller="myProduct" asp-action="Edit" asp-route-id="@item.ProductId"
-                                    class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Düzenle</a>
+                                    style=" font-size: small;" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Düzenle</a>
                                 <a asp-controller="myProduct" asp-action="Delete" asp-route-id="@item.ProductId"
-                                    class="btn btn-danger btn-sm"
+                                    style=" font-size: small;" class="btn btn-danger btn-sm"
                                     onclick="return confirm('Bu ürünü silmek istediğinizden emin misiniz?')"><i
                                         class="fas fa-trash-alt"></i> Sil</a>
                             }
