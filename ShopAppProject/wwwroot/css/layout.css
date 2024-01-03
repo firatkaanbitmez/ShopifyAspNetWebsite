@@ -15,6 +15,7 @@ body {
 }
 
 .search-bar {
+
     width: 25%;
     margin: 0 auto;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -278,7 +279,7 @@ footer {
 .form-control {
     border: 1px solid #ced4da;
     border-radius: 4px;
-    padding: 10px;
+    padding: 5px;
     font-size: 16px;
 }
 
@@ -289,7 +290,7 @@ footer {
 
 /* Buton Stilleri */
 .btn {
-    padding: 10px 15px;
+
     border-radius: 4px;
     font-size: 16px;
 }
