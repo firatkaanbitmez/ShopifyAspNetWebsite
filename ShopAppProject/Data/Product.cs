@@ -36,6 +36,7 @@ namespace ShopAppProject.Data
         public ApplicationUser? User { get; set; }
         public ICollection<Comment>? Comments { get; set; }
 
+        public bool IsActive { get; set; }
 
     }
 }

@@ -66,7 +66,14 @@ namespace ShopAppProject.Controllers
                 // Sepet boşsa, Cart sayfasına yönlendir
                 return RedirectToAction("Index", "Cart");
             }
-
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+            if (cartItems.Any(c => !c.Product.IsActive))
+            {
+                // Handle the case where one or more products are not active
+                TempData["ErrorMessage"] = "Sepetinizdeki bazı ürünler artık mevcut değil.";
+                return RedirectToAction("Index", "Cart");
+            }
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
             var groupedCartItems = cartItems.GroupBy(c => c.Product.UserId);
 #pragma warning restore CS8602 // Dereference of a possibly null reference.

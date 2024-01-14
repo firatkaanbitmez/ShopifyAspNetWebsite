@@ -22,7 +22,7 @@ namespace ShopAppProject.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Index(string category, string query)
         {
-            IQueryable<Product> products = _context.Products.Include(p => p.Images);
+            IQueryable<Product> products = _context.Products.Include(p => p.Images).Where(p => p.IsActive);
 
             if (!string.IsNullOrEmpty(category))
             {
@@ -302,21 +302,31 @@ namespace ShopAppProject.Controllers
 
         public IActionResult Order(int id)
         {
-            int cartItemCount = AddToCart(id);
+            var product = _context.Products.FirstOrDefault(p => p.ProductId == id);
 
+            // Ürünün aktif olup olmadığını kontrol et
+            if (product == null || !product.IsActive)
+            {
+                // Ürün aktif değilse, bir hata mesajı döndür
+                TempData["ErrorMessage"] = "Bu ürün şu anda satışta değil.";
+                return RedirectToAction("Details", new { id });
+            }
+
+            int cartItemCount = AddToCart(id);
             if (cartItemCount != -1)
             {
-                // Product added to cart successfully
+                // Ürün sepete başarıyla eklendi
                 TempData["CartItemCount"] = cartItemCount;
             }
             else
             {
-                // Failed to add product to cart
-
+                // Sepete eklerken bir hata oluştu
+                TempData["ErrorMessage"] = "Sepete ekleme sırasında bir hata oluştu.";
             }
 
             return RedirectToAction("Index");
         }
+
         private void UpdateCartItemCountInSession()
         {
             var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);

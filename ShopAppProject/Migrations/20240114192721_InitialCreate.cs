@@ -241,7 +241,8 @@ namespace ShopAppProject.Migrations
                     ProductCategory = table.Column<string>(type: "TEXT", nullable: true),
                     ProductImage = table.Column<string>(type: "TEXT", nullable: true),
                     HasCommented = table.Column<bool>(type: "INTEGER", nullable: false),
-                    UserId = table.Column<string>(type: "TEXT", nullable: true)
+                    UserId = table.Column<string>(type: "TEXT", nullable: true),
+                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {

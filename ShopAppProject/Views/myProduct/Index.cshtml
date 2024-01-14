@@ -49,6 +49,66 @@
         flex-direction: column;
         align-items: center;
     }
+
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
+
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+    input:checked+.slider {
+        background-color: #2196F3;
+    }
+
+    input:focus+.slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked+.slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
+
+    .slider.round:before {
+        border-radius: 50%;
+    }
 </style>
 
 <h2>Ürün Listem</h2>
@@ -62,7 +122,16 @@
             @foreach (var item in Model)
             {
                 <div class="col-md-3 mb-3">
+
                     <div class="card h-100">
+                        <label class="switch">
+                            <input type="checkbox" @if (item.IsActive)
+                            {
+                                <text>checked</text>
+                            } class="product-toggle"
+                            data-id="@item.ProductId">
+                            <span class="slider round"></span>
+                        </label>
                         @if (item.Images != null && item.Images.Any())
                         {
                             var firstImage = item.Images.First();
@@ -91,6 +160,8 @@
                                 style=" font-size: small;" class="btn btn-danger btn-sm"
                                 onclick="return confirm('Bu ürünü silmek istediğinizden emin misiniz?')"><i
                                     class="fas fa-trash-alt"></i> Sil</a>
+
+
                         </div>
                     </div>
                 </div>
@@ -107,6 +178,14 @@
             {
                 <div class="col-md-3 mb-3">
                     <div class="card h-100">
+                        <label class="switch">
+                            <input type="checkbox" @if (item.IsActive)
+                            {
+                                <text>checked</text>
+                            } class="product-toggle"
+                            data-id="@item.ProductId">
+                            <span class="slider round"></span>
+                        </label>
                         @if (item.Images != null && item.Images.Any())
                         {
                             var firstImage = item.Images.First();
@@ -133,10 +212,8 @@
                             {
                                 <a asp-controller="myProduct" asp-action="Edit" asp-route-id="@item.ProductId"
                                     style=" font-size: small;" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Düzenle</a>
-                                <a asp-controller="myProduct" asp-action="Delete" asp-route-id="@item.ProductId"
-                                    style=" font-size: small;" class="btn btn-danger btn-sm"
-                                    onclick="return confirm('Bu ürünü silmek istediğinizden emin misiniz?')"><i
-                                        class="fas fa-trash-alt"></i> Sil</a>
+
+
                             }
                         </div>
                     </div>
@@ -145,3 +222,21 @@
         </div>
     }
 }
+
+<script>
+    document.querySelectorAll('.product-toggle').forEach(item => {
+        item.addEventListener('change', function () {
+            let productId = this.getAttribute('data-id');
+            let isActive = this.checked;
+            let confirmMessage = isActive ? 'Ürünü Satışa sunmak istediğinize emin misiniz?' : 'Ürünü Satıştan kaldırmak istediğinize emin misiniz?';
+
+            if (confirm(confirmMessage)) {
+                // Send request to server
+                window.location.href = '/myProduct/ToggleActiveStatus/' + productId;
+            } else {
+                // Revert the toggle switch if user cancels
+                this.checked = !isActive;
+            }
+        });
+    });
+</script>

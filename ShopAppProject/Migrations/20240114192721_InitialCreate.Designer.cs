@@ -11,7 +11,7 @@ using ShopAppProject.Data;
 namespace ShopAppProject.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240101021810_InitialCreate")]
+    [Migration("20240114192721_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -490,6 +490,9 @@ namespace ShopAppProject.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("HasCommented")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsActive")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ProductCategory")

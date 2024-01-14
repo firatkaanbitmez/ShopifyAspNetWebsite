@@ -4,7 +4,12 @@
     ViewData["Title"] = "Sepetim";
 
 }
-
+@if (Model.HasInactiveProducts)
+{
+    <div class="alert alert-warning" role="alert">
+Sepetinizdeki bazı ürünler artık mevcut değil. Ödeme işlemine devam etmek için lütfen bunları kaldırın.
+    </div>
+}
 
 <section class="h-100 h-custom">
     <div class="container h-100 py-5">
@@ -38,31 +43,37 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @if (Model.CartItems != null && Model.CartItems.Count > 0)
-                                        {
-                                            @foreach (var item in Model.CartItems)
+                                       @if (Model.CartItems != null && Model.CartItems.Count > 0)
                                             {
+                                            foreach (var item in Model.CartItems)
+                                            {
+                                                var isProductActive = item?.Product?.IsActive ?? false;
+                                                var textStyle = isProductActive ? "" : "text-decoration-line-through text-danger"; 
+
                                                 <tr>
                                                     <td class="align-middle">
                                                         <div class="d-flex align-items-center">
-                                                            <a
-                                                                href="@Url.Action("Details", "Product", new { id = item.ProductId })">
+                                                            <a href="@Url.Action("Details", "Product", new { id = item?.ProductId })">
                                                                 <img src="@Url.Content(item?.Product?.Images?.FirstOrDefault()?.FullImagePath ?? "/img/defaultproduct.png")"
-                                                                    class="img-fluid rounded-3" style="width: 50px;"
+                                                                    class="img-fluid rounded-3 @textStyle" style="width: 50px;"
                                                                     alt="Product Image">
-
-                                                                <!-- ... existing content ... -->
-
                                                             </a>
+                                                             @if (!isProductActive)
+                                                                    {
+                                                                        <span class="ms-2 text-danger">Satışta Değil</span>
+                                                                    }
                                                             <div class="flex-column ms-4">
-                                                                <p class="mb-2 text-center">
+                                                                
+                                                                <p class="mb-2 text-center @textStyle">
                                                                     <a href="@Url.Action("Details", "Product", new { id = item?.ProductId })"
-                                                                        class="text-decoration-none text-dark fw">@item?.Product?.ProductTitle</a>
+                                                                    class="text-decoration-none @textStyle">@item?.Product?.ProductTitle</a>
+                                                                   
                                                                 </p>
+                                                                
                                                             </div>
                                                         </div>
                                                     </td>
-                                                    <td class="align-middle">
+                                                    <td class="align-middle @textStyle">
                                                         <div class="d-flex flex-row align-items-center">
                                                             <form asp-action="UpdateQuantity" method="post" class="d-flex">
                                                                 <input type="hidden" name="productId" value="@item?.ProductId" />
@@ -84,11 +95,11 @@
                                                         </div>
                                                     </td>
 
-                                                    <td class="align-middle">
+                                                    <td class="align-middle @textStyle">
                                                         <p class="mb-0" style="font-weight: 500;">
                                                             @item?.Product?.ProductPrice.ToString("C")</p>
                                                     </td>
-                                                    <td class="align-middle">
+                                                    <td class="align-middle @textStyle">
                                                         <form method="post" action="/Cart/RemoveFromCart">
                                                             <input type="hidden" name="productId" value="@item?.ProductId" />
                                                             <button type="submit" class="btn btn-danger">Sil</button>
@@ -142,14 +153,16 @@
                                     <!-- Yeterli bakiye kontrolü -->
                                     @if (Model.TotalAmount <= ViewBag.WalletBalance)
                                     {
-                                        <form method="post" action="/Order/Create">
-                                            <button type="submit" class="btn btn-primary btn-block btn-lg">
-                                                <div class="d-flex justify-content-between">
-                                                    <span style="color: #ffffff; margin-right:10px;">Checkout </span>
-                                                    <span style="color: #ffffff;"> @Model.TotalAmount.ToString("C")</span>
-                                                </div>
-                                            </button>
-                                        </form>
+                                        @if (!Model.HasInactiveProducts)
+{
+    <form method="post" action="/Order/Create">
+        <button type="submit" class="btn btn-primary btn-block btn-lg">Checkout</button>
+    </form>
+}
+else
+{
+    <button class="btn btn-secondary btn-block btn-lg" disabled>Checkout</button>
+}
                                     }
                                     else
                                     {

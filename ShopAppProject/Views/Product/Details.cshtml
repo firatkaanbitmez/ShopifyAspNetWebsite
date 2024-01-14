@@ -305,8 +305,14 @@
                                 @{
                                 var item = Model;
                                 }
-
-@if (User?.Identity?.IsAuthenticated == true)
+                                @if (!Model.IsActive)
+    {
+        // Redirect to another view or display a message
+        <p style="color: red;">Bu Ürün Artık Satışta Değil.</p>
+    }
+    else
+    {
+        @if (User?.Identity?.IsAuthenticated == true)
                                 {
                                     if (item?.UserId == User.FindFirstValue(ClaimTypes.NameIdentifier))
                                     {
@@ -320,9 +326,19 @@
                                         }
                                         else
                                         {
-                                            <button asp-controller="Product" asp-action="Order" class="btn btn-primary  add-to-cart-btn" style=" margin-top:20px;   padding: 10px 20px !important; " id="Sepetid" data-product-id="@item?.ProductId">
-                                                <h7  class="status-text">Sepete Ekle</h7>
-                                            </button>
+                                         @if (Model.IsActive)
+{
+    <button asp-controller="Product" asp-action="Order" class="btn btn-primary add-to-cart-btn" style="margin-top:20px; padding: 10px 20px !important;" id="Sepetid" data-product-id="@Model.ProductId">
+        <h7 class="status-text">Sepete Ekle</h7>
+    </button>
+}
+else
+{
+    <button class="btn btn-primary" disabled style="margin-top:20px;">
+        Sepete Ekle
+    </button>
+}
+
                                         }
                                     }
                                 }
@@ -330,6 +346,9 @@
                                 {
                                     <a style="margin-top:20px; " href="/Account/Login" class="btn btn-primary">Sepete Ekle</a>
                                 }
+    }
+
+
 @if (User?.Identity?.IsAuthenticated == true && Model?.UserProductLists?.Any(entry => entry.UserId == User.FindFirstValue(ClaimTypes.NameIdentifier) && entry.ProductId == Model.ProductId) == true)
 {
     <a href="@Url.Action("RemoveFromList", "Product", new { id = Model.ProductId })" class="btn btn-success py-2 icon-hover px-3" style="margin-top:20px; font-size: 14px;">

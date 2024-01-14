@@ -489,6 +489,9 @@ namespace ShopAppProject.Migrations
                     b.Property<bool>("HasCommented")
                         .HasColumnType("INTEGER");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("ProductCategory")
                         .HasColumnType("TEXT");
 

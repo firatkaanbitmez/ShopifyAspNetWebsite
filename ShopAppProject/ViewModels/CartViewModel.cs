@@ -9,6 +9,7 @@ namespace ShopAppProject.Data
         public decimal TotalAmount { get; set; }
         public required Dictionary<string, decimal> TotalAmounts { get; set; }
         public List<UserProductList>? UserProductList { get; set; }
+        public bool HasInactiveProducts { get; set; }
 
     }
 }

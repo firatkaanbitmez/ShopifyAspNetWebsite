@@ -42,6 +42,19 @@ namespace ShopAppProject.Controllers
                 return RedirectToAction("Index", "Home");
             }
         }
+        public async Task<IActionResult> ToggleActiveStatus(int id)
+        {
+            var product = await _context.Products.FindAsync(id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            product.IsActive = !product.IsActive;
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
 
         public IActionResult Create()
         {
@@ -283,6 +296,7 @@ namespace ShopAppProject.Controllers
 
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

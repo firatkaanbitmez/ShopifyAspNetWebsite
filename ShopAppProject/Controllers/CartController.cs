@@ -168,11 +168,16 @@ namespace ShopAppProject.Controllers
 #pragma warning disable CS8604 // Possible null reference argument.
             var totalAmounts = CalculateTotalAmount(userId);
 #pragma warning restore CS8604 // Possible null reference argument.
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+            var hasInactiveProducts = cartItems.Any(ci => !ci.Product.IsActive);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
             var cartModel = new CartViewModel
             {
                 CartItems = cartItems,
-                TotalAmounts = totalAmounts
+                TotalAmounts = totalAmounts,
+                HasInactiveProducts = hasInactiveProducts
+
             };
 
             // Calculate the total cart amount
