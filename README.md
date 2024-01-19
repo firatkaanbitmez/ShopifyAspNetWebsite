@@ -1,9 +1,7 @@
 
 
-
+Tanıtım Videosunu izle
 [![Video Adı](http://img.youtube.com/vi/LLT3Q5SahrY/0.jpg)](http://www.youtube.com/watch?v=LLT3Q5SahrY "Video Adı")
-
-![Opera Snapshot_2023-12-27_031340_localhost](https://github.com/firatkaanbitmez/ShopfiyAspNetWebsite/blob/bcb6d47d28fe698199ffe2932019e84312b54329/a.png)
 
 
 # ShopAppProject: ASP.NET Core MVC Shopping Website
