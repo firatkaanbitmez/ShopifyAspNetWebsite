@@ -1,6 +1,7 @@
 
 
 Tanıtım Videosunu izle
+
 [![Video Adı](http://img.youtube.com/vi/LLT3Q5SahrY/0.jpg)](http://www.youtube.com/watch?v=LLT3Q5SahrY "Video Adı")
 
 
