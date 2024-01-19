@@ -1,13 +1,10 @@
-
-
-Tanıtım Videosunu izle
-
-[![Video Adı](http://img.youtube.com/vi/LLT3Q5SahrY/0.jpg)](http://www.youtube.com/watch?v=LLT3Q5SahrY "Video Adı")
-
-
 # ShopAppProject: ASP.NET Core MVC Shopping Website
 
 ShopAppProject is a web application developed using ASP.NET Core MVC, SQLite, Bootstrap, and jQuery. It serves as a simple yet powerful e-commerce platform.
+
+## Tanıtım Videosunu İzle
+
+[![Tanıtım Videosunu İzle](http://img.youtube.com/vi/LLT3Q5SahrY/0.jpg)](http://www.youtube.com/watch?v=LLT3Q5SahrY "Tanıtım Videosunu İzle")
 
 ## Table of Contents
 
@@ -51,8 +48,3 @@ Before you begin, make sure you have the following installed:
 
    ```bash
    git clone https://github.com/firatkaanbitmez/ShopfiyAspNetWebsite.git
-
-
-
-
-   
