@@ -2,7 +2,7 @@
 
 ShopAppProject is a web application developed using ASP.NET Core MVC, SQLite, Bootstrap, and jQuery. It serves as a simple yet powerful e-commerce platform.
 
-## Tanıtım Videosunu İzle
+## Watch the Introduction Video
 
 [![Tanıtım Videosunu İzle](http://img.youtube.com/vi/LLT3Q5SahrY/0.jpg)](http://www.youtube.com/watch?v=LLT3Q5SahrY "Tanıtım Videosunu İzle")
 
