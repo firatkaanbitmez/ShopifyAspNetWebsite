@@ -1,10 +1,10 @@
 # ShopAppProject: ASP.NET Core MVC Shopping Website
 
-ShopAppProject is a web application developed using ASP.NET Core MVC, SQLite, Bootstrap, and jQuery. It serves as a simple yet powerful e-commerce platform.
+ShopAppProject is an e-commerce web application built using ASP.NET Core. The platform allows customers, companies, and administrators to manage their products, orders, and shipping information. The project also supports a robust user management system with roles such as Admin, Company, and Customer.
 
 ## Watch the Introduction Video
 
-[![Tanıtım Videosunu İzle](http://img.youtube.com/vi/LLT3Q5SahrY/0.jpg)](http://www.youtube.com/watch?v=LLT3Q5SahrY "Tanıtım Videosunu İzle")
+[![Screenshot](./screenshot/screenshot.png)
 
 ## Table of Contents
 
@@ -20,20 +20,24 @@ ShopAppProject is a web application developed using ASP.NET Core MVC, SQLite, Bo
 
 ## Features
 
-- User authentication and authorization.
-- Product and category management.
-- Responsive design using Bootstrap.
-- SQLite database for easy setup and portability.
-- Integration with jQuery for dynamic user interfaces.
+- User authentication and role-based authorization (Admin, Company, Customer)
+- Product management: add, update, delete, and toggle product active status
+- Order management: create orders, view order details, and handle wallet transactions
+- Shipping management: configure and manage shipping options
+- Deals management: create and apply deals and coupons
+- Shopping cart functionality: add to cart, update quantities, and remove items
+- User wallet: add balance, view transactions, and deduct amounts during purchases
+- Address management: add, update, and set default addresses for users
+- Product comments and reviews
+
 
 ## Technologies Used
 
-- **ASP.NET Core MVC**: Web application framework.
-- **SQLite**: Embedded relational database.
-- **Bootstrap**: Front-end framework for responsive design.
-- **jQuery**: JavaScript library for DOM manipulation.
-
-## Getting Started
+- ASP.NET Core MVC
+- Entity Framework Core (SQLite)
+- Identity for user authentication and role management
+- Bootstrap for responsive UI
+- jQuery for frontend interactions
 
 ### Prerequisites
 
