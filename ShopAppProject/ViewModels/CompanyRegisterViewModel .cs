@@ -1,7 +1,6 @@
 //Data/CompanyRegisterViewModel.cs
 using System;
 using System.ComponentModel.DataAnnotations;
-//test
 
 namespace ShopAppProject.Data
 {
