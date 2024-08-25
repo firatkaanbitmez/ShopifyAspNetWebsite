@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using ShopAppProject.Data;
 using System.Linq;
 using System.Security.Claims;
-//test
 
 [Authorize]
 public class MyListController : Controller

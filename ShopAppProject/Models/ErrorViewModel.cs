@@ -1,5 +1,4 @@
 namespace ShopAppProject.Models;
-//test
 
 public class //test
 ErrorViewModel
