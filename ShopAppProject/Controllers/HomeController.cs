@@ -5,6 +5,7 @@ using ShopAppProject.Data;
 using ShopAppProject.Models;
 using Microsoft.EntityFrameworkCore; // Bu satırı ekleyin
 
+//test
 
 
 namespace ShopAppProject.Controllers;

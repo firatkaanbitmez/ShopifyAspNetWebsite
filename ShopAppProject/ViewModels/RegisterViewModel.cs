@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+//test
 
 namespace ShopAppProject.Data
 {

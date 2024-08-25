@@ -1,5 +1,6 @@
 //Data/CartViewModel.cs
 using System.ComponentModel.DataAnnotations;
+//test
 
 namespace ShopAppProject.Data
 {

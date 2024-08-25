@@ -94,7 +94,7 @@ using (var scope = app.Services.CreateScope())
                 // Diğer gerekli özellikleri de ekleyebilirsiniz
             };
 
-            var result = await userManager.CreateAsync(adminUser, "19051905Asd.");
+            var result = await userManager.CreateAsync(adminUser, "123456Asd**");
 
             if (result.Succeeded)
             {

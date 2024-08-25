@@ -1,6 +1,8 @@
 namespace ShopAppProject.Models;
+//test
 
-public class ErrorViewModel
+public class //test
+ErrorViewModel
 {
     public string? RequestId { get; set; }
 

@@ -1,5 +1,6 @@
 //ViewModels/AddressViewModel.cs
 using System.ComponentModel.DataAnnotations;
+//test
 
 namespace ShopAppProject.Data
 {
