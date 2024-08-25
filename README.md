@@ -2,9 +2,9 @@
 
 ShopAppProject is an e-commerce web application built using ASP.NET Core. The platform allows customers, companies, and administrators to manage their products, orders, and shipping information. The project also supports a robust user management system with roles such as Admin, Company, and Customer.
 
-## Watch the Introduction Video
+## Home Page Screenshot
 
-[![Screenshot](./screenshot/screenshot.png)
+![Screenshot](./screenshot/screenshot.png)
 
 ## Table of Contents
 
