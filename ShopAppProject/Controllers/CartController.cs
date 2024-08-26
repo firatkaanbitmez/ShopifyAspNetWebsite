@@ -1,12 +1,12 @@
-using ShopAppProject.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ShopAppProject.Data;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-//test
 
 namespace ShopAppProject.Controllers
 {
@@ -20,23 +20,32 @@ namespace ShopAppProject.Controllers
             _context = context;
         }
 
+        private string GetUserId()
+        {
+            return HttpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+        }
+
         private async Task<int> AddToCartAsync(int productId)
         {
-            var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId = GetUserId();
+            if (userId == null)
+            {
+                return -1; // Kullanıcı kimliği yoksa işlem yapılamaz.
+            }
 
             try
             {
-                // Add logic to get the seller ID based on the product
-                var sellerId = await _context.Products
-                    .Where(p => p.ProductId == productId)
-                    .Select(p => p.UserId)
-                    .FirstOrDefaultAsync();
+                var product = await _context.Products
+                    .FirstOrDefaultAsync(p => p.ProductId == productId);
 
-                // Add logic to add to cart with the seller ID
-                // ...
+                if (product == null)
+                {
+                    return -1; // Ürün bulunamadı.
+                }
 
-                _ = await _context.SaveChangesAsync();
+                // CartItem ekleme işlemleri
 
+                await _context.SaveChangesAsync();
                 return await _context.CartItems.CountAsync(c => c.UserId == userId);
             }
             catch (Exception ex)
@@ -49,35 +58,36 @@ namespace ShopAppProject.Controllers
         [HttpGet]
         public IActionResult GetCartItemCount()
         {
-            var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId = GetUserId();
+            if (userId == null)
+            {
+                return Content("0");
+            }
+
             var cartItemCount = _context.CartItems.Count(c => c.UserId == userId);
             return Content(cartItemCount.ToString());
         }
 
         private Dictionary<string, decimal> CalculateTotalAmount(string userId)
         {
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
+            var totalAmounts = new Dictionary<string, decimal>();
+
             var cartItems = _context.CartItems
                 .Where(c => c.UserId == userId)
                 .Include(c => c.Product)
-                .Include(c => c.Product.User) // Include the User navigation property
+                .ThenInclude(p => p.User) // Sadece gerekli veriyi dahil edin
                 .ToList();
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
-
-            var totalAmounts = new Dictionary<string, decimal>();
 
             foreach (var cartItem in cartItems)
             {
-                if (cartItem.Product != null && cartItem.Product.User != null)
+                if (cartItem.Product?.User != null)
                 {
                     var sellerId = cartItem.Product.UserId;
 
-#pragma warning disable CS8604 // Possible null reference argument.
                     if (!totalAmounts.ContainsKey(sellerId))
                     {
                         totalAmounts[sellerId] = 0;
                     }
-#pragma warning restore CS8604 // Possible null reference argument.
 
                     totalAmounts[sellerId] += (decimal)cartItem.Quantity * cartItem.Product.ProductPrice;
                 }
@@ -86,20 +96,22 @@ namespace ShopAppProject.Controllers
             return totalAmounts;
         }
 
-
-
-
         [HttpPost]
         public async Task<IActionResult> RemoveFromCart(int productId)
         {
-            var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId = GetUserId();
+            if (userId == null)
+            {
+                return RedirectToAction("Index");
+            }
+
             var cartItem = await _context.CartItems
                 .FirstOrDefaultAsync(c => c.UserId == userId && c.ProductId == productId);
 
             if (cartItem != null)
             {
-                _ = _context.CartItems.Remove(cartItem);
-                _ = await _context.SaveChangesAsync();
+                _context.CartItems.Remove(cartItem);
+                await _context.SaveChangesAsync();
             }
 
             return RedirectToAction("Index");
@@ -108,7 +120,11 @@ namespace ShopAppProject.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateQuantity(int productId, int decreaseQuantity, int increaseQuantity)
         {
-            var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId = GetUserId();
+            if (userId == null)
+            {
+                return RedirectToAction("Index");
+            }
 
             try
             {
@@ -118,17 +134,12 @@ namespace ShopAppProject.Controllers
 
                 if (cartItem != null)
                 {
-                    // Decrease quantity
                     if (decreaseQuantity > 0)
                     {
                         cartItem.Quantity = Math.Max(0, decreaseQuantity);
                     }
-                    // Increase quantity
-                    else if (increaseQuantity > 0)
+                    else if (increaseQuantity > 0 && cartItem.Product != null)
                     {
-                        // Check if the increased quantity is within the available stock
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-
                         if (cartItem.Quantity + 1 <= cartItem.Product.ProductStock)
                         {
                             cartItem.Quantity++;
@@ -138,11 +149,9 @@ namespace ShopAppProject.Controllers
                             TempData["ErrorMessage"] = "Üzgünüz, stok yetersiz.";
                             return RedirectToAction("Index");
                         }
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
-
                     }
 
-                    _ = await _context.SaveChangesAsync();
+                    await _context.SaveChangesAsync();
                 }
 
                 return RedirectToAction("Index");
@@ -156,42 +165,33 @@ namespace ShopAppProject.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId = GetUserId();
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             var wallet = await _context.Wallets.FirstOrDefaultAsync(w => w.UserId == userId);
-            ViewBag.WalletBalance = wallet?.Balance;
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
+            ViewBag.WalletBalance = wallet?.Balance ?? 0;
+
             var cartItems = await _context.CartItems
                                     .Where(c => c.UserId == userId)
                                     .Include(c => c.Product)
                                         .ThenInclude(p => p.Images) // Eğer ürün resimleri de gerekliyse bu satırı ekleyin
                                     .ToListAsync();
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
-#pragma warning disable CS8604 // Possible null reference argument.
+
             var totalAmounts = CalculateTotalAmount(userId);
-#pragma warning restore CS8604 // Possible null reference argument.
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-            var hasInactiveProducts = cartItems.Any(ci => !ci.Product.IsActive);
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
+            var hasInactiveProducts = cartItems.Any(ci => ci.Product != null && !ci.Product.IsActive);
 
             var cartModel = new CartViewModel
             {
                 CartItems = cartItems,
                 TotalAmounts = totalAmounts,
-                HasInactiveProducts = hasInactiveProducts
-
+                HasInactiveProducts = hasInactiveProducts,
+                TotalAmount = totalAmounts.Values.Sum()
             };
-
-            // Calculate the total cart amount
-            cartModel.TotalAmount = totalAmounts.Values.Sum();
-
-            // Pass the context data to the view
-            ViewData["Context"] = _context;
 
             return View(cartModel);
         }
-
-
-
-
     }
 }

@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
-//test
-//test
 
 
 namespace ShopAppProject.Controllers
@@ -14,17 +12,16 @@ namespace ShopAppProject.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly DataContext _context; // Add this line
+        private readonly DataContext _context; 
 
-        // Add DataContext as a parameter in the constructor
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            DataContext context) // Add this line
+            DataContext context) 
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _context = context; // Add this line
+            _context = context; 
         }
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -38,7 +35,6 @@ namespace ShopAppProject.Controllers
                     user.UserProductLists = _context.UserProductLists
                                                        .Include(upl => upl.Product)
                                                         .ThenInclude(p => p.Images)
-
                                                        .Where(upl => upl.UserId == user.Id)
                                                        .ToList();
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
@@ -46,7 +42,6 @@ namespace ShopAppProject.Controllers
                     var roles = await _userManager.GetRolesAsync(user);
                     ViewBag.Roles = roles;
 
-                    // Load the wallet balance and transactions
                     var wallet = _context.Wallets.Include(w => w.Transactions).FirstOrDefault(w => w.UserId == user.Id);
                     ViewBag.WalletBalance = wallet?.Balance;
                     user.Addresses = _context.Addresses.Where(a => a.UserId == user.Id).ToList();
@@ -64,10 +59,8 @@ namespace ShopAppProject.Controllers
             var user = _userManager.GetUserAsync(User).Result;
             if (user != null)
             {
-                // Eagerly load the Transactions property using Include
                 var wallet = _context.Wallets.Include(w => w.Transactions).FirstOrDefault(w => w.UserId == user.Id);
 
-                // Set the ViewBag.WalletBalance for the view
                 ViewBag.WalletBalance = wallet?.Balance;
 
                 return View(wallet);
@@ -87,32 +80,27 @@ namespace ShopAppProject.Controllers
                 var wallet = _context.Wallets.Include(w => w.Transactions).FirstOrDefault(w => w.UserId == user.Id);
                 if (wallet != null)
                 {
-                    // Update the wallet balance
                     wallet.Balance += amount;
 
-                    // Create a new transaction and add it to the Transactions list
                     var transaction = new Transaction
                     {
                         Date = DateTime.Now,
                         Amount = amount,
-                        Info = $"Bakiye Yükleme: {amount}", // Provide a meaningful Info value
-                        OrderIdLink = null, // Set a default value or a valid value here
+                        Info = $"Bakiye Yükleme: {amount}", 
+                        OrderIdLink = null, 
 
                         WalletId = wallet.Id
                     };
 
-                    // Ensure the Transactions list is initialized before adding the transaction
                     wallet.Transactions = wallet.Transactions ?? new List<Transaction>();
                     wallet.Transactions.Add(transaction);
 
                     _context.SaveChanges();
 
-                    // Pass the updated balance to the view
                     ViewBag.WalletBalance = wallet.Balance;
                 }
             }
 
-            // Redirect to the Wallet action
             return RedirectToAction("Wallet");
         }
 
@@ -153,9 +141,7 @@ namespace ShopAppProject.Controllers
 
                 if (result.Succeeded)
                 {
-                    // Kullanıcıyı "Custom" rolüne ekle
                     await _userManager.AddToRoleAsync(user, "Customer");
-                    // Create a Wallet for the user with an initial balance (e.g., 0.0)
                     var wallet = new Wallet { Balance = 0.0m, UserId = user.Id };
                     _context.Wallets.Add(wallet);
                     await _context.SaveChangesAsync();
@@ -217,13 +203,11 @@ namespace ShopAppProject.Controllers
                 if (result.Succeeded)
                 {
 
-                    // Eğer kullanıcı "Müşteri" rolüne sahipse, onu kaldır
                     if (await _userManager.IsInRoleAsync(user, "Customer"))
                     {
                         await _userManager.RemoveFromRoleAsync(user, "Customer");
                     }
 
-                    // Kullanıcıyı "Girişimci" rolüne ekle
                     await _userManager.AddToRoleAsync(user, "Company");
                     // Create a Wallet for the user with an initial balance (e.g., 0.0)
                     var wallet = new Wallet { Balance = 0.0m, UserId = user.Id };
@@ -365,7 +349,6 @@ namespace ShopAppProject.Controllers
                 var user = await _userManager.GetUserAsync(User);
                 if (user != null)
                 {
-                    // Update user properties with the edited values
                     user.FirstName = model.FirstName ?? user.FirstName;
                     user.LastName = model.LastName ?? user.LastName;
                     user.PhoneNumber = model.PhoneNumber ?? user.PhoneNumber;
@@ -374,7 +357,6 @@ namespace ShopAppProject.Controllers
 
                     if (result.Succeeded)
                     {
-                        // Redirect to the Index page after a successful update
                         return RedirectToAction("Index");
                     }
 
@@ -385,7 +367,6 @@ namespace ShopAppProject.Controllers
                 }
             }
 
-            // If ModelState is not valid, redisplay the edit form with validation errors
             return View(model);
         }
         [HttpPost]
@@ -486,14 +467,12 @@ namespace ShopAppProject.Controllers
                     return Json(new { success = false, message = "User ID not found." });
                 }
 
-                // Önceki varsayılan adresi sıfırla
                 var previousDefault = _context.Addresses.Where(a => a.UserId == userId && a.IsDefault).ToList();
                 foreach (var address in previousDefault)
                 {
                     address.IsDefault = false;
                 }
 
-                // Yeni varsayılan adresi ayarla
                 var newDefaultAddress = await _context.Addresses.FindAsync(addressId);
                 if (newDefaultAddress == null)
                 {
@@ -539,7 +518,7 @@ namespace ShopAppProject.Controllers
 
                 if (changePasswordResult.Succeeded)
                 {
-                    await _signInManager.SignOutAsync(); // Logout işlemi
+                    await _signInManager.SignOutAsync(); 
 
                     return RedirectToAction("ChangePasswordSuccess");
                 }
